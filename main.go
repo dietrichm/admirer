@@ -9,8 +9,6 @@ import (
 )
 
 func main() {
-	fmt.Println("admirer")
-
 	var spotify bool
 	flag.BoolVar(&spotify, "spotify", false, "Authenticate with Spotify")
 
@@ -21,7 +19,11 @@ func main() {
 
 	if spotify {
 		spotifyLogin(oauthCode)
+		os.Exit(0)
 	}
+
+	flag.Usage()
+	os.Exit(1)
 }
 
 func spotifyLogin(oauthCode string) {

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"os"
 
@@ -9,6 +10,14 @@ import (
 
 func main() {
 	fmt.Println("admirer")
+
+	var spotify bool
+	flag.BoolVar(&spotify, "spotify", false, "Authenticate with Spotify")
+
+	var oauthCode string
+	flag.StringVar(&oauthCode, "oauth-code", "", "OAuth code")
+
+	flag.Parse()
 }
 
 func createSpotifyAuthenticator() spotify.Authenticator {

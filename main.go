@@ -18,6 +18,28 @@ func main() {
 	flag.StringVar(&oauthCode, "oauth-code", "", "OAuth code")
 
 	flag.Parse()
+
+	if spotify {
+		spotifyLogin(oauthCode)
+	}
+}
+
+func spotifyLogin(oauthCode string) {
+	authenticator := createSpotifyAuthenticator()
+
+	if len(oauthCode) == 0 {
+		fmt.Println("Spotify authentication URL: " + createSpotifyAuthURL(&authenticator))
+		return
+	}
+
+	client := callbackSpotify(&authenticator, oauthCode)
+
+	user, err := client.CurrentUser()
+	if err != nil {
+		panic("Failed to read Spotify profile data.")
+	}
+
+	fmt.Println("Logged in on Spotify as " + user.DisplayName)
 }
 
 func createSpotifyAuthenticator() spotify.Authenticator {

@@ -9,7 +9,8 @@ import (
 
 // Login runs the CLI procedure for logging in on Last.fm.
 func Login(oauthCode string) {
-	apiClient := createAPIClient()
+	lastfm := NewLastfm()
+	apiClient := lastfm.api
 
 	if len(oauthCode) == 0 {
 		fmt.Println("Last.fm authentication URL: " + createAuthURL(apiClient))
@@ -26,7 +27,13 @@ func Login(oauthCode string) {
 	fmt.Println("Logged in on Last.fm as " + user.Name)
 }
 
-func createAPIClient() *lastfm_api.Api {
+// Lastfm is the external Lastfm service implementation.
+type Lastfm struct {
+	api *lastfm_api.Api
+}
+
+// NewLastfm creates a Lastfm instance.
+func NewLastfm() *Lastfm {
 	clientID := os.Getenv("LASTFM_CLIENT_ID")
 	clientSecret := os.Getenv("LASTFM_CLIENT_SECRET")
 
@@ -34,7 +41,9 @@ func createAPIClient() *lastfm_api.Api {
 		panic("Please set LASTFM_CLIENT_ID and LASTFM_CLIENT_SECRET environment variables.")
 	}
 
-	return lastfm_api.New(clientID, clientSecret)
+	return &Lastfm{
+		api: lastfm_api.New(clientID, clientSecret),
+	}
 }
 
 func createAuthURL(apiClient *lastfm_api.Api) string {

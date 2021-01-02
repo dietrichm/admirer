@@ -17,7 +17,7 @@ func Login(oauthCode string) {
 		return
 	}
 
-	callback(apiClient, oauthCode)
+	lastfm.Authenticate(oauthCode)
 
 	user, err := apiClient.User.GetInfo(lastfm_api.P{})
 	if err != nil {
@@ -54,8 +54,9 @@ func (l *Lastfm) CreateAuthURL() string {
 	return l.api.GetAuthRequestUrl(redirectURL)
 }
 
-func callback(apiClient *lastfm_api.Api, oauthCode string) {
-	err := apiClient.LoginWithToken(oauthCode)
+// Authenticate takes an authorization code and authenticates the user.
+func (l *Lastfm) Authenticate(oauthCode string) {
+	err := l.api.LoginWithToken(oauthCode)
 	if err != nil {
 		panic("Failed to parse Last.fm token.")
 	}

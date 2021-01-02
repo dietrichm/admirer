@@ -9,7 +9,8 @@ import (
 
 // Login runs the CLI procedure for logging in on Spotify.
 func Login(oauthCode string) {
-	authenticator := createAuthenticator()
+	spotify := NewSpotify()
+	authenticator := spotify.authenticator
 
 	if len(oauthCode) == 0 {
 		fmt.Println("Spotify authentication URL: " + createAuthURL(authenticator))
@@ -26,7 +27,13 @@ func Login(oauthCode string) {
 	fmt.Println("Logged in on Spotify as " + user.DisplayName)
 }
 
-func createAuthenticator() *spotify.Authenticator {
+// Spotify is the external Spotify service implementation.
+type Spotify struct {
+	authenticator *spotify.Authenticator
+}
+
+// NewSpotify creates a Spotify instance.
+func NewSpotify() *Spotify {
 	clientID := os.Getenv("SPOTIFY_CLIENT_ID")
 	clientSecret := os.Getenv("SPOTIFY_CLIENT_SECRET")
 
@@ -39,7 +46,9 @@ func createAuthenticator() *spotify.Authenticator {
 	authenticator := spotify.NewAuthenticator(redirectURL, spotify.ScopeUserReadPrivate)
 	authenticator.SetAuthInfo(clientID, clientSecret)
 
-	return &authenticator
+	return &Spotify{
+		authenticator: &authenticator,
+	}
 }
 
 func createAuthURL(authenticator *spotify.Authenticator) string {

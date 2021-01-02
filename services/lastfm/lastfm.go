@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	lastfm_api "github.com/shkh/lastfm-go/lastfm"
+	"github.com/shkh/lastfm-go/lastfm"
 )
 
 // Login runs the CLI procedure for logging in on Last.fm.
@@ -23,7 +23,7 @@ func Login(oauthCode string) {
 
 // Lastfm is the external Lastfm service implementation.
 type Lastfm struct {
-	api *lastfm_api.Api
+	api *lastfm.Api
 }
 
 // NewLastfm creates a Lastfm instance.
@@ -36,7 +36,7 @@ func NewLastfm() *Lastfm {
 	}
 
 	return &Lastfm{
-		api: lastfm_api.New(clientID, clientSecret),
+		api: lastfm.New(clientID, clientSecret),
 	}
 }
 
@@ -58,7 +58,7 @@ func (l *Lastfm) Authenticate(oauthCode string) {
 
 // GetUsername requests and returns the username of the logged in user.
 func (l *Lastfm) GetUsername() string {
-	user, err := l.api.User.GetInfo(lastfm_api.P{})
+	user, err := l.api.User.GetInfo(lastfm.P{})
 	if err != nil {
 		panic("Failed to read Last.fm profile data.")
 	}

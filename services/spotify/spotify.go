@@ -9,24 +9,26 @@ import (
 
 // Login runs the CLI procedure for logging in on Spotify.
 func Login(oauthCode string) {
-	authenticator := createAuthenticator()
+	spotify := NewSpotify()
 
 	if len(oauthCode) == 0 {
-		fmt.Println("Spotify authentication URL: " + createAuthURL(authenticator))
+		fmt.Println("Spotify authentication URL: " + spotify.CreateAuthURL())
 		return
 	}
 
-	client := callback(authenticator, oauthCode)
+	spotify.Authenticate(oauthCode)
 
-	user, err := client.CurrentUser()
-	if err != nil {
-		panic("Failed to read Spotify profile data.")
-	}
-
-	fmt.Println("Logged in on Spotify as " + user.DisplayName)
+	fmt.Println("Logged in on Spotify as " + spotify.GetUsername())
 }
 
-func createAuthenticator() *spotify.Authenticator {
+// Spotify is the external Spotify service implementation.
+type Spotify struct {
+	authenticator *spotify.Authenticator
+	client        *spotify.Client
+}
+
+// NewSpotify creates a Spotify instance.
+func NewSpotify() *Spotify {
 	clientID := os.Getenv("SPOTIFY_CLIENT_ID")
 	clientSecret := os.Getenv("SPOTIFY_CLIENT_SECRET")
 
@@ -39,18 +41,33 @@ func createAuthenticator() *spotify.Authenticator {
 	authenticator := spotify.NewAuthenticator(redirectURL, spotify.ScopeUserReadPrivate)
 	authenticator.SetAuthInfo(clientID, clientSecret)
 
-	return &authenticator
+	return &Spotify{
+		authenticator: &authenticator,
+	}
 }
 
-func createAuthURL(authenticator *spotify.Authenticator) string {
-	return authenticator.AuthURL("")
+// CreateAuthURL returns an authorization URL to authorize the integration.
+func (s *Spotify) CreateAuthURL() string {
+	return s.authenticator.AuthURL("")
 }
 
-func callback(authenticator *spotify.Authenticator, code string) spotify.Client {
-	token, err := authenticator.Exchange(code)
+// Authenticate takes an authorization code and authenticates the user.
+func (s *Spotify) Authenticate(code string) {
+	token, err := s.authenticator.Exchange(code)
 	if err != nil {
 		panic("Failed to parse Spotify token.")
 	}
 
-	return authenticator.NewClient(token)
+	client := s.authenticator.NewClient(token)
+	s.client = &client
+}
+
+// GetUsername requests and returns the username of the logged in user.
+func (s *Spotify) GetUsername() string {
+	user, err := s.client.CurrentUser()
+	if err != nil {
+		panic("Failed to read Spotify profile data.")
+	}
+
+	return user.DisplayName
 }

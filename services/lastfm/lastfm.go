@@ -10,7 +10,6 @@ import (
 // Login runs the CLI procedure for logging in on Last.fm.
 func Login(oauthCode string) {
 	lastfm := NewLastfm()
-	apiClient := lastfm.api
 
 	if len(oauthCode) == 0 {
 		fmt.Println("Last.fm authentication URL: " + lastfm.CreateAuthURL())
@@ -19,12 +18,7 @@ func Login(oauthCode string) {
 
 	lastfm.Authenticate(oauthCode)
 
-	user, err := apiClient.User.GetInfo(lastfm_api.P{})
-	if err != nil {
-		panic("Failed to read Last.fm profile data.")
-	}
-
-	fmt.Println("Logged in on Last.fm as " + user.Name)
+	fmt.Println("Logged in on Last.fm as " + lastfm.GetUsername())
 }
 
 // Lastfm is the external Lastfm service implementation.
@@ -60,4 +54,14 @@ func (l *Lastfm) Authenticate(oauthCode string) {
 	if err != nil {
 		panic("Failed to parse Last.fm token.")
 	}
+}
+
+// GetUsername requests and returns the username of the logged in user.
+func (l *Lastfm) GetUsername() string {
+	user, err := l.api.User.GetInfo(lastfm_api.P{})
+	if err != nil {
+		panic("Failed to read Last.fm profile data.")
+	}
+
+	return user.Name
 }

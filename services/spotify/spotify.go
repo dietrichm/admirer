@@ -10,14 +10,13 @@ import (
 // Login runs the CLI procedure for logging in on Spotify.
 func Login(oauthCode string) {
 	spotify := NewSpotify()
-	authenticator := spotify.authenticator
 
 	if len(oauthCode) == 0 {
 		fmt.Println("Spotify authentication URL: " + spotify.CreateAuthURL())
 		return
 	}
 
-	client := callback(authenticator, oauthCode)
+	client := spotify.Authenticate(oauthCode)
 
 	user, err := client.CurrentUser()
 	if err != nil {
@@ -56,11 +55,12 @@ func (s *Spotify) CreateAuthURL() string {
 	return s.authenticator.AuthURL("")
 }
 
-func callback(authenticator *spotify.Authenticator, code string) spotify.Client {
-	token, err := authenticator.Exchange(code)
+// Authenticate takes an authorization code and authenticates the user.
+func (s *Spotify) Authenticate(code string) spotify.Client {
+	token, err := s.authenticator.Exchange(code)
 	if err != nil {
 		panic("Failed to parse Spotify token.")
 	}
 
-	return authenticator.NewClient(token)
+	return s.authenticator.NewClient(token)
 }

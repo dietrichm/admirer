@@ -7,6 +7,7 @@ import (
 
 // Service is the external service interface.
 type Service interface {
+	Name() string
 	CreateAuthURL() string
 	Authenticate(code string)
 	GetUsername() string

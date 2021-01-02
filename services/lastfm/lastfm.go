@@ -25,6 +25,11 @@ func NewLastfm() *Lastfm {
 	}
 }
 
+// Name returns the human readable service name.
+func (l *Lastfm) Name() string {
+	return "Last.fm"
+}
+
 // CreateAuthURL returns an authorization URL to authorize the integration.
 func (l *Lastfm) CreateAuthURL() string {
 	// Not an actual web server (yet).

@@ -31,6 +31,11 @@ func NewSpotify() *Spotify {
 	}
 }
 
+// Name returns the human readable service name.
+func (s *Spotify) Name() string {
+	return "Spotify"
+}
+
 // CreateAuthURL returns an authorization URL to authorize the integration.
 func (s *Spotify) CreateAuthURL() string {
 	return s.authenticator.AuthURL("")

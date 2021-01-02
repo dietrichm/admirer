@@ -17,14 +17,8 @@ func Login(oauthCode string) {
 	}
 
 	spotify.Authenticate(oauthCode)
-	client := spotify.client
 
-	user, err := client.CurrentUser()
-	if err != nil {
-		panic("Failed to read Spotify profile data.")
-	}
-
-	fmt.Println("Logged in on Spotify as " + user.DisplayName)
+	fmt.Println("Logged in on Spotify as " + spotify.GetUsername())
 }
 
 // Spotify is the external Spotify service implementation.
@@ -66,4 +60,14 @@ func (s *Spotify) Authenticate(code string) {
 
 	client := s.authenticator.NewClient(token)
 	s.client = &client
+}
+
+// GetUsername requests and returns the username of the logged in user.
+func (s *Spotify) GetUsername() string {
+	user, err := s.client.CurrentUser()
+	if err != nil {
+		panic("Failed to read Spotify profile data.")
+	}
+
+	return user.DisplayName
 }

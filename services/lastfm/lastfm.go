@@ -13,7 +13,7 @@ func Login(oauthCode string) {
 	apiClient := lastfm.api
 
 	if len(oauthCode) == 0 {
-		fmt.Println("Last.fm authentication URL: " + createAuthURL(apiClient))
+		fmt.Println("Last.fm authentication URL: " + lastfm.CreateAuthURL())
 		return
 	}
 
@@ -46,11 +46,12 @@ func NewLastfm() *Lastfm {
 	}
 }
 
-func createAuthURL(apiClient *lastfm_api.Api) string {
+// CreateAuthURL returns an authorization URL to authorize the integration.
+func (l *Lastfm) CreateAuthURL() string {
 	// Not an actual web server (yet).
 	redirectURL := "https://admirer.test"
 
-	return apiClient.GetAuthRequestUrl(redirectURL)
+	return l.api.GetAuthRequestUrl(redirectURL)
 }
 
 func callback(apiClient *lastfm_api.Api, oauthCode string) {

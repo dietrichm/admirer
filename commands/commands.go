@@ -1,6 +1,8 @@
 package commands
 
 import (
+	"os"
+
 	"github.com/spf13/cobra"
 )
 
@@ -13,6 +15,6 @@ var rootCommand = &cobra.Command{
 func Execute() {
 	err := rootCommand.Execute()
 	if err != nil {
-		panic(err)
+		os.Exit(1)
 	}
 }

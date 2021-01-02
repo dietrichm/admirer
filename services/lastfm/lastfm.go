@@ -15,6 +15,8 @@ func Login(oauthCode string) {
 		fmt.Println("Last.fm authentication URL: " + createAuthURL(apiClient))
 		return
 	}
+
+	callback(apiClient, oauthCode)
 }
 
 func createAPIClient() *lastfm_api.Api {
@@ -33,4 +35,11 @@ func createAuthURL(apiClient *lastfm_api.Api) string {
 	redirectURL := "https://admirer.test"
 
 	return apiClient.GetAuthRequestUrl(redirectURL)
+}
+
+func callback(apiClient *lastfm_api.Api, oauthCode string) {
+	err := apiClient.LoginWithToken(oauthCode)
+	if err != nil {
+		panic("Failed to parse Last.fm token.")
+	}
 }

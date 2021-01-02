@@ -12,11 +12,11 @@ func Login(oauthCode string) {
 	authenticator := createAuthenticator()
 
 	if len(oauthCode) == 0 {
-		fmt.Println("Spotify authentication URL: " + createAuthURL(&authenticator))
+		fmt.Println("Spotify authentication URL: " + createAuthURL(authenticator))
 		return
 	}
 
-	client := callback(&authenticator, oauthCode)
+	client := callback(authenticator, oauthCode)
 
 	user, err := client.CurrentUser()
 	if err != nil {
@@ -26,7 +26,7 @@ func Login(oauthCode string) {
 	fmt.Println("Logged in on Spotify as " + user.DisplayName)
 }
 
-func createAuthenticator() spotify.Authenticator {
+func createAuthenticator() *spotify.Authenticator {
 	clientID := os.Getenv("SPOTIFY_CLIENT_ID")
 	clientSecret := os.Getenv("SPOTIFY_CLIENT_SECRET")
 
@@ -39,7 +39,7 @@ func createAuthenticator() spotify.Authenticator {
 	authenticator := spotify.NewAuthenticator(redirectURL, spotify.ScopeUserReadPrivate)
 	authenticator.SetAuthInfo(clientID, clientSecret)
 
-	return authenticator
+	return &authenticator
 }
 
 func createAuthURL(authenticator *spotify.Authenticator) string {

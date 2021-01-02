@@ -16,7 +16,8 @@ func Login(oauthCode string) {
 		return
 	}
 
-	client := spotify.Authenticate(oauthCode)
+	spotify.Authenticate(oauthCode)
+	client := spotify.client
 
 	user, err := client.CurrentUser()
 	if err != nil {
@@ -29,6 +30,7 @@ func Login(oauthCode string) {
 // Spotify is the external Spotify service implementation.
 type Spotify struct {
 	authenticator *spotify.Authenticator
+	client        *spotify.Client
 }
 
 // NewSpotify creates a Spotify instance.
@@ -56,11 +58,12 @@ func (s *Spotify) CreateAuthURL() string {
 }
 
 // Authenticate takes an authorization code and authenticates the user.
-func (s *Spotify) Authenticate(code string) spotify.Client {
+func (s *Spotify) Authenticate(code string) {
 	token, err := s.authenticator.Exchange(code)
 	if err != nil {
 		panic("Failed to parse Spotify token.")
 	}
 
-	return s.authenticator.NewClient(token)
+	client := s.authenticator.NewClient(token)
+	s.client = &client
 }

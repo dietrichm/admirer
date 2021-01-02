@@ -17,6 +17,13 @@ func Login(oauthCode string) {
 	}
 
 	callback(apiClient, oauthCode)
+
+	user, err := apiClient.User.GetInfo(lastfm_api.P{})
+	if err != nil {
+		panic("Failed to read Last.fm profile data.")
+	}
+
+	fmt.Println("Logged in on Last.fm as " + user.Name)
 }
 
 func createAPIClient() *lastfm_api.Api {

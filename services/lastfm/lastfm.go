@@ -1,6 +1,7 @@
 package lastfm
 
 import (
+	"fmt"
 	"os"
 
 	lastfm_api "github.com/shkh/lastfm-go/lastfm"
@@ -9,6 +10,11 @@ import (
 // Login runs the CLI procedure for logging in on Last.fm.
 func Login(oauthCode string) {
 	apiClient := createAPIClient()
+
+	if len(oauthCode) == 0 {
+		fmt.Println("Last.fm authentication URL: " + createAuthURL(apiClient))
+		return
+	}
 }
 
 func createAPIClient() *lastfm_api.Api {
@@ -20,4 +26,11 @@ func createAPIClient() *lastfm_api.Api {
 	}
 
 	return lastfm_api.New(clientID, clientSecret)
+}
+
+func createAuthURL(apiClient *lastfm_api.Api) string {
+	// Not an actual web server (yet).
+	redirectURL := "https://admirer.test"
+
+	return apiClient.GetAuthRequestUrl(redirectURL)
 }

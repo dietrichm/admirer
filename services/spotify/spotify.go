@@ -9,14 +9,14 @@ import (
 
 // Login runs the CLI procedure for logging in on Spotify.
 func Login(oauthCode string) {
-	authenticator := createSpotifyAuthenticator()
+	authenticator := createAuthenticator()
 
 	if len(oauthCode) == 0 {
-		fmt.Println("Spotify authentication URL: " + createSpotifyAuthURL(&authenticator))
+		fmt.Println("Spotify authentication URL: " + createAuthURL(&authenticator))
 		return
 	}
 
-	client := callbackSpotify(&authenticator, oauthCode)
+	client := callback(&authenticator, oauthCode)
 
 	user, err := client.CurrentUser()
 	if err != nil {
@@ -26,7 +26,7 @@ func Login(oauthCode string) {
 	fmt.Println("Logged in on Spotify as " + user.DisplayName)
 }
 
-func createSpotifyAuthenticator() spotify.Authenticator {
+func createAuthenticator() spotify.Authenticator {
 	clientID := os.Getenv("SPOTIFY_CLIENT_ID")
 	clientSecret := os.Getenv("SPOTIFY_CLIENT_SECRET")
 
@@ -42,11 +42,11 @@ func createSpotifyAuthenticator() spotify.Authenticator {
 	return authenticator
 }
 
-func createSpotifyAuthURL(authenticator *spotify.Authenticator) string {
+func createAuthURL(authenticator *spotify.Authenticator) string {
 	return authenticator.AuthURL("")
 }
 
-func callbackSpotify(authenticator *spotify.Authenticator, code string) spotify.Client {
+func callback(authenticator *spotify.Authenticator, code string) spotify.Client {
 	token, err := authenticator.Exchange(code)
 	if err != nil {
 		panic("Failed to parse Spotify token.")

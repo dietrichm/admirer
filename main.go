@@ -9,15 +9,15 @@ import (
 )
 
 func main() {
-	var spotify bool
-	flag.BoolVar(&spotify, "spotify", false, "Authenticate with Spotify")
+	var spotifyLogin bool
+	flag.BoolVar(&spotifyLogin, "spotify", false, "Authenticate with Spotify")
 
 	var oauthCode string
 	flag.StringVar(&oauthCode, "oauth-code", "", "OAuth code")
 
 	flag.Parse()
 
-	if spotify {
+	if spotifyLogin {
 		spotifyLogin(oauthCode)
 		os.Exit(0)
 	}

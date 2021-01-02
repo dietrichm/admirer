@@ -13,7 +13,7 @@ func Login(oauthCode string) {
 	authenticator := spotify.authenticator
 
 	if len(oauthCode) == 0 {
-		fmt.Println("Spotify authentication URL: " + createAuthURL(authenticator))
+		fmt.Println("Spotify authentication URL: " + spotify.CreateAuthURL())
 		return
 	}
 
@@ -51,8 +51,9 @@ func NewSpotify() *Spotify {
 	}
 }
 
-func createAuthURL(authenticator *spotify.Authenticator) string {
-	return authenticator.AuthURL("")
+// CreateAuthURL returns an authorization URL to authorize the integration.
+func (s *Spotify) CreateAuthURL() string {
+	return s.authenticator.AuthURL("")
 }
 
 func callback(authenticator *spotify.Authenticator, code string) spotify.Client {

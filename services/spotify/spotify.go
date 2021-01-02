@@ -1,25 +1,10 @@
 package spotify
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/zmb3/spotify"
 )
-
-// Login runs the CLI procedure for logging in on Spotify.
-func Login(oauthCode string) {
-	spotify := NewSpotify()
-
-	if len(oauthCode) == 0 {
-		fmt.Println("Spotify authentication URL: " + spotify.CreateAuthURL())
-		return
-	}
-
-	spotify.Authenticate(oauthCode)
-
-	fmt.Println("Logged in on Spotify as " + spotify.GetUsername())
-}
 
 // Spotify is the external Spotify service implementation.
 type Spotify struct {

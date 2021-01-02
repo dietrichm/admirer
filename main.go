@@ -4,29 +4,20 @@ import (
 	"flag"
 	"os"
 
-	"github.com/dietrichm/admirer/services/lastfm"
-	"github.com/dietrichm/admirer/services/spotify"
+	"github.com/dietrichm/admirer/commands"
 )
 
 func main() {
-	var spotifyLogin bool
-	flag.BoolVar(&spotifyLogin, "spotify", false, "Authenticate with Spotify")
-
-	var lastfmLogin bool
-	flag.BoolVar(&lastfmLogin, "lastfm", false, "Authenticate with Last.fm")
+	var loginServiceName string
+	flag.StringVar(&loginServiceName, "login", "", "Log in on external service")
 
 	var oauthCode string
 	flag.StringVar(&oauthCode, "oauth-code", "", "OAuth code")
 
 	flag.Parse()
 
-	if spotifyLogin {
-		spotify.Login(oauthCode)
-		os.Exit(0)
-	}
-
-	if lastfmLogin {
-		lastfm.Login(oauthCode)
+	if len(loginServiceName) != 0 {
+		commands.Login(loginServiceName, oauthCode)
 		os.Exit(0)
 	}
 

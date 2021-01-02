@@ -1,25 +1,10 @@
 package lastfm
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/shkh/lastfm-go/lastfm"
 )
-
-// Login runs the CLI procedure for logging in on Last.fm.
-func Login(oauthCode string) {
-	lastfm := NewLastfm()
-
-	if len(oauthCode) == 0 {
-		fmt.Println("Last.fm authentication URL: " + lastfm.CreateAuthURL())
-		return
-	}
-
-	lastfm.Authenticate(oauthCode)
-
-	fmt.Println("Logged in on Last.fm as " + lastfm.GetUsername())
-}
 
 // Lastfm is the external Lastfm service implementation.
 type Lastfm struct {
@@ -38,6 +23,11 @@ func NewLastfm() *Lastfm {
 	return &Lastfm{
 		api: lastfm.New(clientID, clientSecret),
 	}
+}
+
+// Name returns the human readable service name.
+func (l *Lastfm) Name() string {
+	return "Last.fm"
 }
 
 // CreateAuthURL returns an authorization URL to authorize the integration.

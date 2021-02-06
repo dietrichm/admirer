@@ -1,6 +1,8 @@
 package services
 
 import (
+	"fmt"
+
 	"github.com/dietrichm/admirer/services/lastfm"
 	"github.com/dietrichm/admirer/services/spotify"
 )
@@ -9,18 +11,19 @@ import (
 type Service interface {
 	Name() string
 	CreateAuthURL() string
-	Authenticate(code string)
-	GetUsername() string
+	Authenticate(code string) error
+	GetUsername() (string, error)
 }
 
 // ForName returns service instance for service name.
-func ForName(serviceName string) Service {
+func ForName(serviceName string) (service Service, err error) {
 	switch serviceName {
 	case "spotify":
-		return spotify.NewSpotify()
+		service, err = spotify.NewSpotify()
 	case "lastfm":
-		return lastfm.NewLastfm()
+		service, err = lastfm.NewLastfm()
 	default:
-		panic("Unknown service " + serviceName)
+		err = fmt.Errorf("unknown service %s", serviceName)
 	}
+	return
 }

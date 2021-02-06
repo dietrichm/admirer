@@ -15,16 +15,27 @@ var loginCommand = &cobra.Command{
 	Use:   "login <service> [oauth-code]",
 	Short: "Log in on external service",
 	Args:  cobra.MinimumNArgs(1),
-	Run: func(command *cobra.Command, args []string) {
-		service := services.ForName(args[0])
+	RunE: func(command *cobra.Command, args []string) error {
+		service, err := services.ForName(args[0])
+		if err != nil {
+			return err
+		}
 
 		if len(args) < 2 {
 			fmt.Println(service.Name() + " authentication URL: " + service.CreateAuthURL())
-			return
+			return nil
 		}
 
-		service.Authenticate(args[1])
+		if err := service.Authenticate(args[1]); err != nil {
+			return err
+		}
 
-		fmt.Println("Logged in on " + service.Name() + " as " + service.GetUsername())
+		username, err := service.GetUsername()
+		if err != nil {
+			return err
+		}
+
+		fmt.Println("Logged in on " + service.Name() + " as " + username)
+		return nil
 	},
 }

@@ -1,6 +1,7 @@
 package lastfm
 
 import (
+	"fmt"
 	"os"
 
 	"github.com/shkh/lastfm-go/lastfm"
@@ -12,17 +13,17 @@ type Lastfm struct {
 }
 
 // NewLastfm creates a Lastfm instance.
-func NewLastfm() *Lastfm {
+func NewLastfm() (*Lastfm, error) {
 	clientID := os.Getenv("LASTFM_CLIENT_ID")
 	clientSecret := os.Getenv("LASTFM_CLIENT_SECRET")
 
 	if len(clientID) == 0 || len(clientSecret) == 0 {
-		panic("Please set LASTFM_CLIENT_ID and LASTFM_CLIENT_SECRET environment variables.")
+		return nil, fmt.Errorf("please set LASTFM_CLIENT_ID and LASTFM_CLIENT_SECRET environment variables")
 	}
 
 	return &Lastfm{
 		api: lastfm.New(clientID, clientSecret),
-	}
+	}, nil
 }
 
 // Name returns the human readable service name.

@@ -23,7 +23,11 @@ func ForName(serviceName string) Service {
 		}
 		return service
 	case "lastfm":
-		return lastfm.NewLastfm()
+		service, err := lastfm.NewLastfm()
+		if err != nil {
+			panic(err)
+		}
+		return service
 	default:
 		panic("Unknown service " + serviceName)
 	}

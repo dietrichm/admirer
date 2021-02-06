@@ -30,6 +30,11 @@ var loginCommand = &cobra.Command{
 			panic(err)
 		}
 
-		fmt.Println("Logged in on " + service.Name() + " as " + service.GetUsername())
+		username, err := service.GetUsername()
+		if err != nil {
+			panic(err)
+		}
+
+		fmt.Println("Logged in on " + service.Name() + " as " + username)
 	},
 }

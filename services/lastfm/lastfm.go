@@ -49,11 +49,11 @@ func (l *Lastfm) Authenticate(oauthCode string) error {
 }
 
 // GetUsername requests and returns the username of the logged in user.
-func (l *Lastfm) GetUsername() string {
+func (l *Lastfm) GetUsername() (string, error) {
 	user, err := l.api.User.GetInfo(lastfm.P{})
 	if err != nil {
-		panic("Failed to read Last.fm profile data.")
+		return "", fmt.Errorf("failed to read Last.fm profile data")
 	}
 
-	return user.Name
+	return user.Name, nil
 }

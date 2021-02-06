@@ -55,11 +55,11 @@ func (s *Spotify) Authenticate(code string) error {
 }
 
 // GetUsername requests and returns the username of the logged in user.
-func (s *Spotify) GetUsername() string {
+func (s *Spotify) GetUsername() (string, error) {
 	user, err := s.client.CurrentUser()
 	if err != nil {
-		panic("Failed to read Spotify profile data.")
+		return "", fmt.Errorf("failed to read Spotify profile data")
 	}
 
-	return user.DisplayName
+	return user.DisplayName, nil
 }

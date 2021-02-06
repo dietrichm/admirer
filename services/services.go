@@ -12,7 +12,7 @@ type Service interface {
 	Name() string
 	CreateAuthURL() string
 	Authenticate(code string) error
-	GetUsername() string
+	GetUsername() (string, error)
 }
 
 // ForName returns service instance for service name.

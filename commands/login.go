@@ -16,7 +16,10 @@ var loginCommand = &cobra.Command{
 	Short: "Log in on external service",
 	Args:  cobra.MinimumNArgs(1),
 	Run: func(command *cobra.Command, args []string) {
-		service := services.ForName(args[0])
+		service, err := services.ForName(args[0])
+		if err != nil {
+			panic(err)
+		}
 
 		if len(args) < 2 {
 			fmt.Println(service.Name() + " authentication URL: " + service.CreateAuthURL())

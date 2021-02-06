@@ -1,6 +1,8 @@
 package services
 
 import (
+	"fmt"
+
 	"github.com/dietrichm/admirer/services/lastfm"
 	"github.com/dietrichm/admirer/services/spotify"
 )
@@ -14,21 +16,14 @@ type Service interface {
 }
 
 // ForName returns service instance for service name.
-func ForName(serviceName string) Service {
+func ForName(serviceName string) (service Service, err error) {
 	switch serviceName {
 	case "spotify":
-		service, err := spotify.NewSpotify()
-		if err != nil {
-			panic(err)
-		}
-		return service
+		service, err = spotify.NewSpotify()
 	case "lastfm":
-		service, err := lastfm.NewLastfm()
-		if err != nil {
-			panic(err)
-		}
-		return service
+		service, err = lastfm.NewLastfm()
 	default:
-		panic("Unknown service " + serviceName)
+		err = fmt.Errorf("unknown service %s", serviceName)
 	}
+	return
 }

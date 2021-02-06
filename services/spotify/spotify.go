@@ -1,6 +1,7 @@
 package spotify
 
 import (
+	"fmt"
 	"os"
 
 	"github.com/zmb3/spotify"
@@ -13,12 +14,12 @@ type Spotify struct {
 }
 
 // NewSpotify creates a Spotify instance.
-func NewSpotify() *Spotify {
+func NewSpotify() (*Spotify, error) {
 	clientID := os.Getenv("SPOTIFY_CLIENT_ID")
 	clientSecret := os.Getenv("SPOTIFY_CLIENT_SECRET")
 
 	if len(clientID) == 0 || len(clientSecret) == 0 {
-		panic("Please set SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET environment variables.")
+		return nil, fmt.Errorf("please set SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET environment variables")
 	}
 
 	// Not an actual web server (yet).
@@ -28,7 +29,7 @@ func NewSpotify() *Spotify {
 
 	return &Spotify{
 		authenticator: &authenticator,
-	}
+	}, nil
 }
 
 // Name returns the human readable service name.

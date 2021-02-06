@@ -17,7 +17,11 @@ type Service interface {
 func ForName(serviceName string) Service {
 	switch serviceName {
 	case "spotify":
-		return spotify.NewSpotify()
+		service, err := spotify.NewSpotify()
+		if err != nil {
+			panic(err)
+		}
+		return service
 	case "lastfm":
 		return lastfm.NewLastfm()
 	default:

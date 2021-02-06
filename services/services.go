@@ -11,7 +11,7 @@ import (
 type Service interface {
 	Name() string
 	CreateAuthURL() string
-	Authenticate(code string)
+	Authenticate(code string) error
 	GetUsername() string
 }
 

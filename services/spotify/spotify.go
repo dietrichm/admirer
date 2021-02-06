@@ -43,14 +43,15 @@ func (s *Spotify) CreateAuthURL() string {
 }
 
 // Authenticate takes an authorization code and authenticates the user.
-func (s *Spotify) Authenticate(code string) {
+func (s *Spotify) Authenticate(code string) error {
 	token, err := s.authenticator.Exchange(code)
 	if err != nil {
-		panic("Failed to parse Spotify token.")
+		return fmt.Errorf("failed to parse Spotify token")
 	}
 
 	client := s.authenticator.NewClient(token)
 	s.client = &client
+	return nil
 }
 
 // GetUsername requests and returns the username of the logged in user.

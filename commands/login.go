@@ -26,7 +26,9 @@ var loginCommand = &cobra.Command{
 			return
 		}
 
-		service.Authenticate(args[1])
+		if err := service.Authenticate(args[1]); err != nil {
+			panic(err)
+		}
 
 		fmt.Println("Logged in on " + service.Name() + " as " + service.GetUsername())
 	},

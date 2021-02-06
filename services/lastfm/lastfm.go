@@ -40,11 +40,12 @@ func (l *Lastfm) CreateAuthURL() string {
 }
 
 // Authenticate takes an authorization code and authenticates the user.
-func (l *Lastfm) Authenticate(oauthCode string) {
-	err := l.api.LoginWithToken(oauthCode)
-	if err != nil {
-		panic("Failed to parse Last.fm token.")
+func (l *Lastfm) Authenticate(oauthCode string) error {
+	if err := l.api.LoginWithToken(oauthCode); err != nil {
+		return fmt.Errorf("failed to parse Last.fm token")
 	}
+
+	return nil
 }
 
 // GetUsername requests and returns the username of the logged in user.

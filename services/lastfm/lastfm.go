@@ -1,7 +1,7 @@
 package lastfm
 
 import (
-	"fmt"
+	"errors"
 	"os"
 
 	"github.com/shkh/lastfm-go/lastfm"
@@ -18,7 +18,7 @@ func NewLastfm() (*Lastfm, error) {
 	clientSecret := os.Getenv("LASTFM_CLIENT_SECRET")
 
 	if len(clientID) == 0 || len(clientSecret) == 0 {
-		return nil, fmt.Errorf("please set LASTFM_CLIENT_ID and LASTFM_CLIENT_SECRET environment variables")
+		return nil, errors.New("please set LASTFM_CLIENT_ID and LASTFM_CLIENT_SECRET environment variables")
 	}
 
 	return &Lastfm{
@@ -42,7 +42,7 @@ func (l *Lastfm) CreateAuthURL() string {
 // Authenticate takes an authorization code and authenticates the user.
 func (l *Lastfm) Authenticate(oauthCode string) error {
 	if err := l.api.LoginWithToken(oauthCode); err != nil {
-		return fmt.Errorf("failed to parse Last.fm token")
+		return errors.New("failed to parse Last.fm token")
 	}
 
 	return nil
@@ -52,7 +52,7 @@ func (l *Lastfm) Authenticate(oauthCode string) error {
 func (l *Lastfm) GetUsername() (string, error) {
 	user, err := l.api.User.GetInfo(lastfm.P{})
 	if err != nil {
-		return "", fmt.Errorf("failed to read Last.fm profile data")
+		return "", errors.New("failed to read Last.fm profile data")
 	}
 
 	return user.Name, nil

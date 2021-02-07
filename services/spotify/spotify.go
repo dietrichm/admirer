@@ -1,7 +1,7 @@
 package spotify
 
 import (
-	"fmt"
+	"errors"
 	"os"
 
 	"github.com/zmb3/spotify"
@@ -19,7 +19,7 @@ func NewSpotify() (*Spotify, error) {
 	clientSecret := os.Getenv("SPOTIFY_CLIENT_SECRET")
 
 	if len(clientID) == 0 || len(clientSecret) == 0 {
-		return nil, fmt.Errorf("please set SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET environment variables")
+		return nil, errors.New("please set SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET environment variables")
 	}
 
 	// Not an actual web server (yet).
@@ -46,7 +46,7 @@ func (s *Spotify) CreateAuthURL() string {
 func (s *Spotify) Authenticate(code string) error {
 	token, err := s.authenticator.Exchange(code)
 	if err != nil {
-		return fmt.Errorf("failed to parse Spotify token")
+		return errors.New("failed to parse Spotify token")
 	}
 
 	client := s.authenticator.NewClient(token)
@@ -58,7 +58,7 @@ func (s *Spotify) Authenticate(code string) error {
 func (s *Spotify) GetUsername() (string, error) {
 	user, err := s.client.CurrentUser()
 	if err != nil {
-		return "", fmt.Errorf("failed to read Spotify profile data")
+		return "", errors.New("failed to read Spotify profile data")
 	}
 
 	return user.DisplayName, nil

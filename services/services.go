@@ -23,7 +23,7 @@ func ForName(serviceName string) (service Service, err error) {
 	case "lastfm":
 		service, err = lastfm.NewLastfm()
 	default:
-		err = fmt.Errorf("unknown service %s", serviceName)
+		err = fmt.Errorf("unknown service %q", serviceName)
 	}
 	return
 }

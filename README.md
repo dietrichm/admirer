@@ -8,4 +8,4 @@ A command line utility to sync song likes between Spotify and Last.fm.
 
 Copyright 2020, Dietrich Moerman.
 
-Released under terms of the [MIT License](LICENSE).
+Released under the terms of the [MIT License](LICENSE).

@@ -1,6 +1,6 @@
 module github.com/dietrichm/admirer
 
-go 1.15
+go 1.16
 
 require (
 	github.com/shkh/lastfm-go v0.0.0-20191215035245-89a801c244e0

@@ -2,21 +2,16 @@ package commands
 
 import (
 	"bytes"
-	"os"
-	"strings"
 	"testing"
 
 	"github.com/dietrichm/admirer/services"
 )
 
 func TestReturnsServiceAuthenticationUrl(t *testing.T) {
-	os.Setenv("SPOTIFY_CLIENT_ID", "foo")
-	os.Setenv("SPOTIFY_CLIENT_SECRET", "bar")
+	got, err := executeLogin("foobar")
+	expected := "Service authentication URL: https://service.test/auth\n"
 
-	got, err := executeLogin("spotify")
-	expected := "Spotify authentication URL: https://"
-
-	if !strings.Contains(got, expected) {
+	if got != expected {
 		t.Errorf("expected %q, got %q", expected, got)
 	}
 
@@ -26,7 +21,7 @@ func TestReturnsServiceAuthenticationUrl(t *testing.T) {
 }
 
 func executeLogin(args ...string) (string, error) {
-	serviceLoader := new(services.DefaultServiceLoader)
+	serviceLoader := new(MockServiceLoader)
 
 	buffer := new(bytes.Buffer)
 	loginCommand.SetOutput(buffer)
@@ -34,4 +29,25 @@ func executeLogin(args ...string) (string, error) {
 	err := Login(serviceLoader, loginCommand, args)
 
 	return buffer.String(), err
+}
+
+type MockService struct{}
+
+func (m *MockService) Name() string {
+	return "Service"
+}
+func (m *MockService) CreateAuthURL() string {
+	return "https://service.test/auth"
+}
+func (m *MockService) Authenticate(code string) error {
+	return nil
+}
+func (m *MockService) GetUsername() (string, error) {
+	return "Joe", nil
+}
+
+type MockServiceLoader struct{}
+
+func (m *MockServiceLoader) ForName(serviceName string) (service services.Service, err error) {
+	return new(MockService), nil
 }

@@ -7,17 +7,19 @@ import (
 	"github.com/dietrichm/admirer/services"
 )
 
-func TestReturnsServiceAuthenticationUrl(t *testing.T) {
-	got, err := executeLogin("foobar")
-	expected := "Service authentication URL: https://service.test/auth\n"
+func TestLogin(t *testing.T) {
+	t.Run("prints service authentication URL", func(t *testing.T) {
+		got, err := executeLogin("foobar")
+		expected := "Service authentication URL: https://service.test/auth\n"
 
-	if got != expected {
-		t.Errorf("expected %q, got %q", expected, got)
-	}
+		if got != expected {
+			t.Errorf("expected %q, got %q", expected, got)
+		}
 
-	if err != nil {
-		t.Errorf("Unexpected error: %v", err)
-	}
+		if err != nil {
+			t.Errorf("Unexpected error: %v", err)
+		}
+	})
 }
 
 func executeLogin(args ...string) (string, error) {

@@ -21,8 +21,10 @@ var loginCommand = &cobra.Command{
 			return err
 		}
 
+		writer := command.OutOrStdout()
+
 		if len(args) < 2 {
-			fmt.Println(service.Name(), "authentication URL:", service.CreateAuthURL())
+			fmt.Fprintln(writer, service.Name(), "authentication URL:", service.CreateAuthURL())
 			return nil
 		}
 
@@ -35,7 +37,7 @@ var loginCommand = &cobra.Command{
 			return err
 		}
 
-		fmt.Println("Logged in on", service.Name(), "as", username)
+		fmt.Fprintln(writer, "Logged in on", service.Name(), "as", username)
 		return nil
 	},
 }

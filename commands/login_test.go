@@ -6,16 +6,14 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/spf13/cobra"
+	"github.com/dietrichm/admirer/services"
 )
 
 func TestReturnsServiceAuthenticationUrl(t *testing.T) {
 	os.Setenv("SPOTIFY_CLIENT_ID", "foo")
 	os.Setenv("SPOTIFY_CLIENT_SECRET", "bar")
 
-	rootCommand.SetArgs([]string{"login", "spotify"})
-
-	got, err := executeCommand(rootCommand)
+	got, err := executeLogin("spotify")
 	expected := "Spotify authentication URL: https://"
 
 	if !strings.Contains(got, expected) {
@@ -27,11 +25,13 @@ func TestReturnsServiceAuthenticationUrl(t *testing.T) {
 	}
 }
 
-func executeCommand(command *cobra.Command) (string, error) {
-	buffer := new(bytes.Buffer)
-	command.SetOutput(buffer)
+func executeLogin(args ...string) (string, error) {
+	serviceLoader := new(services.DefaultServiceLoader)
 
-	_, err := command.ExecuteC()
+	buffer := new(bytes.Buffer)
+	loginCommand.SetOutput(buffer)
+
+	err := Login(serviceLoader, loginCommand, args)
 
 	return buffer.String(), err
 }

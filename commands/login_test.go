@@ -9,7 +9,9 @@ import (
 
 func TestLogin(t *testing.T) {
 	t.Run("prints service authentication URL", func(t *testing.T) {
-		got, err := executeLogin(new(MockService), "foobar")
+		serviceLoader := &MockServiceLoader{new(MockService)}
+
+		got, err := executeLogin(serviceLoader, "foobar")
 		expected := "Service authentication URL: https://service.test/auth\n"
 
 		if got != expected {
@@ -23,7 +25,9 @@ func TestLogin(t *testing.T) {
 
 	t.Run("authenticates on service with auth code", func(t *testing.T) {
 		service := new(MockService)
-		got, err := executeLogin(service, "foobar", "authcode")
+		serviceLoader := &MockServiceLoader{service}
+
+		got, err := executeLogin(serviceLoader, "foobar", "authcode")
 		expected := "Logged in on Service as Joe\n"
 
 		if got != expected {
@@ -40,9 +44,7 @@ func TestLogin(t *testing.T) {
 	})
 }
 
-func executeLogin(service services.Service, args ...string) (string, error) {
-	serviceLoader := &MockServiceLoader{service}
-
+func executeLogin(serviceLoader services.ServiceLoader, args ...string) (string, error) {
 	buffer := new(bytes.Buffer)
 	loginCommand.SetOutput(buffer)
 

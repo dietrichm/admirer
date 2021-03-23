@@ -101,6 +101,7 @@ func executeLogin(serviceLoader services.ServiceLoader, args ...string) (string,
 
 type MockService struct {
 	authenticationError error
+	usernameError       error
 	authenticatedWith   string
 }
 
@@ -115,7 +116,7 @@ func (m *MockService) Authenticate(code string) error {
 	return m.authenticationError
 }
 func (m *MockService) GetUsername() (string, error) {
-	return "Joe", nil
+	return "Joe", m.usernameError
 }
 
 type MockServiceLoader struct {

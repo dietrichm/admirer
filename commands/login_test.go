@@ -66,6 +66,28 @@ func TestLogin(t *testing.T) {
 			t.Errorf("expected %q, got %q", expected, got)
 		}
 	})
+
+	t.Run("returns error for failed authentication", func(t *testing.T) {
+		expected := "failed authentication"
+		service := &MockService{errors.New(expected), ""}
+		serviceLoader := &MockServiceLoader{service, nil}
+
+		output, err := executeLogin(serviceLoader, "foobar", "authcode")
+
+		if output != "" {
+			t.Errorf("Unexpected output: %v", output)
+		}
+
+		if err == nil {
+			t.Error("Expected an error")
+		}
+
+		got := err.Error()
+
+		if got != expected {
+			t.Errorf("expected %q, got %q", expected, got)
+		}
+	})
 }
 
 func executeLogin(serviceLoader services.ServiceLoader, args ...string) (string, error) {

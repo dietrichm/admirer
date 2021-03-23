@@ -78,7 +78,8 @@ func executeLogin(serviceLoader services.ServiceLoader, args ...string) (string,
 }
 
 type MockService struct {
-	authenticatedWith string
+	authenticationError error
+	authenticatedWith   string
 }
 
 func (m *MockService) Name() string {
@@ -89,7 +90,7 @@ func (m *MockService) CreateAuthURL() string {
 }
 func (m *MockService) Authenticate(code string) error {
 	m.authenticatedWith = code
-	return nil
+	return m.authenticationError
 }
 func (m *MockService) GetUsername() (string, error) {
 	return "Joe", nil

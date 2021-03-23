@@ -138,8 +138,6 @@ func TestLogin(t *testing.T) {
 
 func executeLogin(serviceLoader services.ServiceLoader, args ...string) (string, error) {
 	buffer := new(bytes.Buffer)
-
 	err := Login(serviceLoader, buffer, args)
-
 	return buffer.String(), err
 }

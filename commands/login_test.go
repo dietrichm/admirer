@@ -2,6 +2,7 @@ package commands
 
 import (
 	"bytes"
+	"errors"
 	"testing"
 
 	"github.com/dietrichm/admirer/services"
@@ -9,7 +10,7 @@ import (
 
 func TestLogin(t *testing.T) {
 	t.Run("prints service authentication URL", func(t *testing.T) {
-		serviceLoader := &MockServiceLoader{new(MockService)}
+		serviceLoader := &MockServiceLoader{new(MockService), nil}
 
 		got, err := executeLogin(serviceLoader, "foobar")
 		expected := "Service authentication URL: https://service.test/auth\n"
@@ -25,7 +26,7 @@ func TestLogin(t *testing.T) {
 
 	t.Run("authenticates on service with auth code", func(t *testing.T) {
 		service := new(MockService)
-		serviceLoader := &MockServiceLoader{service}
+		serviceLoader := &MockServiceLoader{service, nil}
 
 		got, err := executeLogin(serviceLoader, "foobar", "authcode")
 		expected := "Logged in on Service as Joe\n"
@@ -73,8 +74,9 @@ func (m *MockService) GetUsername() (string, error) {
 
 type MockServiceLoader struct {
 	service services.Service
+	error   error
 }
 
 func (m *MockServiceLoader) ForName(serviceName string) (service services.Service, err error) {
-	return m.service, nil
+	return m.service, m.error
 }

@@ -5,12 +5,21 @@ import (
 	"errors"
 	"testing"
 
+	"github.com/dietrichm/admirer/mock_services"
 	"github.com/dietrichm/admirer/services"
+	"github.com/golang/mock/gomock"
 )
 
 func TestLogin(t *testing.T) {
 	t.Run("prints service authentication URL", func(t *testing.T) {
-		serviceLoader := &MockServiceLoader{new(MockService), nil}
+		ctrl := gomock.NewController(t)
+
+		service := mock_services.NewMockService(ctrl)
+		service.EXPECT().Name().AnyTimes().Return("Service")
+		service.EXPECT().CreateAuthURL().Return("https://service.test/auth")
+
+		serviceLoader := mock_services.NewMockServiceLoader(ctrl)
+		serviceLoader.EXPECT().ForName("foobar").Return(service, nil)
 
 		got, err := executeLogin(serviceLoader, "foobar")
 		expected := "Service authentication URL: https://service.test/auth\n"
@@ -25,20 +34,21 @@ func TestLogin(t *testing.T) {
 	})
 
 	t.Run("authenticates on service with auth code", func(t *testing.T) {
-		service := new(MockService)
-		serviceLoader := &MockServiceLoader{service, nil}
+		ctrl := gomock.NewController(t)
 
-		authcode := "authcode"
-		got, err := executeLogin(serviceLoader, "foobar", authcode)
+		service := mock_services.NewMockService(ctrl)
+		service.EXPECT().Authenticate("authcode")
+		service.EXPECT().Name().AnyTimes().Return("Service")
+		service.EXPECT().GetUsername().Return("Joe", nil)
+
+		serviceLoader := mock_services.NewMockServiceLoader(ctrl)
+		serviceLoader.EXPECT().ForName(gomock.Any()).Return(service, nil)
+
+		got, err := executeLogin(serviceLoader, "foobar", "authcode")
 		expected := "Logged in on Service as Joe\n"
 
 		if got != expected {
 			t.Errorf("expected %q, got %q", expected, got)
-		}
-
-		got = service.authenticatedWith
-		if got != authcode {
-			t.Errorf("expected %q, got %q", authcode, got)
 		}
 
 		if err != nil {
@@ -47,8 +57,11 @@ func TestLogin(t *testing.T) {
 	})
 
 	t.Run("returns error for unknown service", func(t *testing.T) {
+		ctrl := gomock.NewController(t)
+
 		expected := "unknown service"
-		serviceLoader := &MockServiceLoader{nil, errors.New(expected)}
+		serviceLoader := mock_services.NewMockServiceLoader(ctrl)
+		serviceLoader.EXPECT().ForName(gomock.Any()).Return(nil, errors.New(expected))
 
 		output, err := executeLogin(serviceLoader, "foobar")
 
@@ -68,9 +81,14 @@ func TestLogin(t *testing.T) {
 	})
 
 	t.Run("returns error for failed authentication", func(t *testing.T) {
+		ctrl := gomock.NewController(t)
+
 		expected := "failed authentication"
-		service := &MockService{errors.New(expected), nil, ""}
-		serviceLoader := &MockServiceLoader{service, nil}
+		service := mock_services.NewMockService(ctrl)
+		service.EXPECT().Authenticate(gomock.Any()).Return(errors.New(expected))
+
+		serviceLoader := mock_services.NewMockServiceLoader(ctrl)
+		serviceLoader.EXPECT().ForName(gomock.Any()).Return(service, nil)
 
 		output, err := executeLogin(serviceLoader, "foobar", "authcode")
 
@@ -90,9 +108,15 @@ func TestLogin(t *testing.T) {
 	})
 
 	t.Run("returns error for failed username retrieval", func(t *testing.T) {
+		ctrl := gomock.NewController(t)
+
 		expected := "failed username retrieval"
-		service := &MockService{nil, errors.New(expected), ""}
-		serviceLoader := &MockServiceLoader{service, nil}
+		service := mock_services.NewMockService(ctrl)
+		service.EXPECT().Authenticate(gomock.Any()).Return(nil)
+		service.EXPECT().GetUsername().Return("", errors.New(expected))
+
+		serviceLoader := mock_services.NewMockServiceLoader(ctrl)
+		serviceLoader.EXPECT().ForName(gomock.Any()).Return(service, nil)
 
 		output, err := executeLogin(serviceLoader, "foobar", "authcode")
 

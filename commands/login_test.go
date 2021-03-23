@@ -114,9 +114,8 @@ func TestLogin(t *testing.T) {
 
 func executeLogin(serviceLoader services.ServiceLoader, args ...string) (string, error) {
 	buffer := new(bytes.Buffer)
-	loginCommand.SetOutput(buffer)
 
-	err := Login(serviceLoader, loginCommand, args)
+	err := Login(serviceLoader, buffer, args)
 
 	return buffer.String(), err
 }

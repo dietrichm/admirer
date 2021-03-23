@@ -2,6 +2,7 @@ package commands
 
 import (
 	"fmt"
+	"io"
 
 	"github.com/dietrichm/admirer/services"
 	"github.com/spf13/cobra"
@@ -17,18 +18,16 @@ var loginCommand = &cobra.Command{
 	Args:  cobra.MinimumNArgs(1),
 	RunE: func(command *cobra.Command, args []string) error {
 		serviceLoader := new(services.DefaultServiceLoader)
-		return Login(serviceLoader, command, args)
+		return Login(serviceLoader, command.OutOrStdout(), args)
 	},
 }
 
 // Login runs the authentication flow for a specified service.
-func Login(serviceLoader services.ServiceLoader, command *cobra.Command, args []string) error {
+func Login(serviceLoader services.ServiceLoader, writer io.Writer, args []string) error {
 	service, err := serviceLoader.ForName(args[0])
 	if err != nil {
 		return err
 	}
-
-	writer := command.OutOrStdout()
 
 	if len(args) < 2 {
 		fmt.Fprintln(writer, service.Name(), "authentication URL:", service.CreateAuthURL())

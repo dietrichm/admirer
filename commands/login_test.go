@@ -57,7 +57,7 @@ func TestLogin(t *testing.T) {
 		}
 
 		if err == nil {
-			t.Error("Expected an error")
+			t.Fatal("Expected an error")
 		}
 
 		got := err.Error()
@@ -79,7 +79,7 @@ func TestLogin(t *testing.T) {
 		}
 
 		if err == nil {
-			t.Error("Expected an error")
+			t.Fatal("Expected an error")
 		}
 
 		got := err.Error()
@@ -101,7 +101,7 @@ func TestLogin(t *testing.T) {
 		}
 
 		if err == nil {
-			t.Error("Expected an error")
+			t.Fatal("Expected an error")
 		}
 
 		got := err.Error()

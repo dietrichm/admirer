@@ -143,32 +143,3 @@ func executeLogin(serviceLoader services.ServiceLoader, args ...string) (string,
 
 	return buffer.String(), err
 }
-
-type MockService struct {
-	authenticationError error
-	usernameError       error
-	authenticatedWith   string
-}
-
-func (m *MockService) Name() string {
-	return "Service"
-}
-func (m *MockService) CreateAuthURL() string {
-	return "https://service.test/auth"
-}
-func (m *MockService) Authenticate(code string) error {
-	m.authenticatedWith = code
-	return m.authenticationError
-}
-func (m *MockService) GetUsername() (string, error) {
-	return "Joe", m.usernameError
-}
-
-type MockServiceLoader struct {
-	service services.Service
-	error   error
-}
-
-func (m *MockServiceLoader) ForName(serviceName string) (service services.Service, err error) {
-	return m.service, m.error
-}

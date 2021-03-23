@@ -1,3 +1,5 @@
+//go:generate mockgen -source ../services/services.go -destination ../mock_services/services.go
+
 package services
 
 // Service is the external service interface.

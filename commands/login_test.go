@@ -28,15 +28,17 @@ func TestLogin(t *testing.T) {
 		service := new(MockService)
 		serviceLoader := &MockServiceLoader{service, nil}
 
-		got, err := executeLogin(serviceLoader, "foobar", "authcode")
+		authcode := "authcode"
+		got, err := executeLogin(serviceLoader, "foobar", authcode)
 		expected := "Logged in on Service as Joe\n"
 
 		if got != expected {
 			t.Errorf("expected %q, got %q", expected, got)
 		}
 
-		if !service.authenticated {
-			t.Error("Authenticate() was not called")
+		got = service.authenticatedWith
+		if got != authcode {
+			t.Errorf("expected %q, got %q", authcode, got)
 		}
 
 		if err != nil {
@@ -76,7 +78,7 @@ func executeLogin(serviceLoader services.ServiceLoader, args ...string) (string,
 }
 
 type MockService struct {
-	authenticated bool
+	authenticatedWith string
 }
 
 func (m *MockService) Name() string {
@@ -86,7 +88,7 @@ func (m *MockService) CreateAuthURL() string {
 	return "https://service.test/auth"
 }
 func (m *MockService) Authenticate(code string) error {
-	m.authenticated = true
+	m.authenticatedWith = code
 	return nil
 }
 func (m *MockService) GetUsername() (string, error) {

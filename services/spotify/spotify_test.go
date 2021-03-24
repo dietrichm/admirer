@@ -89,4 +89,24 @@ func TestSpotify(t *testing.T) {
 			t.Errorf("expected %q, got %q", expected, got)
 		}
 	})
+
+	t.Run("returns error when failing to read username", func(t *testing.T) {
+		ctrl := gomock.NewController(t)
+
+		client := mock_spotify.NewMockClient(ctrl)
+		client.EXPECT().CurrentUser().Return(nil, errors.New("error"))
+
+		service := &Spotify{client: client}
+
+		got, err := service.GetUsername()
+		expected := ""
+
+		if got != expected {
+			t.Errorf("expected %q, got %q", expected, got)
+		}
+
+		if err == nil {
+			t.Fatal("Expected an error")
+		}
+	})
 }

@@ -2,6 +2,7 @@ package spotify
 
 import (
 	"errors"
+	"os"
 	"testing"
 
 	mock_spotify "github.com/dietrichm/admirer/mock_services/spotify"
@@ -107,6 +108,23 @@ func TestSpotify(t *testing.T) {
 
 		if err == nil {
 			t.Fatal("Expected an error")
+		}
+	})
+}
+
+func TestNewSpotify(t *testing.T) {
+	t.Run("creates instance when environment is configured", func(t *testing.T) {
+		os.Setenv("SPOTIFY_CLIENT_ID", "client_id")
+		os.Setenv("SPOTIFY_CLIENT_SECRET", "client_secret")
+
+		service, err := NewSpotify()
+
+		if service == nil {
+			t.Error("Expected an instance")
+		}
+
+		if err != nil {
+			t.Errorf("Unexpected error: %v", err)
 		}
 	})
 }

@@ -7,9 +7,21 @@ import (
 	"github.com/shkh/lastfm-go/lastfm"
 )
 
+// API is our interface for a Last.fm API.
+type API interface {
+	GetAuthRequestUrl(callback string) (uri string)
+	LoginWithToken(token string) (err error)
+}
+
+// UserAPI is our interface for a Last.fm user API.
+type UserAPI interface {
+	GetInfo(args map[string]interface{}) (result lastfm.UserGetInfo, err error)
+}
+
 // Lastfm is the external Lastfm service implementation.
 type Lastfm struct {
-	api *lastfm.Api
+	api     API
+	userAPI UserAPI
 }
 
 // NewLastfm creates a Lastfm instance.
@@ -21,8 +33,11 @@ func NewLastfm() (*Lastfm, error) {
 		return nil, errors.New("please set LASTFM_CLIENT_ID and LASTFM_CLIENT_SECRET environment variables")
 	}
 
+	api := lastfm.New(clientID, clientSecret)
+
 	return &Lastfm{
-		api: lastfm.New(clientID, clientSecret),
+		api:     api,
+		userAPI: api.User,
 	}, nil
 }
 
@@ -50,7 +65,7 @@ func (l *Lastfm) Authenticate(oauthCode string) error {
 
 // GetUsername requests and returns the username of the logged in user.
 func (l *Lastfm) GetUsername() (string, error) {
-	user, err := l.api.User.GetInfo(lastfm.P{})
+	user, err := l.userAPI.GetInfo(lastfm.P{})
 	if err != nil {
 		return "", errors.New("failed to read Last.fm profile data")
 	}

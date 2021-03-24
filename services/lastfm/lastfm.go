@@ -1,3 +1,5 @@
+//go:generate mockgen -source ../../services/lastfm/lastfm.go -destination ../../mock_services/lastfm/lastfm.go -package lastfm
+
 package lastfm
 
 import (

@@ -1,3 +1,5 @@
+//go:generate mockgen -source ../../services/spotify/spotify.go -destination ../../mock_services/spotify/spotify.go -package spotify
+
 package spotify
 
 import (
@@ -5,12 +7,26 @@ import (
 	"os"
 
 	"github.com/zmb3/spotify"
+	"golang.org/x/oauth2"
 )
+
+// Authenticator is our interface for a Spotify authenticator.
+type Authenticator interface {
+	SetAuthInfo(clientID, secretKey string)
+	AuthURL(state string) string
+	Exchange(code string) (*oauth2.Token, error)
+	NewClient(token *oauth2.Token) spotify.Client
+}
+
+// Client is our interface for a Spotify client.
+type Client interface {
+	CurrentUser() (*spotify.PrivateUser, error)
+}
 
 // Spotify is the external Spotify service implementation.
 type Spotify struct {
-	authenticator *spotify.Authenticator
-	client        *spotify.Client
+	authenticator Authenticator
+	client        Client
 }
 
 // NewSpotify creates a Spotify instance.

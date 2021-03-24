@@ -1,6 +1,7 @@
 package spotify
 
 import (
+	"errors"
 	"testing"
 
 	mock_spotify "github.com/dietrichm/admirer/mock_services/spotify"
@@ -45,6 +46,21 @@ func TestSpotify(t *testing.T) {
 
 		if service.client == nil {
 			t.Error("Expected client to be set")
+		}
+	})
+
+	t.Run("returns error for invalid token", func(t *testing.T) {
+		ctrl := gomock.NewController(t)
+
+		authenticator := mock_spotify.NewMockAuthenticator(ctrl)
+		authenticator.EXPECT().Exchange(gomock.Any()).Return(nil, errors.New("error"))
+
+		service := &Spotify{authenticator: authenticator}
+
+		err := service.Authenticate("authcode")
+
+		if err == nil {
+			t.Fatal("Expected an error")
 		}
 	})
 }

@@ -14,11 +14,11 @@ type ServiceLoader interface {
 	ForName(serviceName string) (Service, error)
 }
 
-// DefaultServiceLoader loads actual instances of services.
-type DefaultServiceLoader struct{}
+// MapServiceLoader loads actual instances of services.
+type MapServiceLoader struct{}
 
 // ForName returns service instance for service name.
-func (d *DefaultServiceLoader) ForName(serviceName string) (service Service, err error) {
+func (d *MapServiceLoader) ForName(serviceName string) (service Service, err error) {
 	switch serviceName {
 	case "spotify":
 		service, err = spotify.NewSpotify()

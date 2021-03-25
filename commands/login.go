@@ -17,7 +17,7 @@ var loginCommand = &cobra.Command{
 	Short: "Log in on external service",
 	Args:  cobra.MinimumNArgs(1),
 	RunE: func(command *cobra.Command, args []string) error {
-		serviceLoader := new(services.DefaultServiceLoader)
+		serviceLoader := new(services.MapServiceLoader)
 		return Login(serviceLoader, command.OutOrStdout(), args)
 	},
 }

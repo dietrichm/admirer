@@ -1,4 +1,4 @@
-//go:generate mockgen -source ../services/loader.go -destination ../mock_services/loader.go
+//go:generate mockgen -source ../services/loader.go -destination ../services/loader_mock.go -package services
 
 package services
 

@@ -4,12 +4,13 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/dietrichm/admirer/services/spotify"
+	"github.com/golang/mock/gomock"
 )
 
 func TestMapServiceLoader(t *testing.T) {
 	t.Run("returns service when loader exists", func(t *testing.T) {
-		service := &spotify.Spotify{}
+		ctrl := gomock.NewController(t)
+		service := NewMockService(ctrl)
 
 		serviceLoader := MapServiceLoader{
 			"foo": func() (Service, error) {
@@ -20,11 +21,10 @@ func TestMapServiceLoader(t *testing.T) {
 			},
 		}
 
-		expected := service
 		got, err := serviceLoader.ForName("foo")
 
-		if got != expected {
-			t.Errorf("expected %q, got %q", expected, got)
+		if got != service {
+			t.Errorf("expected %v, got %v", service, got)
 		}
 
 		if err != nil {

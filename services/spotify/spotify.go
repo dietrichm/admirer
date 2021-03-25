@@ -1,4 +1,4 @@
-//go:generate mockgen -source ../../services/spotify/spotify.go -destination ../../mock_services/spotify/spotify.go -package spotify
+//go:generate mockgen -source ../../services/spotify/spotify.go -destination ../../services/spotify/spotify_mock.go -package spotify
 
 package spotify
 

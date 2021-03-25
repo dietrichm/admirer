@@ -5,7 +5,6 @@ import (
 	"os"
 	"testing"
 
-	mock_spotify "github.com/dietrichm/admirer/mock_services/spotify"
 	"github.com/golang/mock/gomock"
 	"github.com/zmb3/spotify"
 	"golang.org/x/oauth2"
@@ -15,7 +14,7 @@ func TestSpotify(t *testing.T) {
 	t.Run("creates authentication URL", func(t *testing.T) {
 		ctrl := gomock.NewController(t)
 
-		authenticator := mock_spotify.NewMockAuthenticator(ctrl)
+		authenticator := NewMockAuthenticator(ctrl)
 		authenticator.EXPECT().AuthURL("").Return("https://service.test/auth")
 
 		service := &Spotify{authenticator: authenticator}
@@ -33,7 +32,7 @@ func TestSpotify(t *testing.T) {
 
 		token := new(oauth2.Token)
 		client := spotify.Client{}
-		authenticator := mock_spotify.NewMockAuthenticator(ctrl)
+		authenticator := NewMockAuthenticator(ctrl)
 		authenticator.EXPECT().Exchange("authcode").Return(token, nil)
 		authenticator.EXPECT().NewClient(token).Return(client)
 
@@ -53,7 +52,7 @@ func TestSpotify(t *testing.T) {
 	t.Run("returns error for invalid token", func(t *testing.T) {
 		ctrl := gomock.NewController(t)
 
-		authenticator := mock_spotify.NewMockAuthenticator(ctrl)
+		authenticator := NewMockAuthenticator(ctrl)
 		authenticator.EXPECT().Exchange(gomock.Any()).Return(nil, errors.New("error"))
 
 		service := &Spotify{authenticator: authenticator}
@@ -74,7 +73,7 @@ func TestSpotify(t *testing.T) {
 			},
 		}
 
-		client := mock_spotify.NewMockClient(ctrl)
+		client := NewMockClient(ctrl)
 		client.EXPECT().CurrentUser().Return(user, nil)
 
 		service := &Spotify{client: client}
@@ -94,7 +93,7 @@ func TestSpotify(t *testing.T) {
 	t.Run("returns error when failing to read username", func(t *testing.T) {
 		ctrl := gomock.NewController(t)
 
-		client := mock_spotify.NewMockClient(ctrl)
+		client := NewMockClient(ctrl)
 		client.EXPECT().CurrentUser().Return(nil, errors.New("error"))
 
 		service := &Spotify{client: client}

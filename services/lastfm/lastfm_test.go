@@ -5,7 +5,6 @@ import (
 	"os"
 	"testing"
 
-	mock_lastfm "github.com/dietrichm/admirer/mock_services/lastfm"
 	"github.com/golang/mock/gomock"
 	"github.com/shkh/lastfm-go/lastfm"
 )
@@ -14,7 +13,7 @@ func TestLastfm(t *testing.T) {
 	t.Run("creates authentication URL", func(t *testing.T) {
 		ctrl := gomock.NewController(t)
 
-		api := mock_lastfm.NewMockAPI(ctrl)
+		api := NewMockAPI(ctrl)
 		api.EXPECT().GetAuthRequestUrl("https://admirer.test").Return("https://service.test/auth")
 
 		service := &Lastfm{api: api}
@@ -30,7 +29,7 @@ func TestLastfm(t *testing.T) {
 	t.Run("authenticates using authorization code", func(t *testing.T) {
 		ctrl := gomock.NewController(t)
 
-		api := mock_lastfm.NewMockAPI(ctrl)
+		api := NewMockAPI(ctrl)
 		api.EXPECT().LoginWithToken("authcode")
 
 		service := &Lastfm{api: api}
@@ -45,7 +44,7 @@ func TestLastfm(t *testing.T) {
 	t.Run("returns error for invalid token", func(t *testing.T) {
 		ctrl := gomock.NewController(t)
 
-		api := mock_lastfm.NewMockAPI(ctrl)
+		api := NewMockAPI(ctrl)
 		api.EXPECT().LoginWithToken(gomock.Any()).Return(errors.New("error"))
 
 		service := &Lastfm{api: api}
@@ -61,7 +60,7 @@ func TestLastfm(t *testing.T) {
 		ctrl := gomock.NewController(t)
 
 		user := lastfm.UserGetInfo{Name: "Diana"}
-		userAPI := mock_lastfm.NewMockUserAPI(ctrl)
+		userAPI := NewMockUserAPI(ctrl)
 		userAPI.EXPECT().GetInfo(lastfm.P{}).Return(user, nil)
 
 		service := &Lastfm{userAPI: userAPI}
@@ -82,7 +81,7 @@ func TestLastfm(t *testing.T) {
 		ctrl := gomock.NewController(t)
 
 		user := lastfm.UserGetInfo{}
-		userAPI := mock_lastfm.NewMockUserAPI(ctrl)
+		userAPI := NewMockUserAPI(ctrl)
 		userAPI.EXPECT().GetInfo(gomock.Any()).Return(user, errors.New("error"))
 
 		service := &Lastfm{userAPI: userAPI}

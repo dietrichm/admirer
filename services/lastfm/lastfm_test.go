@@ -6,6 +6,7 @@ import (
 
 	mock_lastfm "github.com/dietrichm/admirer/mock_services/lastfm"
 	"github.com/golang/mock/gomock"
+	"github.com/shkh/lastfm-go/lastfm"
 )
 
 func TestLastfm(t *testing.T) {
@@ -52,6 +53,27 @@ func TestLastfm(t *testing.T) {
 
 		if err == nil {
 			t.Fatal("Expected an error")
+		}
+	})
+
+	t.Run("returns username from client", func(t *testing.T) {
+		ctrl := gomock.NewController(t)
+
+		user := lastfm.UserGetInfo{Name: "Diana"}
+		userAPI := mock_lastfm.NewMockUserAPI(ctrl)
+		userAPI.EXPECT().GetInfo(lastfm.P{}).Return(user, nil)
+
+		service := &Lastfm{userAPI: userAPI}
+
+		expected := "Diana"
+		got, err := service.GetUsername()
+
+		if got != expected {
+			t.Errorf("expected %q, got %q", expected, got)
+		}
+
+		if err != nil {
+			t.Errorf("Unexpected error: %v", err)
 		}
 	})
 }

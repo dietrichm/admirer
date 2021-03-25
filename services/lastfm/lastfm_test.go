@@ -2,6 +2,7 @@ package lastfm
 
 import (
 	"errors"
+	"os"
 	"testing"
 
 	mock_lastfm "github.com/dietrichm/admirer/mock_services/lastfm"
@@ -95,6 +96,23 @@ func TestLastfm(t *testing.T) {
 
 		if err == nil {
 			t.Fatal("Expected an error")
+		}
+	})
+}
+
+func TestNewLastfm(t *testing.T) {
+	t.Run("creates instance when environment is configured", func(t *testing.T) {
+		os.Setenv("LASTFM_CLIENT_ID", "client_id")
+		os.Setenv("LASTFM_CLIENT_SECRET", "client_secret")
+
+		service, err := NewLastfm()
+
+		if service == nil {
+			t.Error("Expected an instance")
+		}
+
+		if err != nil {
+			t.Errorf("Unexpected error: %v", err)
 		}
 	})
 }

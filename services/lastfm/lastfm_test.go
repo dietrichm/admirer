@@ -23,4 +23,19 @@ func TestLastfm(t *testing.T) {
 			t.Errorf("expected %q, got %q", expected, got)
 		}
 	})
+
+	t.Run("authenticates using authorization code", func(t *testing.T) {
+		ctrl := gomock.NewController(t)
+
+		api := mock_lastfm.NewMockAPI(ctrl)
+		api.EXPECT().LoginWithToken("authcode")
+
+		service := &Lastfm{api: api}
+
+		err := service.Authenticate("authcode")
+
+		if err != nil {
+			t.Errorf("Unexpected error: %v", err)
+		}
+	})
 }

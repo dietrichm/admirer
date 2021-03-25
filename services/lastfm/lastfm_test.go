@@ -115,4 +115,19 @@ func TestNewLastfm(t *testing.T) {
 			t.Errorf("Unexpected error: %v", err)
 		}
 	})
+
+	t.Run("returns error when environment is not configured", func(t *testing.T) {
+		os.Unsetenv("LASTFM_CLIENT_ID")
+		os.Unsetenv("LASTFM_CLIENT_SECRET")
+
+		service, err := NewLastfm()
+
+		if service != nil {
+			t.Errorf("Unexpected instance: %v", service)
+		}
+
+		if err == nil {
+			t.Error("Expected an error")
+		}
+	})
 }

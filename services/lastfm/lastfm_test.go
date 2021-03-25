@@ -1,6 +1,7 @@
 package lastfm
 
 import (
+	"errors"
 	"testing"
 
 	mock_lastfm "github.com/dietrichm/admirer/mock_services/lastfm"
@@ -36,6 +37,21 @@ func TestLastfm(t *testing.T) {
 
 		if err != nil {
 			t.Errorf("Unexpected error: %v", err)
+		}
+	})
+
+	t.Run("returns error for invalid token", func(t *testing.T) {
+		ctrl := gomock.NewController(t)
+
+		api := mock_lastfm.NewMockAPI(ctrl)
+		api.EXPECT().LoginWithToken(gomock.Any()).Return(errors.New("error"))
+
+		service := &Lastfm{api: api}
+
+		err := service.Authenticate("authcode")
+
+		if err == nil {
+			t.Fatal("Expected an error")
 		}
 	})
 }

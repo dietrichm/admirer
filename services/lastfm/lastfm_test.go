@@ -76,4 +76,25 @@ func TestLastfm(t *testing.T) {
 			t.Errorf("Unexpected error: %v", err)
 		}
 	})
+
+	t.Run("returns error when failing to read username", func(t *testing.T) {
+		ctrl := gomock.NewController(t)
+
+		user := lastfm.UserGetInfo{}
+		userAPI := mock_lastfm.NewMockUserAPI(ctrl)
+		userAPI.EXPECT().GetInfo(gomock.Any()).Return(user, errors.New("error"))
+
+		service := &Lastfm{userAPI: userAPI}
+
+		expected := ""
+		got, err := service.GetUsername()
+
+		if got != expected {
+			t.Errorf("expected %q, got %q", expected, got)
+		}
+
+		if err == nil {
+			t.Fatal("Expected an error")
+		}
+	})
 }

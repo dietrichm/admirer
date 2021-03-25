@@ -30,4 +30,29 @@ func TestMapServiceLoader(t *testing.T) {
 			t.Errorf("Unexpected error: %v", err)
 		}
 	})
+
+	t.Run("returns error when loader does not exist", func(t *testing.T) {
+		serviceLoader := MapServiceLoader{
+			"foo": func() (Service, error) {
+				return nil, nil
+			},
+		}
+
+		service, err := serviceLoader.ForName("bar")
+
+		if service != nil {
+			t.Errorf("Unexpected service instance: %v", service)
+		}
+
+		if err == nil {
+			t.Fatal("Expected an error")
+		}
+
+		expected := `unknown service "bar"`
+		got := err.Error()
+
+		if got != expected {
+			t.Errorf("expected %q, got %q", expected, got)
+		}
+	})
 }

@@ -1,6 +1,7 @@
 package services
 
 import (
+	"errors"
 	"testing"
 
 	"github.com/dietrichm/admirer/services/spotify"
@@ -53,6 +54,29 @@ func TestMapServiceLoader(t *testing.T) {
 
 		if got != expected {
 			t.Errorf("expected %q, got %q", expected, got)
+		}
+	})
+
+	t.Run("returns error when loader yields error", func(t *testing.T) {
+		serviceError := errors.New("service error")
+		serviceLoader := MapServiceLoader{
+			"foo": func() (Service, error) {
+				return nil, serviceError
+			},
+		}
+
+		service, err := serviceLoader.ForName("foo")
+
+		if service != nil {
+			t.Errorf("Unexpected service instance: %v", service)
+		}
+
+		if err == nil {
+			t.Fatal("Expected an error")
+		}
+
+		if err != serviceError {
+			t.Errorf("expected %q, got %q", serviceError, err)
 		}
 	})
 }

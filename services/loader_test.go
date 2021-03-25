@@ -21,11 +21,10 @@ func TestMapServiceLoader(t *testing.T) {
 			},
 		}
 
-		expected := service
 		got, err := serviceLoader.ForName("foo")
 
-		if got != expected {
-			t.Errorf("expected %q, got %q", expected, got)
+		if got != service {
+			t.Errorf("expected %v, got %v", service, got)
 		}
 
 		if err != nil {

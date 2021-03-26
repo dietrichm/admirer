@@ -5,7 +5,7 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/dietrichm/admirer/services"
+	"github.com/dietrichm/admirer/infrastructure/services"
 	"github.com/golang/mock/gomock"
 )
 

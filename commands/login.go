@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/dietrichm/admirer/services"
+	"github.com/dietrichm/admirer/infrastructure/services"
 	"github.com/spf13/cobra"
 )
 

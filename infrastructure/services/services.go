@@ -3,8 +3,8 @@
 package services
 
 import (
-	"github.com/dietrichm/admirer/services/lastfm"
-	"github.com/dietrichm/admirer/services/spotify"
+	"github.com/dietrichm/admirer/infrastructure/services/lastfm"
+	"github.com/dietrichm/admirer/infrastructure/services/spotify"
 )
 
 // Service is the external service interface.

@@ -50,18 +50,23 @@ func (mr *MockAuthenticatorMockRecorder) AuthURL(state interface{}) *gomock.Call
 }
 
 // Exchange mocks base method.
-func (m *MockAuthenticator) Exchange(code string) (*oauth2.Token, error) {
+func (m *MockAuthenticator) Exchange(arg0 string, arg1 ...oauth2.AuthCodeOption) (*oauth2.Token, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Exchange", code)
+	varargs := []interface{}{arg0}
+	for _, a := range arg1 {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "Exchange", varargs...)
 	ret0, _ := ret[0].(*oauth2.Token)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // Exchange indicates an expected call of Exchange.
-func (mr *MockAuthenticatorMockRecorder) Exchange(code interface{}) *gomock.Call {
+func (mr *MockAuthenticatorMockRecorder) Exchange(arg0 interface{}, arg1 ...interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Exchange", reflect.TypeOf((*MockAuthenticator)(nil).Exchange), code)
+	varargs := append([]interface{}{arg0}, arg1...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Exchange", reflect.TypeOf((*MockAuthenticator)(nil).Exchange), varargs...)
 }
 
 // NewClient mocks base method.

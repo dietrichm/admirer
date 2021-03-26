@@ -14,7 +14,7 @@ import (
 type Authenticator interface {
 	SetAuthInfo(clientID, secretKey string)
 	AuthURL(state string) string
-	Exchange(code string) (*oauth2.Token, error)
+	Exchange(string, ...oauth2.AuthCodeOption) (*oauth2.Token, error)
 	NewClient(token *oauth2.Token) spotify.Client
 }
 

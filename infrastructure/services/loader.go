@@ -1,19 +1,16 @@
-//go:generate mockgen -source loader.go -destination loader_mock.go -package services
-
 package services
 
-import "fmt"
+import (
+	"fmt"
 
-// ServiceLoader loads service instances by name.
-type ServiceLoader interface {
-	ForName(serviceName string) (Service, error)
-}
+	"github.com/dietrichm/admirer/domain"
+)
 
 // MapServiceLoader loads actual instances of services.
-type MapServiceLoader map[string]func() (Service, error)
+type MapServiceLoader map[string]func() (domain.Service, error)
 
 // ForName returns service instance for service name.
-func (m MapServiceLoader) ForName(serviceName string) (service Service, err error) {
+func (m MapServiceLoader) ForName(serviceName string) (service domain.Service, err error) {
 	loader, exists := m[serviceName]
 
 	if !exists {

@@ -4,7 +4,8 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/dietrichm/admirer/services"
+	"github.com/dietrichm/admirer/domain"
+	"github.com/dietrichm/admirer/infrastructure/services"
 	"github.com/spf13/cobra"
 )
 
@@ -22,7 +23,7 @@ var loginCommand = &cobra.Command{
 }
 
 // Login runs the authentication flow for a specified service.
-func Login(serviceLoader services.ServiceLoader, writer io.Writer, args []string) error {
+func Login(serviceLoader domain.ServiceLoader, writer io.Writer, args []string) error {
 	service, err := serviceLoader.ForName(args[0])
 	if err != nil {
 		return err

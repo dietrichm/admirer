@@ -4,19 +4,20 @@ import (
 	"errors"
 	"testing"
 
+	"github.com/dietrichm/admirer/domain"
 	"github.com/golang/mock/gomock"
 )
 
 func TestMapServiceLoader(t *testing.T) {
 	t.Run("returns service when loader exists", func(t *testing.T) {
 		ctrl := gomock.NewController(t)
-		service := NewMockService(ctrl)
+		service := domain.NewMockService(ctrl)
 
 		serviceLoader := MapServiceLoader{
-			"foo": func() (Service, error) {
+			"foo": func() (domain.Service, error) {
 				return service, nil
 			},
-			"bar": func() (Service, error) {
+			"bar": func() (domain.Service, error) {
 				return nil, nil
 			},
 		}
@@ -34,7 +35,7 @@ func TestMapServiceLoader(t *testing.T) {
 
 	t.Run("returns error when loader does not exist", func(t *testing.T) {
 		serviceLoader := MapServiceLoader{
-			"foo": func() (Service, error) {
+			"foo": func() (domain.Service, error) {
 				return nil, nil
 			},
 		}
@@ -60,7 +61,7 @@ func TestMapServiceLoader(t *testing.T) {
 	t.Run("returns error when loader yields error", func(t *testing.T) {
 		serviceError := errors.New("service error")
 		serviceLoader := MapServiceLoader{
-			"foo": func() (Service, error) {
+			"foo": func() (domain.Service, error) {
 				return nil, serviceError
 			},
 		}

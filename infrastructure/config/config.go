@@ -1,3 +1,5 @@
+//go:generate mockgen -source config.go -destination config_mock.go -package config
+
 package config
 
 import (

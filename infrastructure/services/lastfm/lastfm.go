@@ -13,6 +13,7 @@ import (
 type API interface {
 	GetAuthRequestUrl(callback string) (uri string)
 	LoginWithToken(token string) (err error)
+	GetSessionKey() (sk string)
 }
 
 // UserAPI is our interface for a Last.fm user API.
@@ -74,4 +75,9 @@ func (l *Lastfm) GetUsername() (string, error) {
 	}
 
 	return user.Name, nil
+}
+
+// AccessToken returns the API access token to persist.
+func (l *Lastfm) AccessToken() string {
+	return l.api.GetSessionKey()
 }

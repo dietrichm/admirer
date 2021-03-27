@@ -20,7 +20,9 @@ func loadConfigFromFile(filename string) (Config, error) {
 	if err := config.ReadInConfig(); err != nil {
 		switch readError := err.(type) {
 		case *fs.PathError:
-			os.Create(filename)
+			if _, err := os.Create(filename); err != nil {
+				return nil, err
+			}
 		default:
 			return nil, readError
 		}

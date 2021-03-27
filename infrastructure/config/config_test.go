@@ -49,6 +49,18 @@ func TestConfig(t *testing.T) {
 			t.Fatal("Expected config struct")
 		}
 	})
+
+	t.Run("returns error for invalid filename", func(t *testing.T) {
+		config, err := loadConfigFromFile("./")
+
+		if err == nil {
+			t.Fatal("Expected an error")
+		}
+
+		if config != nil {
+			t.Errorf("Unexpected config struct: %v", config)
+		}
+	})
 }
 
 func createFile(contents string) (*os.File, error) {

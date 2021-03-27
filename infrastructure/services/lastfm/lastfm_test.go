@@ -104,7 +104,7 @@ func TestNewLastfm(t *testing.T) {
 		os.Setenv("LASTFM_CLIENT_ID", "client_id")
 		os.Setenv("LASTFM_CLIENT_SECRET", "client_secret")
 
-		service, err := NewLastfm("")
+		service, err := NewLastfm("myAccessToken")
 
 		if service == nil {
 			t.Error("Expected an instance")
@@ -112,6 +112,13 @@ func TestNewLastfm(t *testing.T) {
 
 		if err != nil {
 			t.Errorf("Unexpected error: %v", err)
+		}
+
+		expected := "myAccessToken"
+		got := service.AccessToken()
+
+		if got != expected {
+			t.Errorf("expected %q, got %q", expected, got)
 		}
 	})
 

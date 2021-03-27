@@ -40,6 +40,7 @@ func TestLogin(t *testing.T) {
 
 		service := domain.NewMockService(ctrl)
 		service.EXPECT().Authenticate("authcode")
+		service.EXPECT().AccessToken().Return("access_token")
 		service.EXPECT().Name().AnyTimes().Return("Service")
 		service.EXPECT().GetUsername().Return("Joe", nil)
 
@@ -47,6 +48,10 @@ func TestLogin(t *testing.T) {
 		serviceLoader.EXPECT().ForName(gomock.Any()).Return(service, nil)
 
 		secrets := config.NewMockConfig(ctrl)
+		gomock.InOrder(
+			secrets.EXPECT().Set("service.foobar.access_token", "access_token"),
+			secrets.EXPECT().WriteConfig(),
+		)
 
 		got, err := executeLogin(serviceLoader, secrets, "foobar", "authcode")
 		expected := "Logged in on Service as Joe\n"
@@ -121,12 +126,15 @@ func TestLogin(t *testing.T) {
 		expected := "failed username retrieval"
 		service := domain.NewMockService(ctrl)
 		service.EXPECT().Authenticate(gomock.Any()).Return(nil)
+		service.EXPECT().AccessToken().AnyTimes().Return("access_token")
 		service.EXPECT().GetUsername().Return("", errors.New(expected))
 
 		serviceLoader := domain.NewMockServiceLoader(ctrl)
 		serviceLoader.EXPECT().ForName(gomock.Any()).Return(service, nil)
 
 		secrets := config.NewMockConfig(ctrl)
+		secrets.EXPECT().Set(gomock.Any(), gomock.Any()).AnyTimes()
+		secrets.EXPECT().WriteConfig().AnyTimes()
 
 		output, err := executeLogin(serviceLoader, secrets, "foobar", "authcode")
 

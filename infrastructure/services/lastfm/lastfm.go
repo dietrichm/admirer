@@ -27,7 +27,7 @@ type Lastfm struct {
 }
 
 // NewLastfm creates a Lastfm instance.
-func NewLastfm() (*Lastfm, error) {
+func NewLastfm(sessionKey string) (*Lastfm, error) {
 	clientID := os.Getenv("LASTFM_CLIENT_ID")
 	clientSecret := os.Getenv("LASTFM_CLIENT_SECRET")
 
@@ -36,6 +36,7 @@ func NewLastfm() (*Lastfm, error) {
 	}
 
 	api := lastfm.New(clientID, clientSecret)
+	api.SetSession(sessionKey)
 
 	return &Lastfm{
 		api:     api,

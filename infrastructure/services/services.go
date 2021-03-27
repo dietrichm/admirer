@@ -12,6 +12,6 @@ var AvailableServices = MapServiceLoader{
 		return spotify.NewSpotify()
 	},
 	"lastfm": func() (domain.Service, error) {
-		return lastfm.NewLastfm()
+		return lastfm.NewLastfm("")
 	},
 }

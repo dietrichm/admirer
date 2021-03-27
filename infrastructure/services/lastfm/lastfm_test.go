@@ -104,7 +104,7 @@ func TestNewLastfm(t *testing.T) {
 		os.Setenv("LASTFM_CLIENT_ID", "client_id")
 		os.Setenv("LASTFM_CLIENT_SECRET", "client_secret")
 
-		service, err := NewLastfm()
+		service, err := NewLastfm("")
 
 		if service == nil {
 			t.Error("Expected an instance")
@@ -119,7 +119,7 @@ func TestNewLastfm(t *testing.T) {
 		os.Unsetenv("LASTFM_CLIENT_ID")
 		os.Unsetenv("LASTFM_CLIENT_SECRET")
 
-		service, err := NewLastfm()
+		service, err := NewLastfm("")
 
 		if service != nil {
 			t.Errorf("Unexpected instance: %v", service)

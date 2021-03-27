@@ -18,6 +18,11 @@ type Config interface {
 	WriteConfig() error
 }
 
+const (
+	permissions       os.FileMode = 0600
+	permissionsString string      = "-rw-------"
+)
+
 // LoadConfig creates a Config struct for reading and writing configuration.
 func LoadConfig(name string) (Config, error) {
 	filename := filepath.Join(os.Getenv("HOME"), ".config", "admirer", name)
@@ -32,7 +37,7 @@ func loadConfigFromFile(filename string) (Config, error) {
 	if err := config.ReadInConfig(); err != nil {
 		switch readError := err.(type) {
 		case *fs.PathError:
-			if _, err := os.OpenFile(filename, os.O_RDWR|os.O_CREATE|os.O_EXCL, 0600); err != nil {
+			if _, err := os.OpenFile(filename, os.O_RDWR|os.O_CREATE|os.O_EXCL, permissions); err != nil {
 				return nil, err
 			}
 		default:
@@ -58,10 +63,10 @@ func checkPermissions(filename string) error {
 		return err
 	}
 
-	permissions := stat.Mode().Perm().String()
+	actualPermissions := stat.Mode().Perm()
 
-	if permissions != "-rw-------" {
-		return fmt.Errorf("wrong permissions on %q: got %q, want %q", filename, permissions, "-rw-------")
+	if actualPermissions.String() != permissionsString {
+		return fmt.Errorf("wrong permissions on %q: got %q, want %q", filename, actualPermissions, permissionsString)
 	}
 
 	return nil

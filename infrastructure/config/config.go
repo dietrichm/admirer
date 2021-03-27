@@ -3,6 +3,7 @@
 package config
 
 import (
+	"fmt"
 	"io/fs"
 	"os"
 	"path/filepath"
@@ -37,6 +38,19 @@ func loadConfigFromFile(filename string) (Config, error) {
 		default:
 			return nil, readError
 		}
+	}
+
+	file, err := os.Open(filename)
+	if err != nil {
+		return nil, err
+	}
+	stat, err := file.Stat()
+	if err != nil {
+		return nil, err
+	}
+	permissions := stat.Mode().Perm().String()
+	if permissions != "-rw-------" {
+		return nil, fmt.Errorf("wrong permissions on %q: got %q, want %q", filename, permissions, "-rw-------")
 	}
 
 	return config, nil

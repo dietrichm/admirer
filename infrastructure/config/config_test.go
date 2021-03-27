@@ -3,6 +3,7 @@ package config
 import (
 	"io/ioutil"
 	"os"
+	"strings"
 	"testing"
 )
 
@@ -82,6 +83,32 @@ func TestConfig(t *testing.T) {
 
 		if err == nil {
 			t.Fatal("Expected an error")
+		}
+
+		if config != nil {
+			t.Errorf("Unexpected config struct: %v", config)
+		}
+	})
+
+	t.Run("returns error when file has incorrect permissions", func(t *testing.T) {
+		file, err := createFile("")
+		if err != nil {
+			t.Fatalf("Unexpected error: %v", err)
+		}
+		file.Chmod(0666)
+		defer os.Remove(file.Name())
+
+		config, err := loadConfigFromFile(file.Name())
+
+		if err == nil {
+			t.Fatal("Expected an error")
+		}
+
+		expected := "wrong permissions on "
+		got := err.Error()
+
+		if !strings.Contains(got, expected) {
+			t.Errorf("expected %q, got %q", expected, got)
 		}
 
 		if config != nil {

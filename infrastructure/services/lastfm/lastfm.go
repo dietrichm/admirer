@@ -13,6 +13,7 @@ import (
 type API interface {
 	GetAuthRequestUrl(callback string) (uri string)
 	LoginWithToken(token string) (err error)
+	GetSessionKey() (sk string)
 }
 
 // UserAPI is our interface for a Last.fm user API.
@@ -27,7 +28,7 @@ type Lastfm struct {
 }
 
 // NewLastfm creates a Lastfm instance.
-func NewLastfm() (*Lastfm, error) {
+func NewLastfm(sessionKey string) (*Lastfm, error) {
 	clientID := os.Getenv("LASTFM_CLIENT_ID")
 	clientSecret := os.Getenv("LASTFM_CLIENT_SECRET")
 
@@ -36,6 +37,7 @@ func NewLastfm() (*Lastfm, error) {
 	}
 
 	api := lastfm.New(clientID, clientSecret)
+	api.SetSession(sessionKey)
 
 	return &Lastfm{
 		api:     api,
@@ -73,4 +75,9 @@ func (l *Lastfm) GetUsername() (string, error) {
 	}
 
 	return user.Name, nil
+}
+
+// AccessToken returns the API access token to persist.
+func (l *Lastfm) AccessToken() string {
+	return l.api.GetSessionKey()
 }

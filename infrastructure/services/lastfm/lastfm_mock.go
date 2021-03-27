@@ -48,6 +48,20 @@ func (mr *MockAPIMockRecorder) GetAuthRequestUrl(callback interface{}) *gomock.C
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetAuthRequestUrl", reflect.TypeOf((*MockAPI)(nil).GetAuthRequestUrl), callback)
 }
 
+// GetSessionKey mocks base method.
+func (m *MockAPI) GetSessionKey() string {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetSessionKey")
+	ret0, _ := ret[0].(string)
+	return ret0
+}
+
+// GetSessionKey indicates an expected call of GetSessionKey.
+func (mr *MockAPIMockRecorder) GetSessionKey() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetSessionKey", reflect.TypeOf((*MockAPI)(nil).GetSessionKey))
+}
+
 // LoginWithToken mocks base method.
 func (m *MockAPI) LoginWithToken(token string) error {
 	m.ctrl.T.Helper()

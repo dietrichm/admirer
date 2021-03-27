@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/dietrichm/admirer/domain"
+	"github.com/dietrichm/admirer/infrastructure/config"
 	"github.com/golang/mock/gomock"
 )
 
@@ -20,7 +21,9 @@ func TestLogin(t *testing.T) {
 		serviceLoader := domain.NewMockServiceLoader(ctrl)
 		serviceLoader.EXPECT().ForName("foobar").Return(service, nil)
 
-		got, err := executeLogin(serviceLoader, "foobar")
+		secrets := config.NewMockConfig(ctrl)
+
+		got, err := executeLogin(serviceLoader, secrets, "foobar")
 		expected := "Service authentication URL: https://service.test/auth\n"
 
 		if got != expected {
@@ -37,13 +40,20 @@ func TestLogin(t *testing.T) {
 
 		service := domain.NewMockService(ctrl)
 		service.EXPECT().Authenticate("authcode")
+		service.EXPECT().AccessToken().Return("access_token")
 		service.EXPECT().Name().AnyTimes().Return("Service")
 		service.EXPECT().GetUsername().Return("Joe", nil)
 
 		serviceLoader := domain.NewMockServiceLoader(ctrl)
 		serviceLoader.EXPECT().ForName(gomock.Any()).Return(service, nil)
 
-		got, err := executeLogin(serviceLoader, "foobar", "authcode")
+		secrets := config.NewMockConfig(ctrl)
+		gomock.InOrder(
+			secrets.EXPECT().Set("service.foobar.access_token", "access_token"),
+			secrets.EXPECT().WriteConfig(),
+		)
+
+		got, err := executeLogin(serviceLoader, secrets, "foobar", "authcode")
 		expected := "Logged in on Service as Joe\n"
 
 		if got != expected {
@@ -62,7 +72,9 @@ func TestLogin(t *testing.T) {
 		serviceLoader := domain.NewMockServiceLoader(ctrl)
 		serviceLoader.EXPECT().ForName(gomock.Any()).Return(nil, errors.New(expected))
 
-		output, err := executeLogin(serviceLoader, "foobar")
+		secrets := config.NewMockConfig(ctrl)
+
+		output, err := executeLogin(serviceLoader, secrets, "foobar")
 
 		if output != "" {
 			t.Errorf("Unexpected output: %v", output)
@@ -89,7 +101,43 @@ func TestLogin(t *testing.T) {
 		serviceLoader := domain.NewMockServiceLoader(ctrl)
 		serviceLoader.EXPECT().ForName(gomock.Any()).Return(service, nil)
 
-		output, err := executeLogin(serviceLoader, "foobar", "authcode")
+		secrets := config.NewMockConfig(ctrl)
+
+		output, err := executeLogin(serviceLoader, secrets, "foobar", "authcode")
+
+		if output != "" {
+			t.Errorf("Unexpected output: %v", output)
+		}
+
+		if err == nil {
+			t.Fatal("Expected an error")
+		}
+
+		got := err.Error()
+
+		if got != expected {
+			t.Errorf("expected %q, got %q", expected, got)
+		}
+	})
+
+	t.Run("returns error for failed secrets file write", func(t *testing.T) {
+		ctrl := gomock.NewController(t)
+
+		service := domain.NewMockService(ctrl)
+		service.EXPECT().Authenticate(gomock.Any()).Return(nil)
+		service.EXPECT().AccessToken().AnyTimes().Return("access_token")
+		service.EXPECT().GetUsername().AnyTimes().Return("Joe", nil)
+		service.EXPECT().Name().AnyTimes().Return("Service")
+
+		serviceLoader := domain.NewMockServiceLoader(ctrl)
+		serviceLoader.EXPECT().ForName(gomock.Any()).Return(service, nil)
+
+		expected := "failed file write"
+		secrets := config.NewMockConfig(ctrl)
+		secrets.EXPECT().Set(gomock.Any(), gomock.Any()).AnyTimes()
+		secrets.EXPECT().WriteConfig().Return(errors.New(expected))
+
+		output, err := executeLogin(serviceLoader, secrets, "foobar", "authcode")
 
 		if output != "" {
 			t.Errorf("Unexpected output: %v", output)
@@ -112,12 +160,17 @@ func TestLogin(t *testing.T) {
 		expected := "failed username retrieval"
 		service := domain.NewMockService(ctrl)
 		service.EXPECT().Authenticate(gomock.Any()).Return(nil)
+		service.EXPECT().AccessToken().AnyTimes().Return("access_token")
 		service.EXPECT().GetUsername().Return("", errors.New(expected))
 
 		serviceLoader := domain.NewMockServiceLoader(ctrl)
 		serviceLoader.EXPECT().ForName(gomock.Any()).Return(service, nil)
 
-		output, err := executeLogin(serviceLoader, "foobar", "authcode")
+		secrets := config.NewMockConfig(ctrl)
+		secrets.EXPECT().Set(gomock.Any(), gomock.Any()).AnyTimes()
+		secrets.EXPECT().WriteConfig().AnyTimes()
+
+		output, err := executeLogin(serviceLoader, secrets, "foobar", "authcode")
 
 		if output != "" {
 			t.Errorf("Unexpected output: %v", output)
@@ -135,8 +188,8 @@ func TestLogin(t *testing.T) {
 	})
 }
 
-func executeLogin(serviceLoader domain.ServiceLoader, args ...string) (string, error) {
+func executeLogin(serviceLoader domain.ServiceLoader, secrets config.Config, args ...string) (string, error) {
 	buffer := new(bytes.Buffer)
-	err := Login(serviceLoader, buffer, args)
+	err := Login(serviceLoader, secrets, buffer, args)
 	return buffer.String(), err
 }

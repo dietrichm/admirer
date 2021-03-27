@@ -79,3 +79,8 @@ func (s *Spotify) GetUsername() (string, error) {
 
 	return user.DisplayName, nil
 }
+
+// AccessToken returns the API access token to persist.
+func (s *Spotify) AccessToken() string {
+	return ""
+}

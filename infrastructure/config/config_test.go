@@ -61,6 +61,24 @@ func TestConfig(t *testing.T) {
 			t.Errorf("Unexpected config struct: %v", config)
 		}
 	})
+
+	t.Run("returns error for other read issues", func(t *testing.T) {
+		file, err := createFile("$$$")
+		if err != nil {
+			t.Fatalf("Unexpected error: %v", err)
+		}
+		defer os.Remove(file.Name())
+
+		config, err := loadConfigFromFile(file.Name())
+
+		if err == nil {
+			t.Fatal("Expected an error")
+		}
+
+		if config != nil {
+			t.Errorf("Unexpected config struct: %v", config)
+		}
+	})
 }
 
 func createFile(contents string) (*os.File, error) {

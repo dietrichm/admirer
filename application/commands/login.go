@@ -30,7 +30,9 @@ var loginCommand = &cobra.Command{
 
 // Login runs the authentication flow for a specified service.
 func Login(serviceLoader domain.ServiceLoader, secrets config.Config, writer io.Writer, args []string) error {
-	service, err := serviceLoader.ForName(args[0])
+	serviceName := args[0]
+
+	service, err := serviceLoader.ForName(serviceName)
 	if err != nil {
 		return err
 	}

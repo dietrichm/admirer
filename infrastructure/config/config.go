@@ -40,18 +40,29 @@ func loadConfigFromFile(filename string) (Config, error) {
 		}
 	}
 
-	file, err := os.Open(filename)
-	if err != nil {
+	if err := checkPermissions(filename); err != nil {
 		return nil, err
-	}
-	stat, err := file.Stat()
-	if err != nil {
-		return nil, err
-	}
-	permissions := stat.Mode().Perm().String()
-	if permissions != "-rw-------" {
-		return nil, fmt.Errorf("wrong permissions on %q: got %q, want %q", filename, permissions, "-rw-------")
 	}
 
 	return config, nil
+}
+
+func checkPermissions(filename string) error {
+	file, err := os.Open(filename)
+	if err != nil {
+		return err
+	}
+
+	stat, err := file.Stat()
+	if err != nil {
+		return err
+	}
+
+	permissions := stat.Mode().Perm().String()
+
+	if permissions != "-rw-------" {
+		return fmt.Errorf("wrong permissions on %q: got %q, want %q", filename, permissions, "-rw-------")
+	}
+
+	return nil
 }

@@ -3,6 +3,7 @@ package config
 import (
 	"io/ioutil"
 	"os"
+	"strings"
 	"testing"
 )
 
@@ -31,7 +32,7 @@ func TestConfig(t *testing.T) {
 		}
 	})
 
-	t.Run("creates non existing configuration file", func(t *testing.T) {
+	t.Run("creates non existing configuration file with correct permissions", func(t *testing.T) {
 		file, err := createFile("")
 		if err != nil {
 			t.Fatalf("Unexpected error: %v", err)
@@ -47,6 +48,15 @@ func TestConfig(t *testing.T) {
 
 		if config == nil {
 			t.Fatal("Expected config struct")
+		}
+
+		file, _ = os.Open(file.Name())
+		stat, _ := file.Stat()
+		expected := "-rw-------"
+		got := stat.Mode().Perm().String()
+
+		if got != expected {
+			t.Errorf("expected %q, got %q", expected, got)
 		}
 	})
 
@@ -73,6 +83,32 @@ func TestConfig(t *testing.T) {
 
 		if err == nil {
 			t.Fatal("Expected an error")
+		}
+
+		if config != nil {
+			t.Errorf("Unexpected config struct: %v", config)
+		}
+	})
+
+	t.Run("returns error when file has incorrect permissions", func(t *testing.T) {
+		file, err := createFile("")
+		if err != nil {
+			t.Fatalf("Unexpected error: %v", err)
+		}
+		file.Chmod(0666)
+		defer os.Remove(file.Name())
+
+		config, err := loadConfigFromFile(file.Name())
+
+		if err == nil {
+			t.Fatal("Expected an error")
+		}
+
+		expected := "wrong permissions on "
+		got := err.Error()
+
+		if !strings.Contains(got, expected) {
+			t.Errorf("expected %q, got %q", expected, got)
 		}
 
 		if config != nil {

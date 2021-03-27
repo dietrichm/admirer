@@ -30,6 +30,25 @@ func TestConfig(t *testing.T) {
 			t.Errorf("expected %q, got %q", expected, got)
 		}
 	})
+
+	t.Run("creates non existing configuration file", func(t *testing.T) {
+		file, err := createFile("")
+		if err != nil {
+			t.Fatalf("Unexpected error: %v", err)
+		}
+		os.Remove(file.Name())
+		defer os.Remove(file.Name())
+
+		config, err := loadConfigFromFile(file.Name())
+
+		if err != nil {
+			t.Fatalf("Unexpected error: %v", err)
+		}
+
+		if config == nil {
+			t.Fatal("Expected config struct")
+		}
+	})
 }
 
 func createFile(contents string) (*os.File, error) {

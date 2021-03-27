@@ -1,6 +1,9 @@
 package config
 
 import (
+	"io/fs"
+	"os"
+
 	"github.com/spf13/viper"
 )
 
@@ -15,7 +18,12 @@ func loadConfigFromFile(filename string) (Config, error) {
 	config.SetConfigType("yaml")
 
 	if err := config.ReadInConfig(); err != nil {
-		return nil, err
+		switch readError := err.(type) {
+		case *fs.PathError:
+			os.Create(filename)
+		default:
+			return nil, readError
+		}
 	}
 
 	return config, nil

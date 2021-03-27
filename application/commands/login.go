@@ -47,7 +47,10 @@ func Login(serviceLoader domain.ServiceLoader, secrets config.Config, writer io.
 	}
 
 	secrets.Set("service."+serviceName+".access_token", service.AccessToken())
-	secrets.WriteConfig()
+
+	if err := secrets.WriteConfig(); err != nil {
+		return err
+	}
 
 	username, err := service.GetUsername()
 	if err != nil {

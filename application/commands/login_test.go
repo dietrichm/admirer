@@ -120,6 +120,40 @@ func TestLogin(t *testing.T) {
 		}
 	})
 
+	t.Run("returns error for failed secrets file write", func(t *testing.T) {
+		ctrl := gomock.NewController(t)
+
+		service := domain.NewMockService(ctrl)
+		service.EXPECT().Authenticate(gomock.Any()).Return(nil)
+		service.EXPECT().AccessToken().AnyTimes().Return("access_token")
+		service.EXPECT().GetUsername().AnyTimes().Return("Joe", nil)
+		service.EXPECT().Name().AnyTimes().Return("Service")
+
+		serviceLoader := domain.NewMockServiceLoader(ctrl)
+		serviceLoader.EXPECT().ForName(gomock.Any()).Return(service, nil)
+
+		expected := "failed file write"
+		secrets := config.NewMockConfig(ctrl)
+		secrets.EXPECT().Set(gomock.Any(), gomock.Any()).AnyTimes()
+		secrets.EXPECT().WriteConfig().Return(errors.New(expected))
+
+		output, err := executeLogin(serviceLoader, secrets, "foobar", "authcode")
+
+		if output != "" {
+			t.Errorf("Unexpected output: %v", output)
+		}
+
+		if err == nil {
+			t.Fatal("Expected an error")
+		}
+
+		got := err.Error()
+
+		if got != expected {
+			t.Errorf("expected %q, got %q", expected, got)
+		}
+	})
+
 	t.Run("returns error for failed username retrieval", func(t *testing.T) {
 		ctrl := gomock.NewController(t)
 

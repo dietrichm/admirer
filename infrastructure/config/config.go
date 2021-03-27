@@ -13,6 +13,8 @@ import (
 // Config is the interface for reading and writing configuration.
 type Config interface {
 	GetString(key string) string
+	Set(key string, value interface{})
+	WriteConfig() error
 }
 
 // LoadConfig creates a Config struct for reading and writing configuration.

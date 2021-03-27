@@ -31,7 +31,7 @@ func TestConfig(t *testing.T) {
 		}
 	})
 
-	t.Run("creates non existing configuration file", func(t *testing.T) {
+	t.Run("creates non existing configuration file with correct permissions", func(t *testing.T) {
 		file, err := createFile("")
 		if err != nil {
 			t.Fatalf("Unexpected error: %v", err)
@@ -47,6 +47,15 @@ func TestConfig(t *testing.T) {
 
 		if config == nil {
 			t.Fatal("Expected config struct")
+		}
+
+		file, _ = os.Open(file.Name())
+		stat, _ := file.Stat()
+		expected := "-rw-------"
+		got := stat.Mode().Perm().String()
+
+		if got != expected {
+			t.Errorf("expected %q, got %q", expected, got)
 		}
 	})
 

@@ -31,7 +31,7 @@ func loadConfigFromFile(filename string) (Config, error) {
 	if err := config.ReadInConfig(); err != nil {
 		switch readError := err.(type) {
 		case *fs.PathError:
-			if _, err := os.OpenFile(filename, os.O_RDWR|os.O_CREATE|os.O_EXCL, 0666); err != nil {
+			if _, err := os.OpenFile(filename, os.O_RDWR|os.O_CREATE|os.O_EXCL, 0600); err != nil {
 				return nil, err
 			}
 		default:

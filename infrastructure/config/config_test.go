@@ -16,7 +16,8 @@ func TestConfig(t *testing.T) {
 		}
 		defer os.Remove(file.Name())
 
-		config, err := loadConfigFromFile(file.Name())
+		loader := &viperLoader{}
+		config, err := loader.loadConfigFromFile(file.Name())
 
 		if err != nil {
 			t.Fatalf("Unexpected error: %v", err)
@@ -41,7 +42,8 @@ func TestConfig(t *testing.T) {
 		os.Remove(file.Name())
 		defer os.Remove(file.Name())
 
-		config, err := loadConfigFromFile(file.Name())
+		loader := &viperLoader{}
+		config, err := loader.loadConfigFromFile(file.Name())
 
 		if err != nil {
 			t.Fatalf("Unexpected error: %v", err)
@@ -72,7 +74,8 @@ func TestConfig(t *testing.T) {
 		directoryFile := filepath.Join(directory, filepath.Base(file.Name()))
 		defer os.RemoveAll(directory)
 
-		config, err := loadConfigFromFile(directoryFile)
+		loader := &viperLoader{}
+		config, err := loader.loadConfigFromFile(directoryFile)
 
 		if err != nil {
 			t.Fatalf("Unexpected error: %v", err)
@@ -93,7 +96,8 @@ func TestConfig(t *testing.T) {
 	})
 
 	t.Run("returns error for invalid filename", func(t *testing.T) {
-		config, err := loadConfigFromFile("./")
+		loader := &viperLoader{}
+		config, err := loader.loadConfigFromFile("./")
 
 		if err == nil {
 			t.Fatal("Expected an error")
@@ -111,7 +115,8 @@ func TestConfig(t *testing.T) {
 		}
 		defer os.Remove(file.Name())
 
-		config, err := loadConfigFromFile(file.Name())
+		loader := &viperLoader{}
+		config, err := loader.loadConfigFromFile(file.Name())
 
 		if err == nil {
 			t.Fatal("Expected an error")
@@ -130,7 +135,8 @@ func TestConfig(t *testing.T) {
 		file.Chmod(0666)
 		defer os.Remove(file.Name())
 
-		config, err := loadConfigFromFile(file.Name())
+		loader := &viperLoader{}
+		config, err := loader.loadConfigFromFile(file.Name())
 
 		if err == nil {
 			t.Fatal("Expected an error")

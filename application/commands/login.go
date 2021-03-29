@@ -19,7 +19,7 @@ var loginCommand = &cobra.Command{
 	Short: "Log in on external service",
 	Args:  cobra.MinimumNArgs(1),
 	RunE: func(command *cobra.Command, args []string) error {
-		secrets, err := config.LoadConfig("secrets")
+		secrets, err := config.ConfigLoader.Load("secrets")
 		if err != nil {
 			return err
 		}

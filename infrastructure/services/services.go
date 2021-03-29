@@ -13,7 +13,7 @@ var AvailableServices = MapServiceLoader{
 		return spotify.NewSpotify()
 	},
 	"lastfm": func() (domain.Service, error) {
-		secrets, err := config.LoadConfig("secrets")
+		secrets, err := config.ConfigLoader.Load("secrets")
 		if err != nil {
 			return nil, err
 		}

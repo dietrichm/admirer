@@ -3,6 +3,7 @@ package config
 import (
 	"io/ioutil"
 	"os"
+	"path/filepath"
 	"strings"
 	"testing"
 )
@@ -53,6 +54,37 @@ func TestConfig(t *testing.T) {
 		file, _ = os.Open(file.Name())
 		stat, _ := file.Stat()
 		expected := "-rw-------"
+		got := stat.Mode().Perm().String()
+
+		if got != expected {
+			t.Errorf("expected %q, got %q", expected, got)
+		}
+	})
+
+	t.Run("creates non existing containing directory with correct permissions", func(t *testing.T) {
+		file, err := createFile("")
+		if err != nil {
+			t.Fatalf("Unexpected error: %v", err)
+		}
+		os.Remove(file.Name())
+
+		directory := filepath.Join(filepath.Dir(file.Name()), "admirer-test")
+		directoryFile := filepath.Join(directory, filepath.Base(file.Name()))
+		defer os.RemoveAll(directory)
+
+		config, err := loadConfigFromFile(directoryFile)
+
+		if err != nil {
+			t.Fatalf("Unexpected error: %v", err)
+		}
+
+		if config == nil {
+			t.Fatal("Expected config struct")
+		}
+
+		file, _ = os.Open(directory)
+		stat, _ := file.Stat()
+		expected := "-rwx------"
 		got := stat.Mode().Perm().String()
 
 		if got != expected {

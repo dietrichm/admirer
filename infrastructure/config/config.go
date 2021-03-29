@@ -19,8 +19,9 @@ type Config interface {
 }
 
 const (
-	permissions       os.FileMode = 0600
-	permissionsString string      = "-rw-------"
+	permissions          os.FileMode = 0600
+	permissionsString    string      = "-rw-------"
+	directoryPermissions os.FileMode = 0700
 )
 
 // LoadConfig creates a Config struct for reading and writing configuration.
@@ -38,6 +39,10 @@ func loadConfigFromFile(filename string) (Config, error) {
 	if err := config.ReadInConfig(); err != nil {
 		switch readError := err.(type) {
 		case *fs.PathError:
+			directory := filepath.Dir(filename)
+			if err := os.MkdirAll(directory, directoryPermissions); err != nil {
+				return nil, err
+			}
 			if err := config.WriteConfig(); err != nil {
 				return nil, err
 			}

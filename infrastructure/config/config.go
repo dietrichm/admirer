@@ -33,11 +33,12 @@ func loadConfigFromFile(filename string) (Config, error) {
 	config := viper.New()
 	config.SetConfigFile(filename)
 	config.SetConfigType("yaml")
+	config.SetConfigPermissions(permissions)
 
 	if err := config.ReadInConfig(); err != nil {
 		switch readError := err.(type) {
 		case *fs.PathError:
-			if _, err := os.OpenFile(filename, os.O_RDWR|os.O_CREATE|os.O_EXCL, permissions); err != nil {
+			if err := config.WriteConfig(); err != nil {
 				return nil, err
 			}
 		default:

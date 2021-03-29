@@ -31,7 +31,7 @@ type viperLoader struct{}
 // Load Config from file system.
 func (v viperLoader) Load(name string) (Config, error) {
 	filename := filepath.Join(os.Getenv("HOME"), ".config", "admirer", name)
-	return v.loadConfigFromFile(filename)
+	return v.loadFromFile(filename)
 }
 
 const (
@@ -40,7 +40,7 @@ const (
 	directoryPermissions os.FileMode = 0700
 )
 
-func (v viperLoader) loadConfigFromFile(filename string) (Config, error) {
+func (v viperLoader) loadFromFile(filename string) (Config, error) {
 	config := viper.New()
 	config.SetConfigFile(filename)
 	config.SetConfigType("yaml")

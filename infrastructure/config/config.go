@@ -40,12 +40,6 @@ const (
 	directoryPermissions os.FileMode = 0700
 )
 
-// LoadConfig creates a Config struct for reading and writing configuration.
-func LoadConfig(name string) (Config, error) {
-	filename := filepath.Join(os.Getenv("HOME"), ".config", "admirer", name)
-	return loadConfigFromFile(filename)
-}
-
 func loadConfigFromFile(filename string) (Config, error) {
 	config := viper.New()
 	config.SetConfigFile(filename)

@@ -9,6 +9,12 @@ import (
 	"github.com/spf13/viper"
 )
 
+const (
+	permissions          os.FileMode = 0600
+	permissionsString    string      = "-rw-------"
+	directoryPermissions os.FileMode = 0700
+)
+
 type viperLoader struct{}
 
 // Load Config from file system.
@@ -16,12 +22,6 @@ func (v viperLoader) Load(name string) (Config, error) {
 	filename := filepath.Join(os.Getenv("HOME"), ".config", "admirer", name)
 	return v.loadFromFile(filename)
 }
-
-const (
-	permissions          os.FileMode = 0600
-	permissionsString    string      = "-rw-------"
-	directoryPermissions os.FileMode = 0700
-)
 
 func (v viperLoader) loadFromFile(filename string) (Config, error) {
 	config := viper.New()

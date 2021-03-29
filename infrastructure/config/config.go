@@ -11,6 +11,9 @@ import (
 	"github.com/spf13/viper"
 )
 
+// ConfigLoader is the default configuration loader.
+var ConfigLoader = &viperLoader{}
+
 // Config is the interface for reading and writing configuration.
 type Config interface {
 	GetString(key string) string

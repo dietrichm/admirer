@@ -5,6 +5,7 @@ package spotify
 import (
 	"errors"
 	"os"
+	"time"
 
 	"github.com/dietrichm/admirer/infrastructure/config"
 	"github.com/zmb3/spotify"
@@ -48,6 +49,18 @@ func NewSpotify(secrets config.Config) (*Spotify, error) {
 	service := &Spotify{
 		authenticator: &authenticator,
 		secrets:       secrets,
+	}
+
+	if secrets.IsSet("token_type") {
+		expiryTime, _ := time.Parse(time.RFC3339, secrets.GetString("expiry"))
+		token := &oauth2.Token{
+			TokenType:    secrets.GetString("token_type"),
+			AccessToken:  secrets.GetString("access_token"),
+			Expiry:       expiryTime,
+			RefreshToken: secrets.GetString("refresh_token"),
+		}
+		client := authenticator.NewClient(token)
+		service.client = &client
 	}
 
 	return service, nil

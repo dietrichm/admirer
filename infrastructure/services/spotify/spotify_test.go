@@ -135,7 +135,9 @@ func TestSpotify(t *testing.T) {
 func TestNewSpotify(t *testing.T) {
 	t.Run("creates instance when environment is configured", func(t *testing.T) {
 		ctrl := gomock.NewController(t)
+
 		secrets := config.NewMockConfig(ctrl)
+		secrets.EXPECT().IsSet("token_type").Return(false)
 
 		os.Setenv("SPOTIFY_CLIENT_ID", "client_id")
 		os.Setenv("SPOTIFY_CLIENT_SECRET", "client_secret")

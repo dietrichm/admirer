@@ -137,7 +137,7 @@ func TestNewLastfm(t *testing.T) {
 		ctrl := gomock.NewController(t)
 
 		secrets := config.NewMockConfig(ctrl)
-		secrets.EXPECT().GetString("session_key").Return("myAccessToken")
+		secrets.EXPECT().GetString("session_key").Return("mySessionKey")
 
 		os.Setenv("LASTFM_CLIENT_ID", "client_id")
 		os.Setenv("LASTFM_CLIENT_SECRET", "client_secret")
@@ -150,13 +150,6 @@ func TestNewLastfm(t *testing.T) {
 
 		if err != nil {
 			t.Errorf("Unexpected error: %v", err)
-		}
-
-		expected := "myAccessToken"
-		got := service.AccessToken()
-
-		if got != expected {
-			t.Errorf("expected %q, got %q", expected, got)
 		}
 	})
 

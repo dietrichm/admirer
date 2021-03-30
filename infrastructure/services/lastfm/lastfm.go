@@ -67,7 +67,7 @@ func (l *Lastfm) Authenticate(oauthCode string) error {
 		return errors.New("failed to parse Last.fm token")
 	}
 
-	l.secrets.Set("session_key", l.AccessToken())
+	l.secrets.Set("session_key", l.api.GetSessionKey())
 
 	if err := l.secrets.WriteConfig(); err != nil {
 		return err
@@ -84,9 +84,4 @@ func (l *Lastfm) GetUsername() (string, error) {
 	}
 
 	return user.Name, nil
-}
-
-// AccessToken returns the API access token to persist.
-func (l *Lastfm) AccessToken() string {
-	return l.api.GetSessionKey()
 }

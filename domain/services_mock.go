@@ -33,20 +33,6 @@ func (m *MockService) EXPECT() *MockServiceMockRecorder {
 	return m.recorder
 }
 
-// AccessToken mocks base method.
-func (m *MockService) AccessToken() string {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "AccessToken")
-	ret0, _ := ret[0].(string)
-	return ret0
-}
-
-// AccessToken indicates an expected call of AccessToken.
-func (mr *MockServiceMockRecorder) AccessToken() *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AccessToken", reflect.TypeOf((*MockService)(nil).AccessToken))
-}
-
 // Authenticate mocks base method.
 func (m *MockService) Authenticate(code string) error {
 	m.ctrl.T.Helper()

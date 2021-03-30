@@ -112,7 +112,6 @@ func TestLogin(t *testing.T) {
 		expected := "failed username retrieval"
 		service := domain.NewMockService(ctrl)
 		service.EXPECT().Authenticate(gomock.Any()).Return(nil)
-		service.EXPECT().AccessToken().AnyTimes().Return("access_token")
 		service.EXPECT().GetUsername().Return("", errors.New(expected))
 
 		serviceLoader := domain.NewMockServiceLoader(ctrl)

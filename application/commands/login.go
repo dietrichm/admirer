@@ -19,20 +19,20 @@ var loginCommand = &cobra.Command{
 	Short: "Log in on external service",
 	Args:  cobra.MinimumNArgs(1),
 	RunE: func(command *cobra.Command, args []string) error {
-		secrets, err := config.ConfigLoader.Load("secrets")
-		if err != nil {
-			return err
-		}
-
-		return Login(services.AvailableServices, secrets, command.OutOrStdout(), args)
+		return Login(services.AvailableServices, config.ConfigLoader, command.OutOrStdout(), args)
 	},
 }
 
 // Login runs the authentication flow for a specified service.
-func Login(serviceLoader domain.ServiceLoader, secrets config.Config, writer io.Writer, args []string) error {
+func Login(serviceLoader domain.ServiceLoader, configLoader config.Loader, writer io.Writer, args []string) error {
 	serviceName := args[0]
 
 	service, err := serviceLoader.ForName(serviceName)
+	if err != nil {
+		return err
+	}
+
+	secrets, err := configLoader.Load("secrets")
 	if err != nil {
 		return err
 	}

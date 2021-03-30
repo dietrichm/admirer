@@ -8,7 +8,7 @@ import (
 )
 
 // AvailableServices is the configured ServiceLoader for the available services.
-var AvailableServices = MapServiceLoader{
+var AvailableServices = mapServiceLoader{
 	services: loaderMap{
 		"spotify": func(secrets config.Config) (domain.Service, error) {
 			return spotify.NewSpotify()

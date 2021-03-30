@@ -19,7 +19,7 @@ func TestMapServiceLoader(t *testing.T) {
 		configLoader := config.NewMockLoader(ctrl)
 		configLoader.EXPECT().Load("secrets").Return(secrets, nil)
 
-		serviceLoader := MapServiceLoader{
+		serviceLoader := mapServiceLoader{
 			services: loaderMap{
 				"foo": func(secrets config.Config) (domain.Service, error) {
 					return service, nil
@@ -43,7 +43,7 @@ func TestMapServiceLoader(t *testing.T) {
 	})
 
 	t.Run("returns error when loader does not exist", func(t *testing.T) {
-		serviceLoader := MapServiceLoader{
+		serviceLoader := mapServiceLoader{
 			services: loaderMap{
 				"foo": func(secrets config.Config) (domain.Service, error) {
 					return nil, nil
@@ -76,7 +76,7 @@ func TestMapServiceLoader(t *testing.T) {
 		configError := errors.New("failed to load")
 		configLoader.EXPECT().Load(gomock.Any()).Return(nil, configError)
 
-		serviceLoader := MapServiceLoader{
+		serviceLoader := mapServiceLoader{
 			services: loaderMap{
 				"foo": func(secrets config.Config) (domain.Service, error) {
 					return nil, nil
@@ -108,7 +108,7 @@ func TestMapServiceLoader(t *testing.T) {
 		configLoader.EXPECT().Load(gomock.Any()).Return(secrets, nil)
 
 		serviceError := errors.New("service error")
-		serviceLoader := MapServiceLoader{
+		serviceLoader := mapServiceLoader{
 			services: loaderMap{
 				"foo": func(secrets config.Config) (domain.Service, error) {
 					return nil, serviceError

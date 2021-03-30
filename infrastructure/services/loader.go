@@ -9,14 +9,12 @@ import (
 
 type loaderMap map[string]func(secrets config.Config) (domain.Service, error)
 
-// MapServiceLoader loads actual instances of services.
-type MapServiceLoader struct {
+type mapServiceLoader struct {
 	services     loaderMap
 	configLoader config.Loader
 }
 
-// ForName returns service instance for service name.
-func (m MapServiceLoader) ForName(serviceName string) (service domain.Service, err error) {
+func (m mapServiceLoader) ForName(serviceName string) (service domain.Service, err error) {
 	loader, exists := m.services[serviceName]
 
 	if !exists {

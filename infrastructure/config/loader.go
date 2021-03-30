@@ -17,7 +17,6 @@ const (
 
 type viperLoader struct{}
 
-// Load Config from file system.
 func (v viperLoader) Load(name string) (Config, error) {
 	filename := filepath.Join(os.Getenv("HOME"), ".config", "admirer", name)
 	return v.loadFromFile(filename)

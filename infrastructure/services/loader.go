@@ -4,13 +4,15 @@ import (
 	"fmt"
 
 	"github.com/dietrichm/admirer/domain"
+	"github.com/dietrichm/admirer/infrastructure/config"
 )
 
 type loaderMap map[string]func() (domain.Service, error)
 
 // MapServiceLoader loads actual instances of services.
 type MapServiceLoader struct {
-	services loaderMap
+	services     loaderMap
+	configLoader config.Loader
 }
 
 // ForName returns service instance for service name.

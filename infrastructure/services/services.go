@@ -22,4 +22,5 @@ var AvailableServices = MapServiceLoader{
 			return lastfm.NewLastfm(secrets.GetString("service.lastfm.access_token"))
 		},
 	},
+	configLoader: config.ConfigLoader,
 }

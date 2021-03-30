@@ -45,10 +45,12 @@ func NewSpotify(secrets config.Config) (*Spotify, error) {
 	authenticator := spotify.NewAuthenticator(redirectURL, spotify.ScopeUserReadPrivate)
 	authenticator.SetAuthInfo(clientID, clientSecret)
 
-	return &Spotify{
+	service := &Spotify{
 		authenticator: &authenticator,
 		secrets:       secrets,
-	}, nil
+	}
+
+	return service, nil
 }
 
 // Name returns the human readable service name.

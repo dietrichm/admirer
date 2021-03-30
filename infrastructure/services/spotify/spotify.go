@@ -6,6 +6,7 @@ import (
 	"errors"
 	"os"
 
+	"github.com/dietrichm/admirer/infrastructure/config"
 	"github.com/zmb3/spotify"
 	"golang.org/x/oauth2"
 )
@@ -27,10 +28,11 @@ type Client interface {
 type Spotify struct {
 	authenticator Authenticator
 	client        Client
+	secrets       config.Config
 }
 
 // NewSpotify creates a Spotify instance.
-func NewSpotify() (*Spotify, error) {
+func NewSpotify(secrets config.Config) (*Spotify, error) {
 	clientID := os.Getenv("SPOTIFY_CLIENT_ID")
 	clientSecret := os.Getenv("SPOTIFY_CLIENT_SECRET")
 
@@ -45,6 +47,7 @@ func NewSpotify() (*Spotify, error) {
 
 	return &Spotify{
 		authenticator: &authenticator,
+		secrets:       secrets,
 	}, nil
 }
 
@@ -67,6 +70,16 @@ func (s *Spotify) Authenticate(code string) error {
 
 	client := s.authenticator.NewClient(token)
 	s.client = &client
+
+	s.secrets.Set("token_type", token.TokenType)
+	s.secrets.Set("access_token", token.AccessToken)
+	s.secrets.Set("expiry", token.Expiry)
+	s.secrets.Set("refresh_token", token.RefreshToken)
+
+	if err := s.secrets.WriteConfig(); err != nil {
+		return err
+	}
+
 	return nil
 }
 

@@ -11,7 +11,7 @@ import (
 var AvailableServices = mapServiceLoader{
 	services: loaderMap{
 		"spotify": func(secrets config.Config) (domain.Service, error) {
-			return spotify.NewSpotify()
+			return spotify.NewSpotify(secrets)
 		},
 		"lastfm": func(secrets config.Config) (domain.Service, error) {
 			return lastfm.NewLastfm(secrets)

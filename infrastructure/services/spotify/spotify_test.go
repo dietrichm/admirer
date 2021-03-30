@@ -4,7 +4,9 @@ import (
 	"errors"
 	"os"
 	"testing"
+	"time"
 
+	"github.com/dietrichm/admirer/infrastructure/config"
 	"github.com/golang/mock/gomock"
 	"github.com/zmb3/spotify"
 	"golang.org/x/oauth2"
@@ -27,16 +29,35 @@ func TestSpotify(t *testing.T) {
 		}
 	})
 
-	t.Run("authenticates using authorization code", func(t *testing.T) {
+	t.Run("authenticates using authorization code and saves oauth token", func(t *testing.T) {
 		ctrl := gomock.NewController(t)
 
-		token := new(oauth2.Token)
+		now := time.Now()
+		token := &oauth2.Token{
+			TokenType:    "myTokenType",
+			AccessToken:  "myAccessToken",
+			Expiry:       now,
+			RefreshToken: "myRefreshToken",
+		}
+
 		client := spotify.Client{}
 		authenticator := NewMockAuthenticator(ctrl)
 		authenticator.EXPECT().Exchange("authcode").Return(token, nil)
 		authenticator.EXPECT().NewClient(token).Return(client)
 
-		service := &Spotify{authenticator: authenticator}
+		secrets := config.NewMockConfig(ctrl)
+		gomock.InOrder(
+			secrets.EXPECT().Set("token_type", "myTokenType"),
+			secrets.EXPECT().Set("access_token", "myAccessToken"),
+			secrets.EXPECT().Set("expiry", now),
+			secrets.EXPECT().Set("refresh_token", "myRefreshToken"),
+			secrets.EXPECT().WriteConfig(),
+		)
+
+		service := &Spotify{
+			authenticator: authenticator,
+			secrets:       secrets,
+		}
 
 		err := service.Authenticate("authcode")
 
@@ -113,10 +134,13 @@ func TestSpotify(t *testing.T) {
 
 func TestNewSpotify(t *testing.T) {
 	t.Run("creates instance when environment is configured", func(t *testing.T) {
+		ctrl := gomock.NewController(t)
+		secrets := config.NewMockConfig(ctrl)
+
 		os.Setenv("SPOTIFY_CLIENT_ID", "client_id")
 		os.Setenv("SPOTIFY_CLIENT_SECRET", "client_secret")
 
-		service, err := NewSpotify()
+		service, err := NewSpotify(secrets)
 
 		if service == nil {
 			t.Error("Expected an instance")
@@ -128,10 +152,13 @@ func TestNewSpotify(t *testing.T) {
 	})
 
 	t.Run("returns error when environment is not configured", func(t *testing.T) {
+		ctrl := gomock.NewController(t)
+		secrets := config.NewMockConfig(ctrl)
+
 		os.Unsetenv("SPOTIFY_CLIENT_ID")
 		os.Unsetenv("SPOTIFY_CLIENT_SECRET")
 
-		service, err := NewSpotify()
+		service, err := NewSpotify(secrets)
 
 		if service != nil {
 			t.Errorf("Unexpected instance: %v", service)

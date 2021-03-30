@@ -151,6 +151,13 @@ func TestNewLastfm(t *testing.T) {
 		if err != nil {
 			t.Errorf("Unexpected error: %v", err)
 		}
+
+		expected := "mySessionKey"
+		got := service.api.GetSessionKey()
+
+		if got != expected {
+			t.Errorf("expected %q, got %q", expected, got)
+		}
 	})
 
 	t.Run("returns error when environment is not configured", func(t *testing.T) {

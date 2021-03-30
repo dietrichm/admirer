@@ -44,14 +44,14 @@ func (v viperLoader) loadFromFile(filename string) (Config, error) {
 		}
 	}
 
-	if err := checkPermissions(filename); err != nil {
+	if err := v.checkPermissions(filename); err != nil {
 		return nil, err
 	}
 
 	return config, nil
 }
 
-func checkPermissions(filename string) error {
+func (v viperLoader) checkPermissions(filename string) error {
 	file, err := os.Open(filename)
 	if err != nil {
 		return err

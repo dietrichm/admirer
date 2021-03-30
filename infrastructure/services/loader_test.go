@@ -69,6 +69,37 @@ func TestMapServiceLoader(t *testing.T) {
 		}
 	})
 
+	t.Run("returns error when configuration fails to load", func(t *testing.T) {
+		ctrl := gomock.NewController(t)
+
+		configLoader := config.NewMockLoader(ctrl)
+		configError := errors.New("failed to load")
+		configLoader.EXPECT().Load(gomock.Any()).Return(nil, configError)
+
+		serviceLoader := MapServiceLoader{
+			services: loaderMap{
+				"foo": func(secrets config.Config) (domain.Service, error) {
+					return nil, nil
+				},
+			},
+			configLoader: configLoader,
+		}
+
+		service, err := serviceLoader.ForName("foo")
+
+		if service != nil {
+			t.Errorf("Unexpected service instance: %v", service)
+		}
+
+		if err == nil {
+			t.Fatal("Expected an error")
+		}
+
+		if err != configError {
+			t.Errorf("expected %q, got %q", configError, err)
+		}
+	})
+
 	t.Run("returns error when loader yields error", func(t *testing.T) {
 		ctrl := gomock.NewController(t)
 

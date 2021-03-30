@@ -21,7 +21,7 @@ func (m mapServiceLoader) ForName(serviceName string) (service domain.Service, e
 		return nil, fmt.Errorf("unknown service %q", serviceName)
 	}
 
-	secrets, err := m.configLoader.Load("secrets")
+	secrets, err := m.configLoader.Load("secrets-" + serviceName)
 	if err != nil {
 		return nil, err
 	}

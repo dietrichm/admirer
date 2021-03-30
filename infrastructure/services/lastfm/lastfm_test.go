@@ -32,11 +32,11 @@ func TestLastfm(t *testing.T) {
 
 		api := NewMockAPI(ctrl)
 		api.EXPECT().LoginWithToken("authcode")
-		api.EXPECT().GetSessionKey().Return("myAccessToken")
+		api.EXPECT().GetSessionKey().Return("mySessionKey")
 
 		secrets := config.NewMockConfig(ctrl)
 		gomock.InOrder(
-			secrets.EXPECT().Set("service.lastfm.access_token", "myAccessToken"),
+			secrets.EXPECT().Set("session_key", "mySessionKey"),
 			secrets.EXPECT().WriteConfig(),
 		)
 
@@ -72,7 +72,7 @@ func TestLastfm(t *testing.T) {
 
 		api := NewMockAPI(ctrl)
 		api.EXPECT().LoginWithToken(gomock.Any()).Return(nil)
-		api.EXPECT().GetSessionKey().Return("myAccessToken")
+		api.EXPECT().GetSessionKey().Return("mySessionKey")
 
 		secrets := config.NewMockConfig(ctrl)
 		secrets.EXPECT().Set(gomock.Any(), gomock.Any())
@@ -137,7 +137,7 @@ func TestNewLastfm(t *testing.T) {
 		ctrl := gomock.NewController(t)
 
 		secrets := config.NewMockConfig(ctrl)
-		secrets.EXPECT().GetString("service.lastfm.access_token").Return("myAccessToken")
+		secrets.EXPECT().GetString("session_key").Return("myAccessToken")
 
 		os.Setenv("LASTFM_CLIENT_ID", "client_id")
 		os.Setenv("LASTFM_CLIENT_SECRET", "client_secret")

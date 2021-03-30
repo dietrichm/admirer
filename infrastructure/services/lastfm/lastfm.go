@@ -39,7 +39,7 @@ func NewLastfm(secrets config.Config) (*Lastfm, error) {
 	}
 
 	api := lastfm.New(clientID, clientSecret)
-	api.SetSession(secrets.GetString("service.lastfm.access_token"))
+	api.SetSession(secrets.GetString("session_key"))
 
 	return &Lastfm{
 		api:     api,
@@ -67,7 +67,7 @@ func (l *Lastfm) Authenticate(oauthCode string) error {
 		return errors.New("failed to parse Last.fm token")
 	}
 
-	l.secrets.Set("service.lastfm.access_token", l.AccessToken())
+	l.secrets.Set("session_key", l.AccessToken())
 
 	if err := l.secrets.WriteConfig(); err != nil {
 		return err

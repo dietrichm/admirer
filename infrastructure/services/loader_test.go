@@ -17,7 +17,7 @@ func TestMapServiceLoader(t *testing.T) {
 		secrets := config.NewMockConfig(ctrl)
 
 		configLoader := config.NewMockLoader(ctrl)
-		configLoader.EXPECT().Load("secrets").Return(secrets, nil)
+		configLoader.EXPECT().Load("secrets-foo").Return(secrets, nil)
 
 		serviceLoader := mapServiceLoader{
 			services: loaderMap{

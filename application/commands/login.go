@@ -32,23 +32,12 @@ func Login(serviceLoader domain.ServiceLoader, configLoader config.Loader, write
 		return err
 	}
 
-	secrets, err := configLoader.Load("secrets")
-	if err != nil {
-		return err
-	}
-
 	if len(args) < 2 {
 		fmt.Fprintln(writer, service.Name(), "authentication URL:", service.CreateAuthURL())
 		return nil
 	}
 
 	if err := service.Authenticate(args[1]); err != nil {
-		return err
-	}
-
-	secrets.Set("service."+serviceName+".access_token", service.AccessToken())
-
-	if err := secrets.WriteConfig(); err != nil {
 		return err
 	}
 

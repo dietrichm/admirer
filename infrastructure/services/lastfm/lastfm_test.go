@@ -27,13 +27,23 @@ func TestLastfm(t *testing.T) {
 		}
 	})
 
-	t.Run("authenticates using authorization code", func(t *testing.T) {
+	t.Run("authenticates using authorization code and saves session key", func(t *testing.T) {
 		ctrl := gomock.NewController(t)
 
 		api := NewMockAPI(ctrl)
 		api.EXPECT().LoginWithToken("authcode")
+		api.EXPECT().GetSessionKey().Return("myAccessToken")
 
-		service := &Lastfm{api: api}
+		secrets := config.NewMockConfig(ctrl)
+		gomock.InOrder(
+			secrets.EXPECT().Set("service.lastfm.access_token", "myAccessToken"),
+			secrets.EXPECT().WriteConfig(),
+		)
+
+		service := &Lastfm{
+			api:     api,
+			secrets: secrets,
+		}
 
 		err := service.Authenticate("authcode")
 

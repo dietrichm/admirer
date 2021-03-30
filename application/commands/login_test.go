@@ -21,9 +21,7 @@ func TestLogin(t *testing.T) {
 		serviceLoader := domain.NewMockServiceLoader(ctrl)
 		serviceLoader.EXPECT().ForName("foobar").Return(service, nil)
 
-		secrets := config.NewMockConfig(ctrl)
 		configLoader := config.NewMockLoader(ctrl)
-		configLoader.EXPECT().Load("secrets").Return(secrets, nil)
 
 		got, err := executeLogin(serviceLoader, configLoader, "foobar")
 		expected := "Service authentication URL: https://service.test/auth\n"
@@ -42,21 +40,13 @@ func TestLogin(t *testing.T) {
 
 		service := domain.NewMockService(ctrl)
 		service.EXPECT().Authenticate("authcode")
-		service.EXPECT().AccessToken().Return("access_token")
 		service.EXPECT().Name().AnyTimes().Return("Service")
 		service.EXPECT().GetUsername().Return("Joe", nil)
 
 		serviceLoader := domain.NewMockServiceLoader(ctrl)
 		serviceLoader.EXPECT().ForName(gomock.Any()).Return(service, nil)
 
-		secrets := config.NewMockConfig(ctrl)
 		configLoader := config.NewMockLoader(ctrl)
-		configLoader.EXPECT().Load("secrets").Return(secrets, nil)
-
-		gomock.InOrder(
-			secrets.EXPECT().Set("service.foobar.access_token", "access_token"),
-			secrets.EXPECT().WriteConfig(),
-		)
 
 		got, err := executeLogin(serviceLoader, configLoader, "foobar", "authcode")
 		expected := "Logged in on Service as Joe\n"
@@ -106,46 +96,7 @@ func TestLogin(t *testing.T) {
 		serviceLoader := domain.NewMockServiceLoader(ctrl)
 		serviceLoader.EXPECT().ForName(gomock.Any()).Return(service, nil)
 
-		secrets := config.NewMockConfig(ctrl)
 		configLoader := config.NewMockLoader(ctrl)
-		configLoader.EXPECT().Load(gomock.Any()).Return(secrets, nil)
-
-		output, err := executeLogin(serviceLoader, configLoader, "foobar", "authcode")
-
-		if output != "" {
-			t.Errorf("Unexpected output: %v", output)
-		}
-
-		if err == nil {
-			t.Fatal("Expected an error")
-		}
-
-		got := err.Error()
-
-		if got != expected {
-			t.Errorf("expected %q, got %q", expected, got)
-		}
-	})
-
-	t.Run("returns error for failed secrets file write", func(t *testing.T) {
-		ctrl := gomock.NewController(t)
-
-		service := domain.NewMockService(ctrl)
-		service.EXPECT().Authenticate(gomock.Any()).Return(nil)
-		service.EXPECT().AccessToken().AnyTimes().Return("access_token")
-		service.EXPECT().GetUsername().AnyTimes().Return("Joe", nil)
-		service.EXPECT().Name().AnyTimes().Return("Service")
-
-		serviceLoader := domain.NewMockServiceLoader(ctrl)
-		serviceLoader.EXPECT().ForName(gomock.Any()).Return(service, nil)
-
-		expected := "failed file write"
-		secrets := config.NewMockConfig(ctrl)
-		secrets.EXPECT().Set(gomock.Any(), gomock.Any()).AnyTimes()
-		secrets.EXPECT().WriteConfig().Return(errors.New(expected))
-
-		configLoader := config.NewMockLoader(ctrl)
-		configLoader.EXPECT().Load(gomock.Any()).Return(secrets, nil)
 
 		output, err := executeLogin(serviceLoader, configLoader, "foobar", "authcode")
 
@@ -176,12 +127,7 @@ func TestLogin(t *testing.T) {
 		serviceLoader := domain.NewMockServiceLoader(ctrl)
 		serviceLoader.EXPECT().ForName(gomock.Any()).Return(service, nil)
 
-		secrets := config.NewMockConfig(ctrl)
-		secrets.EXPECT().Set(gomock.Any(), gomock.Any()).AnyTimes()
-		secrets.EXPECT().WriteConfig().AnyTimes()
-
 		configLoader := config.NewMockLoader(ctrl)
-		configLoader.EXPECT().Load(gomock.Any()).Return(secrets, nil)
 
 		output, err := executeLogin(serviceLoader, configLoader, "foobar", "authcode")
 

@@ -26,6 +26,7 @@ type UserAPI interface {
 type Lastfm struct {
 	api     API
 	userAPI UserAPI
+	secrets config.Config
 }
 
 // NewLastfm creates a Lastfm instance.
@@ -43,6 +44,7 @@ func NewLastfm(secrets config.Config) (*Lastfm, error) {
 	return &Lastfm{
 		api:     api,
 		userAPI: api.User,
+		secrets: secrets,
 	}, nil
 }
 
@@ -63,6 +65,12 @@ func (l *Lastfm) CreateAuthURL() string {
 func (l *Lastfm) Authenticate(oauthCode string) error {
 	if err := l.api.LoginWithToken(oauthCode); err != nil {
 		return errors.New("failed to parse Last.fm token")
+	}
+
+	l.secrets.Set("service.lastfm.access_token", l.AccessToken())
+
+	if err := l.secrets.WriteConfig(); err != nil {
+		return err
 	}
 
 	return nil

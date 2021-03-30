@@ -73,7 +73,7 @@ func (s *Spotify) Authenticate(code string) error {
 
 	s.secrets.Set("token_type", token.TokenType)
 	s.secrets.Set("access_token", token.AccessToken)
-	s.secrets.Set("expiry", token.Expiry)
+	s.secrets.Set("expiry", token.Expiry.Format(time.RFC3339))
 	s.secrets.Set("refresh_token", token.RefreshToken)
 
 	if err := s.secrets.WriteConfig(); err != nil {

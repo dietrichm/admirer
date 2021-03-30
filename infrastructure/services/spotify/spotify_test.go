@@ -49,7 +49,7 @@ func TestSpotify(t *testing.T) {
 		gomock.InOrder(
 			secrets.EXPECT().Set("token_type", "myTokenType"),
 			secrets.EXPECT().Set("access_token", "myAccessToken"),
-			secrets.EXPECT().Set("expiry", now),
+			secrets.EXPECT().Set("expiry", now.Format(time.RFC3339)),
 			secrets.EXPECT().Set("refresh_token", "myRefreshToken"),
 			secrets.EXPECT().WriteConfig(),
 		)

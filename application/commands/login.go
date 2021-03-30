@@ -5,7 +5,6 @@ import (
 	"io"
 
 	"github.com/dietrichm/admirer/domain"
-	"github.com/dietrichm/admirer/infrastructure/config"
 	"github.com/dietrichm/admirer/infrastructure/services"
 	"github.com/spf13/cobra"
 )
@@ -19,12 +18,12 @@ var loginCommand = &cobra.Command{
 	Short: "Log in on external service",
 	Args:  cobra.MinimumNArgs(1),
 	RunE: func(command *cobra.Command, args []string) error {
-		return Login(services.AvailableServices, config.ConfigLoader, command.OutOrStdout(), args)
+		return Login(services.AvailableServices, command.OutOrStdout(), args)
 	},
 }
 
 // Login runs the authentication flow for a specified service.
-func Login(serviceLoader domain.ServiceLoader, configLoader config.Loader, writer io.Writer, args []string) error {
+func Login(serviceLoader domain.ServiceLoader, writer io.Writer, args []string) error {
 	serviceName := args[0]
 
 	service, err := serviceLoader.ForName(serviceName)

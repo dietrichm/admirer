@@ -6,7 +6,6 @@ import (
 	"testing"
 
 	"github.com/dietrichm/admirer/domain"
-	"github.com/dietrichm/admirer/infrastructure/config"
 	"github.com/golang/mock/gomock"
 )
 
@@ -21,9 +20,7 @@ func TestLogin(t *testing.T) {
 		serviceLoader := domain.NewMockServiceLoader(ctrl)
 		serviceLoader.EXPECT().ForName("foobar").Return(service, nil)
 
-		configLoader := config.NewMockLoader(ctrl)
-
-		got, err := executeLogin(serviceLoader, configLoader, "foobar")
+		got, err := executeLogin(serviceLoader, "foobar")
 		expected := "Service authentication URL: https://service.test/auth\n"
 
 		if got != expected {
@@ -46,9 +43,7 @@ func TestLogin(t *testing.T) {
 		serviceLoader := domain.NewMockServiceLoader(ctrl)
 		serviceLoader.EXPECT().ForName(gomock.Any()).Return(service, nil)
 
-		configLoader := config.NewMockLoader(ctrl)
-
-		got, err := executeLogin(serviceLoader, configLoader, "foobar", "authcode")
+		got, err := executeLogin(serviceLoader, "foobar", "authcode")
 		expected := "Logged in on Service as Joe\n"
 
 		if got != expected {
@@ -67,9 +62,7 @@ func TestLogin(t *testing.T) {
 		serviceLoader := domain.NewMockServiceLoader(ctrl)
 		serviceLoader.EXPECT().ForName(gomock.Any()).Return(nil, errors.New(expected))
 
-		configLoader := config.NewMockLoader(ctrl)
-
-		output, err := executeLogin(serviceLoader, configLoader, "foobar")
+		output, err := executeLogin(serviceLoader, "foobar")
 
 		if output != "" {
 			t.Errorf("Unexpected output: %v", output)
@@ -96,9 +89,7 @@ func TestLogin(t *testing.T) {
 		serviceLoader := domain.NewMockServiceLoader(ctrl)
 		serviceLoader.EXPECT().ForName(gomock.Any()).Return(service, nil)
 
-		configLoader := config.NewMockLoader(ctrl)
-
-		output, err := executeLogin(serviceLoader, configLoader, "foobar", "authcode")
+		output, err := executeLogin(serviceLoader, "foobar", "authcode")
 
 		if output != "" {
 			t.Errorf("Unexpected output: %v", output)
@@ -127,9 +118,7 @@ func TestLogin(t *testing.T) {
 		serviceLoader := domain.NewMockServiceLoader(ctrl)
 		serviceLoader.EXPECT().ForName(gomock.Any()).Return(service, nil)
 
-		configLoader := config.NewMockLoader(ctrl)
-
-		output, err := executeLogin(serviceLoader, configLoader, "foobar", "authcode")
+		output, err := executeLogin(serviceLoader, "foobar", "authcode")
 
 		if output != "" {
 			t.Errorf("Unexpected output: %v", output)
@@ -147,8 +136,8 @@ func TestLogin(t *testing.T) {
 	})
 }
 
-func executeLogin(serviceLoader domain.ServiceLoader, configLoader config.Loader, args ...string) (string, error) {
+func executeLogin(serviceLoader domain.ServiceLoader, args ...string) (string, error) {
 	buffer := new(bytes.Buffer)
-	err := Login(serviceLoader, configLoader, buffer, args)
+	err := Login(serviceLoader, buffer, args)
 	return buffer.String(), err
 }

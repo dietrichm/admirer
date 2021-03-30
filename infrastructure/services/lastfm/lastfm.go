@@ -6,6 +6,7 @@ import (
 	"errors"
 	"os"
 
+	"github.com/dietrichm/admirer/infrastructure/config"
 	"github.com/shkh/lastfm-go/lastfm"
 )
 
@@ -28,7 +29,7 @@ type Lastfm struct {
 }
 
 // NewLastfm creates a Lastfm instance.
-func NewLastfm(sessionKey string) (*Lastfm, error) {
+func NewLastfm(secrets config.Config) (*Lastfm, error) {
 	clientID := os.Getenv("LASTFM_CLIENT_ID")
 	clientSecret := os.Getenv("LASTFM_CLIENT_SECRET")
 
@@ -37,7 +38,7 @@ func NewLastfm(sessionKey string) (*Lastfm, error) {
 	}
 
 	api := lastfm.New(clientID, clientSecret)
-	api.SetSession(sessionKey)
+	api.SetSession(secrets.GetString("service.lastfm.access_token"))
 
 	return &Lastfm{
 		api:     api,

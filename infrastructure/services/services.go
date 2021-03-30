@@ -14,7 +14,7 @@ var AvailableServices = mapServiceLoader{
 			return spotify.NewSpotify()
 		},
 		"lastfm": func(secrets config.Config) (domain.Service, error) {
-			return lastfm.NewLastfm(secrets.GetString("service.lastfm.access_token"))
+			return lastfm.NewLastfm(secrets)
 		},
 	},
 	configLoader: config.ConfigLoader,

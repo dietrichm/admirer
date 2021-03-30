@@ -5,6 +5,7 @@ import (
 	"os"
 	"testing"
 
+	"github.com/dietrichm/admirer/infrastructure/config"
 	"github.com/golang/mock/gomock"
 	"github.com/shkh/lastfm-go/lastfm"
 )
@@ -101,10 +102,15 @@ func TestLastfm(t *testing.T) {
 
 func TestNewLastfm(t *testing.T) {
 	t.Run("creates instance when environment is configured", func(t *testing.T) {
+		ctrl := gomock.NewController(t)
+
+		secrets := config.NewMockConfig(ctrl)
+		secrets.EXPECT().GetString("service.lastfm.access_token").Return("myAccessToken")
+
 		os.Setenv("LASTFM_CLIENT_ID", "client_id")
 		os.Setenv("LASTFM_CLIENT_SECRET", "client_secret")
 
-		service, err := NewLastfm("myAccessToken")
+		service, err := NewLastfm(secrets)
 
 		if service == nil {
 			t.Error("Expected an instance")
@@ -123,10 +129,13 @@ func TestNewLastfm(t *testing.T) {
 	})
 
 	t.Run("returns error when environment is not configured", func(t *testing.T) {
+		ctrl := gomock.NewController(t)
+		secrets := config.NewMockConfig(ctrl)
+
 		os.Unsetenv("LASTFM_CLIENT_ID")
 		os.Unsetenv("LASTFM_CLIENT_SECRET")
 
-		service, err := NewLastfm("")
+		service, err := NewLastfm(secrets)
 
 		if service != nil {
 			t.Errorf("Unexpected instance: %v", service)

@@ -9,15 +9,17 @@ import (
 
 // AvailableServices is the configured ServiceLoader for the available services.
 var AvailableServices = MapServiceLoader{
-	"spotify": func() (domain.Service, error) {
-		return spotify.NewSpotify()
-	},
-	"lastfm": func() (domain.Service, error) {
-		secrets, err := config.ConfigLoader.Load("secrets")
-		if err != nil {
-			return nil, err
-		}
+	services: loaderMap{
+		"spotify": func() (domain.Service, error) {
+			return spotify.NewSpotify()
+		},
+		"lastfm": func() (domain.Service, error) {
+			secrets, err := config.ConfigLoader.Load("secrets")
+			if err != nil {
+				return nil, err
+			}
 
-		return lastfm.NewLastfm(secrets.GetString("service.lastfm.access_token"))
+			return lastfm.NewLastfm(secrets.GetString("service.lastfm.access_token"))
+		},
 	},
 }

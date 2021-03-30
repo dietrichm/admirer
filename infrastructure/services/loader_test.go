@@ -14,11 +14,13 @@ func TestMapServiceLoader(t *testing.T) {
 		service := domain.NewMockService(ctrl)
 
 		serviceLoader := MapServiceLoader{
-			"foo": func() (domain.Service, error) {
-				return service, nil
-			},
-			"bar": func() (domain.Service, error) {
-				return nil, nil
+			services: loaderMap{
+				"foo": func() (domain.Service, error) {
+					return service, nil
+				},
+				"bar": func() (domain.Service, error) {
+					return nil, nil
+				},
 			},
 		}
 
@@ -35,8 +37,10 @@ func TestMapServiceLoader(t *testing.T) {
 
 	t.Run("returns error when loader does not exist", func(t *testing.T) {
 		serviceLoader := MapServiceLoader{
-			"foo": func() (domain.Service, error) {
-				return nil, nil
+			services: loaderMap{
+				"foo": func() (domain.Service, error) {
+					return nil, nil
+				},
 			},
 		}
 
@@ -61,8 +65,10 @@ func TestMapServiceLoader(t *testing.T) {
 	t.Run("returns error when loader yields error", func(t *testing.T) {
 		serviceError := errors.New("service error")
 		serviceLoader := MapServiceLoader{
-			"foo": func() (domain.Service, error) {
-				return nil, serviceError
+			services: loaderMap{
+				"foo": func() (domain.Service, error) {
+					return nil, serviceError
+				},
 			},
 		}
 

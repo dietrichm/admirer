@@ -67,6 +67,28 @@ func TestLastfm(t *testing.T) {
 		}
 	})
 
+	t.Run("returns error for failed config write", func(t *testing.T) {
+		ctrl := gomock.NewController(t)
+
+		api := NewMockAPI(ctrl)
+		api.EXPECT().LoginWithToken(gomock.Any()).Return(nil)
+		api.EXPECT().GetSessionKey().Return("myAccessToken")
+
+		secrets := config.NewMockConfig(ctrl)
+		secrets.EXPECT().Set(gomock.Any(), gomock.Any())
+		secrets.EXPECT().WriteConfig().Return(errors.New("write error"))
+
+		service := &Lastfm{
+			api:     api,
+			secrets: secrets}
+
+		err := service.Authenticate("authcode")
+
+		if err == nil {
+			t.Fatal("Expected an error")
+		}
+	})
+
 	t.Run("returns username from client", func(t *testing.T) {
 		ctrl := gomock.NewController(t)
 

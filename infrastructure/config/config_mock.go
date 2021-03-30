@@ -47,6 +47,20 @@ func (mr *MockConfigMockRecorder) GetString(key interface{}) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetString", reflect.TypeOf((*MockConfig)(nil).GetString), key)
 }
 
+// IsSet mocks base method.
+func (m *MockConfig) IsSet(key string) bool {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "IsSet", key)
+	ret0, _ := ret[0].(bool)
+	return ret0
+}
+
+// IsSet indicates an expected call of IsSet.
+func (mr *MockConfigMockRecorder) IsSet(key interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "IsSet", reflect.TypeOf((*MockConfig)(nil).IsSet), key)
+}
+
 // Set mocks base method.
 func (m *MockConfig) Set(key string, value interface{}) {
 	m.ctrl.T.Helper()

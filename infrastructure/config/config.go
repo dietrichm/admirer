@@ -7,6 +7,7 @@ var ConfigLoader = &viperLoader{}
 
 // Config is the interface for reading and writing configuration.
 type Config interface {
+	IsSet(key string) bool
 	GetString(key string) string
 	Set(key string, value interface{})
 	WriteConfig() error

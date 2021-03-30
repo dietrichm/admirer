@@ -7,7 +7,7 @@ import (
 	"github.com/dietrichm/admirer/infrastructure/config"
 )
 
-type loaderMap map[string]func() (domain.Service, error)
+type loaderMap map[string]func(secrets config.Config) (domain.Service, error)
 
 // MapServiceLoader loads actual instances of services.
 type MapServiceLoader struct {
@@ -23,5 +23,10 @@ func (m MapServiceLoader) ForName(serviceName string) (service domain.Service, e
 		return nil, fmt.Errorf("unknown service %q", serviceName)
 	}
 
-	return loader()
+	secrets, err := m.configLoader.Load("secrets")
+	if err != nil {
+		return nil, err
+	}
+
+	return loader(secrets)
 }

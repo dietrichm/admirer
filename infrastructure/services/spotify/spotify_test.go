@@ -130,6 +130,36 @@ func TestSpotify(t *testing.T) {
 			t.Fatal("Expected an error")
 		}
 	})
+
+	t.Run("authenticates from token in secrets", func(t *testing.T) {
+		ctrl := gomock.NewController(t)
+
+		now := time.Now()
+		token := &oauth2.Token{
+			TokenType:    "myTokenType",
+			AccessToken:  "myAccessToken",
+			Expiry:       now.Truncate(time.Second),
+			RefreshToken: "myRefreshToken",
+		}
+		client := spotify.Client{}
+
+		authenticator := NewMockAuthenticator(ctrl)
+		authenticator.EXPECT().NewClient(token).Return(client)
+
+		secrets := config.NewMockConfig(ctrl)
+		secrets.EXPECT().IsSet("token_type").Return(true)
+		secrets.EXPECT().GetString("expiry").Return(now.Format(time.RFC3339))
+		secrets.EXPECT().GetString("token_type").Return("myTokenType")
+		secrets.EXPECT().GetString("access_token").Return("myAccessToken")
+		secrets.EXPECT().GetString("refresh_token").Return("myRefreshToken")
+
+		service := &Spotify{
+			authenticator: authenticator,
+			secrets:       secrets,
+		}
+
+		service.authenticateFromSecrets(secrets)
+	})
 }
 
 func TestNewSpotify(t *testing.T) {

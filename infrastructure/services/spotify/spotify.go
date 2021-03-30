@@ -50,18 +50,7 @@ func NewSpotify(secrets config.Config) (*Spotify, error) {
 		authenticator: &authenticator,
 		secrets:       secrets,
 	}
-
-	if secrets.IsSet("token_type") {
-		expiryTime, _ := time.Parse(time.RFC3339, secrets.GetString("expiry"))
-		token := &oauth2.Token{
-			TokenType:    secrets.GetString("token_type"),
-			AccessToken:  secrets.GetString("access_token"),
-			Expiry:       expiryTime,
-			RefreshToken: secrets.GetString("refresh_token"),
-		}
-		client := authenticator.NewClient(token)
-		service.client = &client
-	}
+	service.authenticateFromSecrets(secrets)
 
 	return service, nil
 }
@@ -106,4 +95,25 @@ func (s *Spotify) GetUsername() (string, error) {
 	}
 
 	return user.DisplayName, nil
+}
+
+func (s *Spotify) authenticateFromSecrets(secrets config.Config) {
+	if !secrets.IsSet("token_type") {
+		return
+	}
+
+	expiryTime, err := time.Parse(time.RFC3339, secrets.GetString("expiry"))
+	if err != nil {
+		return
+	}
+
+	token := &oauth2.Token{
+		TokenType:    secrets.GetString("token_type"),
+		AccessToken:  secrets.GetString("access_token"),
+		Expiry:       expiryTime,
+		RefreshToken: secrets.GetString("refresh_token"),
+	}
+
+	client := s.authenticator.NewClient(token)
+	s.client = &client
 }

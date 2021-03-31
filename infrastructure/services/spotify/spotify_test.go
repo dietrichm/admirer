@@ -2,7 +2,9 @@ package spotify
 
 import (
 	"errors"
+	"fmt"
 	"os"
+	"reflect"
 	"testing"
 	"time"
 
@@ -144,7 +146,7 @@ func TestSpotify(t *testing.T) {
 		client := spotify.Client{}
 
 		authenticator := NewMockAuthenticator(ctrl)
-		authenticator.EXPECT().NewClient(token).Return(client)
+		authenticator.EXPECT().NewClient(&tokenMatcher{token}).Return(client)
 
 		secrets := config.NewMockConfig(ctrl)
 		secrets.EXPECT().IsSet("token_type").Return(true)
@@ -200,4 +202,44 @@ func TestNewSpotify(t *testing.T) {
 			t.Error("Expected an error")
 		}
 	})
+}
+
+type tokenMatcher struct {
+	token *oauth2.Token
+}
+
+func (t tokenMatcher) Matches(x interface{}) bool {
+	tokenWithoutExpiry := &oauth2.Token{
+		TokenType:    t.token.TokenType,
+		AccessToken:  t.token.AccessToken,
+		RefreshToken: t.token.RefreshToken,
+	}
+
+	gotToken, ok := x.(*oauth2.Token)
+	if !ok {
+		return false
+	}
+
+	gotTokenWithoutExpiry := &oauth2.Token{
+		TokenType:    gotToken.TokenType,
+		AccessToken:  gotToken.AccessToken,
+		RefreshToken: gotToken.RefreshToken,
+	}
+
+	if !reflect.DeepEqual(tokenWithoutExpiry, gotTokenWithoutExpiry) {
+		return false
+	}
+
+	expiry := t.token.Expiry.Truncate(time.Second)
+	gotExpiry := gotToken.Expiry.Truncate(time.Second)
+
+	if !expiry.Equal(gotExpiry) {
+		return false
+	}
+
+	return true
+}
+
+func (t tokenMatcher) String() string {
+	return fmt.Sprintf("is equal to %v", t.token)
 }

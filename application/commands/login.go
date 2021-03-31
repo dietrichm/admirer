@@ -18,12 +18,11 @@ var loginCommand = &cobra.Command{
 	Short: "Log in on external service",
 	Args:  cobra.MinimumNArgs(1),
 	RunE: func(command *cobra.Command, args []string) error {
-		return Login(services.AvailableServices, command.OutOrStdout(), args)
+		return login(services.AvailableServices, command.OutOrStdout(), args)
 	},
 }
 
-// Login runs the authentication flow for a specified service.
-func Login(serviceLoader domain.ServiceLoader, writer io.Writer, args []string) error {
+func login(serviceLoader domain.ServiceLoader, writer io.Writer, args []string) error {
 	serviceName := args[0]
 
 	service, err := serviceLoader.ForName(serviceName)

@@ -13,4 +13,5 @@ type Service interface {
 // ServiceLoader loads service instances by name.
 type ServiceLoader interface {
 	ForName(serviceName string) (Service, error)
+	Names() []string
 }

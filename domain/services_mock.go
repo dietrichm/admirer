@@ -127,3 +127,17 @@ func (mr *MockServiceLoaderMockRecorder) ForName(serviceName interface{}) *gomoc
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ForName", reflect.TypeOf((*MockServiceLoader)(nil).ForName), serviceName)
 }
+
+// Names mocks base method.
+func (m *MockServiceLoader) Names() []string {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Names")
+	ret0, _ := ret[0].([]string)
+	return ret0
+}
+
+// Names indicates an expected call of Names.
+func (mr *MockServiceLoaderMockRecorder) Names() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Names", reflect.TypeOf((*MockServiceLoader)(nil).Names))
+}

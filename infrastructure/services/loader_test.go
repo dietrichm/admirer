@@ -2,6 +2,7 @@ package services
 
 import (
 	"errors"
+	"reflect"
 	"testing"
 
 	"github.com/dietrichm/admirer/domain"
@@ -129,6 +130,26 @@ func TestMapServiceLoader(t *testing.T) {
 
 		if err != serviceError {
 			t.Errorf("expected %q, got %q", serviceError, err)
+		}
+	})
+
+	t.Run("returns slice of names of available services", func(t *testing.T) {
+		serviceLoader := mapServiceLoader{
+			services: loaderMap{
+				"foo": func(secrets config.Config) (domain.Service, error) {
+					return nil, nil
+				},
+				"bar": func(secrets config.Config) (domain.Service, error) {
+					return nil, nil
+				},
+			},
+		}
+
+		expected := []string{"foo", "bar"}
+		got := serviceLoader.Names()
+
+		if !reflect.DeepEqual(got, expected) {
+			t.Errorf("expected %q, got %q", expected, got)
 		}
 	})
 }

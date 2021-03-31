@@ -28,3 +28,10 @@ func (m mapServiceLoader) ForName(serviceName string) (service domain.Service, e
 
 	return loader(secrets)
 }
+
+func (m mapServiceLoader) Names() (names []string) {
+	for name := range m.services {
+		names = append(names, name)
+	}
+	return
+}

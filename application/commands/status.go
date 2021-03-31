@@ -28,8 +28,12 @@ func status(serviceLoader domain.ServiceLoader, writer io.Writer) error {
 			return err
 		}
 
-		fmt.Fprintln(writer, service.Name())
+		statusForService(service, writer)
 	}
 
 	return nil
+}
+
+func statusForService(service domain.Service, writer io.Writer) {
+	fmt.Fprintln(writer, service.Name())
 }

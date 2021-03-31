@@ -14,9 +14,11 @@ func TestStatus(t *testing.T) {
 
 		fooService := domain.NewMockService(ctrl)
 		fooService.EXPECT().Name().Return("Foo")
+		fooService.EXPECT().GetUsername().Return("user303", nil)
 
 		barService := domain.NewMockService(ctrl)
 		barService.EXPECT().Name().Return("Bar")
+		barService.EXPECT().GetUsername().Return("user808", nil)
 
 		serviceLoader := domain.NewMockServiceLoader(ctrl)
 		serviceLoader.EXPECT().Names().Return([]string{"foo", "bar"})
@@ -24,7 +26,9 @@ func TestStatus(t *testing.T) {
 		serviceLoader.EXPECT().ForName("bar").Return(barService, nil)
 
 		expected := `Foo
+	Authenticated as user303
 Bar
+	Authenticated as user808
 `
 		got, err := executeStatus(serviceLoader)
 

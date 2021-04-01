@@ -53,6 +53,14 @@ func (l *Lastfm) Name() string {
 	return "Last.fm"
 }
 
+// Authenticated returns whether the service is logged in.
+func (l *Lastfm) Authenticated() bool {
+	if l.api.GetSessionKey() != "" {
+		return true
+	}
+	return false
+}
+
 // CreateAuthURL returns an authorization URL to authorize the integration.
 func (l *Lastfm) CreateAuthURL() string {
 	// Not an actual web server (yet).

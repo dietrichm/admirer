@@ -11,6 +11,28 @@ import (
 )
 
 func TestLastfm(t *testing.T) {
+	t.Run("returns whether service is authenticated", func(t *testing.T) {
+		ctrl := gomock.NewController(t)
+
+		api := NewMockAPI(ctrl)
+		api.EXPECT().GetSessionKey().Return("")
+
+		service := &Lastfm{api: api}
+
+		if service.Authenticated() {
+			t.Error("expected not to be authenticated")
+		}
+
+		api = NewMockAPI(ctrl)
+		api.EXPECT().GetSessionKey().Return("sessionKey")
+
+		service = &Lastfm{api: api}
+
+		if !service.Authenticated() {
+			t.Error("expected to be authenticated")
+		}
+	})
+
 	t.Run("creates authentication URL", func(t *testing.T) {
 		ctrl := gomock.NewController(t)
 

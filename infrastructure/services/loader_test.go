@@ -145,7 +145,7 @@ func TestMapServiceLoader(t *testing.T) {
 			},
 		}
 
-		expected := []string{"foo", "bar"}
+		expected := []string{"bar", "foo"}
 		got := serviceLoader.Names()
 
 		if !reflect.DeepEqual(got, expected) {

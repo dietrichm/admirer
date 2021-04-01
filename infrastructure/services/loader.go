@@ -2,6 +2,7 @@ package services
 
 import (
 	"fmt"
+	"sort"
 
 	"github.com/dietrichm/admirer/domain"
 	"github.com/dietrichm/admirer/infrastructure/config"
@@ -33,5 +34,6 @@ func (m mapServiceLoader) Names() (names []string) {
 	for name := range m.services {
 		names = append(names, name)
 	}
+	sort.Strings(names)
 	return
 }

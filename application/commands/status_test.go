@@ -2,6 +2,7 @@ package commands
 
 import (
 	"bytes"
+	"errors"
 	"testing"
 
 	"github.com/dietrichm/admirer/domain"
@@ -38,6 +39,31 @@ Bar
 
 		if got != expected {
 			t.Errorf("expected %q, got %q", expected, got)
+		}
+	})
+
+	t.Run("returns error when failing to load service", func(t *testing.T) {
+		ctrl := gomock.NewController(t)
+
+		expected := "failed to load"
+		serviceLoader := domain.NewMockServiceLoader(ctrl)
+		serviceLoader.EXPECT().Names().Return([]string{"foo"})
+		serviceLoader.EXPECT().ForName("foo").Return(nil, errors.New(expected))
+
+		output, err := executeStatus(serviceLoader)
+
+		if err == nil {
+			t.Fatal("Expected an error")
+		}
+
+		got := err.Error()
+
+		if got != expected {
+			t.Errorf("expected %q, got %q", expected, got)
+		}
+
+		if output != "" {
+			t.Errorf("Unexpected output: %v", output)
 		}
 	})
 }

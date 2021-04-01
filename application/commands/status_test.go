@@ -94,29 +94,32 @@ Bar
 		}
 	})
 
-	t.Run("returns error when not authenticated", func(t *testing.T) {
+	t.Run("returns error when failed to get username", func(t *testing.T) {
 		ctrl := gomock.NewController(t)
 
+		expected := "auth error"
 		fooService := domain.NewMockService(ctrl)
-		fooService.EXPECT().Name().Return("Foo")
 		fooService.EXPECT().Authenticated().Return(true)
-		fooService.EXPECT().GetUsername().Return("", errors.New("auth error"))
+		fooService.EXPECT().GetUsername().Return("", errors.New(expected))
 
 		serviceLoader := domain.NewMockServiceLoader(ctrl)
 		serviceLoader.EXPECT().Names().Return([]string{"foo"})
 		serviceLoader.EXPECT().ForName("foo").Return(fooService, nil)
 
-		expected := `Foo
-	Not authenticated - auth error
-`
-		got, err := executeStatus(serviceLoader)
+		output, err := executeStatus(serviceLoader)
 
-		if err != nil {
-			t.Errorf("Unexpected error: %v", err)
+		if err == nil {
+			t.Fatal("Expected an error")
 		}
+
+		got := err.Error()
 
 		if got != expected {
 			t.Errorf("expected %q, got %q", expected, got)
+		}
+
+		if output != "" {
+			t.Errorf("Unexpected output: %v", output)
 		}
 	})
 }

@@ -28,25 +28,27 @@ func status(serviceLoader domain.ServiceLoader, writer io.Writer) error {
 			return err
 		}
 
-		statusForService(service, writer)
+		if err := statusForService(service, writer); err != nil {
+			return err
+		}
 	}
 
 	return nil
 }
 
-func statusForService(service domain.Service, writer io.Writer) {
-	fmt.Fprintln(writer, service.Name())
-
+func statusForService(service domain.Service, writer io.Writer) error {
 	if !service.Authenticated() {
+		fmt.Fprintln(writer, service.Name())
 		fmt.Fprintln(writer, "\tNot logged in")
-		return
+		return nil
 	}
 
 	username, err := service.GetUsername()
-
 	if err != nil {
-		fmt.Fprintln(writer, "\tNot authenticated -", err.Error())
-	} else {
-		fmt.Fprintln(writer, "\tAuthenticated as", username)
+		return err
 	}
+
+	fmt.Fprintln(writer, service.Name())
+	fmt.Fprintln(writer, "\tAuthenticated as", username)
+	return nil
 }

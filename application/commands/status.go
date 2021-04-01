@@ -37,6 +37,11 @@ func status(serviceLoader domain.ServiceLoader, writer io.Writer) error {
 func statusForService(service domain.Service, writer io.Writer) {
 	fmt.Fprintln(writer, service.Name())
 
+	if !service.Authenticated() {
+		fmt.Fprintln(writer, "\tNot logged in")
+		return
+	}
+
 	username, err := service.GetUsername()
 
 	if err != nil {

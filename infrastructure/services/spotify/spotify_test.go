@@ -15,6 +15,22 @@ import (
 )
 
 func TestSpotify(t *testing.T) {
+	t.Run("returns whether service is authenticated", func(t *testing.T) {
+		ctrl := gomock.NewController(t)
+
+		service := &Spotify{}
+
+		if service.Authenticated() {
+			t.Error("expected not to be authenticated")
+		}
+
+		service = &Spotify{client: NewMockClient(ctrl)}
+
+		if !service.Authenticated() {
+			t.Error("expected to be authenticated")
+		}
+	})
+
 	t.Run("creates authentication URL", func(t *testing.T) {
 		ctrl := gomock.NewController(t)
 

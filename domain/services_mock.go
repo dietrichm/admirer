@@ -47,6 +47,20 @@ func (mr *MockServiceMockRecorder) Authenticate(code interface{}) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Authenticate", reflect.TypeOf((*MockService)(nil).Authenticate), code)
 }
 
+// Authenticated mocks base method.
+func (m *MockService) Authenticated() bool {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Authenticated")
+	ret0, _ := ret[0].(bool)
+	return ret0
+}
+
+// Authenticated indicates an expected call of Authenticated.
+func (mr *MockServiceMockRecorder) Authenticated() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Authenticated", reflect.TypeOf((*MockService)(nil).Authenticated))
+}
+
 // CreateAuthURL mocks base method.
 func (m *MockService) CreateAuthURL() string {
 	m.ctrl.T.Helper()

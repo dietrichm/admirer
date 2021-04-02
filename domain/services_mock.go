@@ -61,6 +61,20 @@ func (mr *MockServiceMockRecorder) Authenticated() *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Authenticated", reflect.TypeOf((*MockService)(nil).Authenticated))
 }
 
+// Close mocks base method.
+func (m *MockService) Close() error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Close")
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// Close indicates an expected call of Close.
+func (mr *MockServiceMockRecorder) Close() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Close", reflect.TypeOf((*MockService)(nil).Close))
+}
+
 // CreateAuthURL mocks base method.
 func (m *MockService) CreateAuthURL() string {
 	m.ctrl.T.Helper()

@@ -9,6 +9,7 @@ type Service interface {
 	CreateAuthURL() string
 	Authenticate(code string) error
 	GetUsername() (string, error)
+	Close() error
 }
 
 // ServiceLoader loads service instances by name.

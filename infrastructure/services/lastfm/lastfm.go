@@ -93,3 +93,8 @@ func (l *Lastfm) GetUsername() (string, error) {
 
 	return user.Name, nil
 }
+
+// Close persists any state before quitting the application.
+func (l *Lastfm) Close() error {
+	return nil
+}

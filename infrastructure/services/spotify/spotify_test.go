@@ -178,6 +178,37 @@ func TestSpotify(t *testing.T) {
 
 		service.authenticateFromSecrets(secrets)
 	})
+
+	t.Run("new token is persisted when closing service", func(t *testing.T) {
+		ctrl := gomock.NewController(t)
+
+		now := time.Now()
+		token := &oauth2.Token{
+			TokenType:    "myTokenType",
+			AccessToken:  "myAccessToken",
+			Expiry:       now,
+			RefreshToken: "myRefreshToken",
+		}
+
+		client := NewMockClient(ctrl)
+		client.EXPECT().Token().Return(token, nil)
+
+		secrets := config.NewMockConfig(ctrl)
+		gomock.InOrder(
+			secrets.EXPECT().Set("token_type", "myTokenType"),
+			secrets.EXPECT().Set("access_token", "myAccessToken"),
+			secrets.EXPECT().Set("expiry", now.Format(time.RFC3339)),
+			secrets.EXPECT().Set("refresh_token", "myRefreshToken"),
+			secrets.EXPECT().WriteConfig(),
+		)
+
+		service := &Spotify{
+			client:  client,
+			secrets: secrets,
+		}
+
+		service.Close()
+	})
 }
 
 func TestNewSpotify(t *testing.T) {

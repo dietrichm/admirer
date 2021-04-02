@@ -23,6 +23,7 @@ type Authenticator interface {
 // Client is our interface for a Spotify client.
 type Client interface {
 	CurrentUser() (*spotify.PrivateUser, error)
+	Token() (*oauth2.Token, error)
 }
 
 // Spotify is the external Spotify service implementation.

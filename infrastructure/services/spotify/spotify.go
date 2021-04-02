@@ -83,12 +83,7 @@ func (s *Spotify) Authenticate(code string) error {
 	client := s.authenticator.NewClient(token)
 	s.client = &client
 
-	s.secrets.Set("token_type", token.TokenType)
-	s.secrets.Set("access_token", token.AccessToken)
-	s.secrets.Set("expiry", token.Expiry.Format(time.RFC3339))
-	s.secrets.Set("refresh_token", token.RefreshToken)
-
-	if err := s.secrets.WriteConfig(); err != nil {
+	if err := s.persistToken(token); err != nil {
 		return err
 	}
 
@@ -103,6 +98,18 @@ func (s *Spotify) GetUsername() (string, error) {
 	}
 
 	return user.DisplayName, nil
+}
+
+func (s *Spotify) persistToken(token *oauth2.Token) error {
+	s.secrets.Set("token_type", token.TokenType)
+	s.secrets.Set("access_token", token.AccessToken)
+	s.secrets.Set("expiry", token.Expiry.Format(time.RFC3339))
+	s.secrets.Set("refresh_token", token.RefreshToken)
+
+	if err := s.secrets.WriteConfig(); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (s *Spotify) authenticateFromSecrets(secrets config.Config) {

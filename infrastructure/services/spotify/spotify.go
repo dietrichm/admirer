@@ -84,10 +84,6 @@ func (s *Spotify) Authenticate(code string) error {
 	client := s.authenticator.NewClient(token)
 	s.client = &client
 
-	if err := s.persistToken(token); err != nil {
-		return err
-	}
-
 	return nil
 }
 

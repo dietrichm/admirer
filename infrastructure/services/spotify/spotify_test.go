@@ -47,7 +47,7 @@ func TestSpotify(t *testing.T) {
 		}
 	})
 
-	t.Run("authenticates using authorization code and saves oauth token", func(t *testing.T) {
+	t.Run("authenticates using authorization code", func(t *testing.T) {
 		ctrl := gomock.NewController(t)
 
 		now := time.Now()
@@ -63,18 +63,8 @@ func TestSpotify(t *testing.T) {
 		authenticator.EXPECT().Exchange("authcode").Return(token, nil)
 		authenticator.EXPECT().NewClient(token).Return(client)
 
-		secrets := config.NewMockConfig(ctrl)
-		gomock.InOrder(
-			secrets.EXPECT().Set("token_type", "myTokenType"),
-			secrets.EXPECT().Set("access_token", "myAccessToken"),
-			secrets.EXPECT().Set("expiry", now.Format(time.RFC3339)),
-			secrets.EXPECT().Set("refresh_token", "myRefreshToken"),
-			secrets.EXPECT().WriteConfig(),
-		)
-
 		service := &Spotify{
 			authenticator: authenticator,
-			secrets:       secrets,
 		}
 
 		err := service.Authenticate("authcode")
@@ -100,45 +90,6 @@ func TestSpotify(t *testing.T) {
 
 		if err == nil {
 			t.Fatal("Expected an error")
-		}
-	})
-
-	t.Run("returns error when failing to write token to secrets", func(t *testing.T) {
-		ctrl := gomock.NewController(t)
-
-		now := time.Now()
-		token := &oauth2.Token{
-			TokenType:    "myTokenType",
-			AccessToken:  "myAccessToken",
-			Expiry:       now,
-			RefreshToken: "myRefreshToken",
-		}
-
-		client := spotify.Client{}
-		authenticator := NewMockAuthenticator(ctrl)
-		authenticator.EXPECT().Exchange("authcode").Return(token, nil)
-		authenticator.EXPECT().NewClient(token).Return(client)
-
-		expected := "write error"
-		secrets := config.NewMockConfig(ctrl)
-		secrets.EXPECT().Set(gomock.Any(), gomock.Any()).AnyTimes()
-		secrets.EXPECT().WriteConfig().Return(errors.New(expected))
-
-		service := &Spotify{
-			authenticator: authenticator,
-			secrets:       secrets,
-		}
-
-		err := service.Authenticate("authcode")
-
-		if err == nil {
-			t.Fatal("Expected an error")
-		}
-
-		got := err.Error()
-
-		if got != expected {
-			t.Errorf("expected %q, got %q", expected, got)
 		}
 	})
 

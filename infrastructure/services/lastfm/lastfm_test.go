@@ -5,6 +5,7 @@ import (
 	"os"
 	"testing"
 
+	"github.com/dietrichm/admirer/domain"
 	"github.com/dietrichm/admirer/infrastructure/config"
 	"github.com/golang/mock/gomock"
 	"github.com/shkh/lastfm-go/lastfm"
@@ -150,6 +151,84 @@ func TestLastfm(t *testing.T) {
 
 		if err == nil {
 			t.Fatal("Expected an error")
+		}
+	})
+
+	t.Run("returns map of loved tracks", func(t *testing.T) {
+		ctrl := gomock.NewController(t)
+
+		result := lastfm.UserGetLovedTracks{
+			Tracks: []struct {
+				Name string "xml:\"name\""
+				Mbid string "xml:\"mbid\""
+				Url  string "xml:\"url\""
+				Date struct {
+					Uts  string "xml:\"uts,attr\""
+					Date string "xml:\",chardata\""
+				} "xml:\"date\""
+				Artist struct {
+					Name string "xml:\"name\""
+					Mbid string "xml:\"mbid\""
+					Url  string "xml:\"url\""
+				} "xml:\"artist\""
+				Images []struct {
+					Size string "xml:\"size,attr\""
+					Url  string "xml:\",chardata\""
+				} "xml:\"image\""
+				Streamable struct {
+					FullTrack  string "xml:\"fulltrack,attr\""
+					Streamable string "xml:\",chardata\""
+				} "xml:\"streamable\""
+			}{
+				{
+					Name: "Blam (Instrumental)",
+					Artist: struct {
+						Name string "xml:\"name\""
+						Mbid string "xml:\"mbid\""
+						Url  string "xml:\"url\""
+					}{
+						Name: "Awesome Artist",
+					},
+				},
+				{
+					Name: "Mr. Testy",
+					Artist: struct {
+						Name string "xml:\"name\""
+						Mbid string "xml:\"mbid\""
+						Url  string "xml:\"url\""
+					}{
+						Name: "Foo & Bar",
+					},
+				},
+			},
+		}
+
+		user := lastfm.UserGetInfo{Name: "Diana"}
+		userAPI := NewMockUserAPI(ctrl)
+		userAPI.EXPECT().GetInfo(lastfm.P{}).Return(user, nil)
+		userAPI.EXPECT().GetLovedTracks(lastfm.P{
+			"user":  "Diana",
+			"limit": 10,
+		}).Return(result, nil)
+
+		service := &Lastfm{userAPI: userAPI}
+
+		expected := []domain.Track{
+			domain.Track{
+				Artist: "Awesome Artist",
+				Name:   "Blam (Instrumental)",
+			},
+			domain.Track{
+				Artist: "Foo & Bar",
+				Name:   "Mr. Testy",
+			},
+		}
+		got := service.GetLovedTracks()
+
+		for index, expectedTrack := range expected {
+			if got[index] != expectedTrack {
+				t.Errorf("expected %q, got %q", expectedTrack, got[index])
+			}
 		}
 	})
 }

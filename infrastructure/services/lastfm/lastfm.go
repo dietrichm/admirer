@@ -97,8 +97,21 @@ func (l *Lastfm) GetUsername() (string, error) {
 }
 
 // GetLovedTracks returns loved tracks from the external service.
-func (l *Lastfm) GetLovedTracks() []domain.Track {
-	return make([]domain.Track, 0)
+func (l *Lastfm) GetLovedTracks() (tracks []domain.Track) {
+	username, _ := l.GetUsername()
+	result, _ := l.userAPI.GetLovedTracks(lastfm.P{
+		"user":  username,
+		"limit": 10,
+	})
+
+	for _, resultTrack := range result.Tracks {
+		track := domain.Track{
+			Artist: resultTrack.Artist.Name,
+			Name:   resultTrack.Name,
+		}
+		tracks = append(tracks, track)
+	}
+	return
 }
 
 // Close persists any state before quitting the application.

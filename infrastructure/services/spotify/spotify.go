@@ -103,6 +103,10 @@ func (s *Spotify) GetUsername() (string, error) {
 
 // Close persists any state before quitting the application.
 func (s *Spotify) Close() error {
+	if !s.Authenticated() {
+		return nil
+	}
+
 	newToken, err := s.client.Token()
 	if err != nil {
 		return err

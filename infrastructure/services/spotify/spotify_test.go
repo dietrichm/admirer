@@ -209,6 +209,21 @@ func TestSpotify(t *testing.T) {
 
 		service.Close()
 	})
+
+	t.Run("skip persisting token on close when not authenticated", func(t *testing.T) {
+		ctrl := gomock.NewController(t)
+		secrets := config.NewMockConfig(ctrl)
+
+		service := &Spotify{
+			secrets: secrets,
+		}
+
+		err := service.Close()
+
+		if err != nil {
+			t.Errorf("Unexpected error: %v", err)
+		}
+	})
 }
 
 func TestNewSpotify(t *testing.T) {

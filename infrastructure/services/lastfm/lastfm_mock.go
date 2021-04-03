@@ -113,3 +113,18 @@ func (mr *MockUserAPIMockRecorder) GetInfo(args interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetInfo", reflect.TypeOf((*MockUserAPI)(nil).GetInfo), args)
 }
+
+// GetLovedTracks mocks base method.
+func (m *MockUserAPI) GetLovedTracks(args map[string]interface{}) (lastfm.UserGetLovedTracks, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetLovedTracks", args)
+	ret0, _ := ret[0].(lastfm.UserGetLovedTracks)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetLovedTracks indicates an expected call of GetLovedTracks.
+func (mr *MockUserAPIMockRecorder) GetLovedTracks(args interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetLovedTracks", reflect.TypeOf((*MockUserAPI)(nil).GetLovedTracks), args)
+}

@@ -21,6 +21,7 @@ type API interface {
 // UserAPI is our interface for a Last.fm user API.
 type UserAPI interface {
 	GetInfo(args map[string]interface{}) (result lastfm.UserGetInfo, err error)
+	GetLovedTracks(args map[string]interface{}) (result lastfm.UserGetLovedTracks, err error)
 }
 
 // Lastfm is the external Lastfm service implementation.

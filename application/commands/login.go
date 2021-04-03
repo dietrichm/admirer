@@ -30,6 +30,8 @@ func login(serviceLoader domain.ServiceLoader, writer io.Writer, args []string) 
 		return err
 	}
 
+	defer service.Close()
+
 	if len(args) < 2 {
 		fmt.Fprintln(writer, service.Name(), "authentication URL:", service.CreateAuthURL())
 		return nil

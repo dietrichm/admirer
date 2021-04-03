@@ -3,4 +3,7 @@
 package domain
 
 // Track represents a track on an external service.
-type Track struct{}
+type Track struct{
+	Artist string
+	Name string
+}

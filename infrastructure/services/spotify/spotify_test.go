@@ -228,6 +228,30 @@ func TestSpotify(t *testing.T) {
 			t.Errorf("Unexpected error: %v", err)
 		}
 	})
+
+	t.Run("returns error when unable to read token", func(t *testing.T) {
+		ctrl := gomock.NewController(t)
+
+		expected := "token error"
+		client := NewMockClient(ctrl)
+		client.EXPECT().Token().Return(nil, errors.New(expected))
+
+		service := &Spotify{
+			client: client,
+		}
+
+		err := service.Close()
+
+		if err == nil {
+			t.Fatal("Expected an error")
+		}
+
+		got := err.Error()
+
+		if got != expected {
+			t.Errorf("expected %q, got %q", expected, got)
+		}
+	})
 }
 
 func TestNewSpotify(t *testing.T) {

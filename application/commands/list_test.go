@@ -2,6 +2,7 @@ package commands
 
 import (
 	"bytes"
+	"errors"
 	"testing"
 
 	"github.com/dietrichm/admirer/domain"
@@ -39,6 +40,30 @@ func TestList(t *testing.T) {
 		expected := `Awesome Artist - Blam (Instrumental)
 Foo & Bar - Mr. Testy
 `
+		if got != expected {
+			t.Errorf("expected %q, got %q", expected, got)
+		}
+	})
+
+	t.Run("returns error for unknown service", func(t *testing.T) {
+		ctrl := gomock.NewController(t)
+
+		expected := "unknown service"
+		serviceLoader := domain.NewMockServiceLoader(ctrl)
+		serviceLoader.EXPECT().ForName(gomock.Any()).Return(nil, errors.New(expected))
+
+		output, err := executeList(serviceLoader, "foobar")
+
+		if output != "" {
+			t.Errorf("Unexpected output: %v", output)
+		}
+
+		if err == nil {
+			t.Fatal("Expected an error")
+		}
+
+		got := err.Error()
+
 		if got != expected {
 			t.Errorf("expected %q, got %q", expected, got)
 		}

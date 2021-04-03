@@ -1,6 +1,6 @@
 # admirer
 
-[![Go version](https://img.shields.io/github/go-mod/go-version/dietrichm/admirer)](https://github.com/dietrichm/admirer/blob/main/go.mod)
+[![Go version](https://img.shields.io/github/go-mod/go-version/dietrichm/admirer)](go.mod)
 [![Go CI](https://github.com/dietrichm/admirer/actions/workflows/go.yml/badge.svg)](https://github.com/dietrichm/admirer/actions/workflows/go.yml)
 [![License](https://img.shields.io/github/license/dietrichm/admirer)](LICENSE)
 

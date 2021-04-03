@@ -103,7 +103,7 @@ func (l *Lastfm) GetLovedTracks() (tracks []domain.Track, err error) {
 		return
 	}
 
-	result, _ := l.userAPI.GetLovedTracks(lastfm.P{
+	result, err := l.userAPI.GetLovedTracks(lastfm.P{
 		"user":  username,
 		"limit": 10,
 	})

@@ -255,6 +255,28 @@ func TestLastfm(t *testing.T) {
 			t.Errorf("Unexpected return value: %v", got)
 		}
 	})
+
+	t.Run("returns error when failed to read loved tracks", func(t *testing.T) {
+		ctrl := gomock.NewController(t)
+
+		user := lastfm.UserGetInfo{Name: "Diana"}
+		result := lastfm.UserGetLovedTracks{}
+		userAPI := NewMockUserAPI(ctrl)
+		userAPI.EXPECT().GetInfo(lastfm.P{}).Return(user, nil)
+		userAPI.EXPECT().GetLovedTracks(gomock.Any()).Return(result, errors.New("read error"))
+
+		service := &Lastfm{userAPI: userAPI}
+
+		got, err := service.GetLovedTracks()
+
+		if err == nil {
+			t.Error("Expected an error")
+		}
+
+		if len(got) > 0 {
+			t.Errorf("Unexpected return value: %v", got)
+		}
+	})
 }
 
 func TestNewLastfm(t *testing.T) {

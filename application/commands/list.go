@@ -1,6 +1,11 @@
 package commands
 
 import (
+	"fmt"
+	"io"
+
+	"github.com/dietrichm/admirer/domain"
+	"github.com/dietrichm/admirer/infrastructure/services"
 	"github.com/spf13/cobra"
 )
 
@@ -13,6 +18,23 @@ var listCommand = &cobra.Command{
 	Short: "List loved tracks on specified service",
 	Args:  cobra.MinimumNArgs(1),
 	RunE: func(command *cobra.Command, args []string) error {
-		return nil
+		return list(services.AvailableServices, command.OutOrStdout(), args)
 	},
+}
+
+func list(serviceLoader domain.ServiceLoader, writer io.Writer, args []string) error {
+	serviceName := args[0]
+
+	service, err := serviceLoader.ForName(serviceName)
+	if err != nil {
+		return err
+	}
+
+	defer service.Close()
+
+	for _, track := range service.GetLovedTracks() {
+		fmt.Fprintln(writer, track.Artist, "-", track.Name)
+	}
+
+	return nil
 }

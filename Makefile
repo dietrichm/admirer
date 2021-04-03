@@ -1,4 +1,4 @@
-.PHONY: default build test
+.PHONY: default build test mocks
 
 default: build test
 

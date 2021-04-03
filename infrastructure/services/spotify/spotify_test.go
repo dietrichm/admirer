@@ -252,6 +252,43 @@ func TestSpotify(t *testing.T) {
 			t.Errorf("expected %q, got %q", expected, got)
 		}
 	})
+
+	t.Run("returns error when unable to write secrets", func(t *testing.T) {
+		ctrl := gomock.NewController(t)
+
+		now := time.Now()
+		token := &oauth2.Token{
+			TokenType:    "myTokenType",
+			AccessToken:  "myAccessToken",
+			Expiry:       now,
+			RefreshToken: "myRefreshToken",
+		}
+
+		client := NewMockClient(ctrl)
+		client.EXPECT().Token().Return(token, nil)
+
+		expected := "write error"
+		secrets := config.NewMockConfig(ctrl)
+		secrets.EXPECT().Set(gomock.Any(), gomock.Any()).AnyTimes()
+		secrets.EXPECT().WriteConfig().Return(errors.New(expected))
+
+		service := &Spotify{
+			client:  client,
+			secrets: secrets,
+		}
+
+		err := service.Close()
+
+		if err == nil {
+			t.Fatal("Expected an error")
+		}
+
+		got := err.Error()
+
+		if got != expected {
+			t.Errorf("expected %q, got %q", expected, got)
+		}
+	})
 }
 
 func TestNewSpotify(t *testing.T) {

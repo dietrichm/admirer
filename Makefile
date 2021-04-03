@@ -7,3 +7,6 @@ build:
 
 test:
 	go test ./...
+
+mocks:
+	go generate ./...

@@ -7,6 +7,7 @@ import (
 	"os"
 	"time"
 
+	"github.com/dietrichm/admirer/domain"
 	"github.com/dietrichm/admirer/infrastructure/config"
 	"github.com/zmb3/spotify"
 	"golang.org/x/oauth2"
@@ -95,6 +96,11 @@ func (s *Spotify) GetUsername() (string, error) {
 	}
 
 	return user.DisplayName, nil
+}
+
+// GetLovedTracks returns loved tracks from the external service.
+func (s *Spotify) GetLovedTracks() []domain.Track {
+	return make([]domain.Track, 0)
 }
 
 // Close persists any state before quitting the application.

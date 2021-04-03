@@ -207,7 +207,11 @@ func TestSpotify(t *testing.T) {
 			secrets: secrets,
 		}
 
-		service.Close()
+		err := service.Close()
+
+		if err != nil {
+			t.Errorf("Unexpected error: %v", err)
+		}
 	})
 
 	t.Run("skip persisting token on close when not authenticated", func(t *testing.T) {

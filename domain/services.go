@@ -9,7 +9,7 @@ type Service interface {
 	CreateAuthURL() string
 	Authenticate(code string) error
 	GetUsername() (string, error)
-	GetLovedTracks() []Track
+	GetLovedTracks() ([]Track, error)
 	Close() error
 }
 

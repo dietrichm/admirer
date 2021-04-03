@@ -25,7 +25,7 @@ func TestList(t *testing.T) {
 		}
 
 		service := domain.NewMockService(ctrl)
-		service.EXPECT().GetLovedTracks().Return(tracks)
+		service.EXPECT().GetLovedTracks().Return(tracks, nil)
 		service.EXPECT().Close()
 
 		serviceLoader := domain.NewMockServiceLoader(ctrl)

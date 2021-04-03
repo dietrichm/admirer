@@ -97,7 +97,7 @@ func (l *Lastfm) GetUsername() (string, error) {
 }
 
 // GetLovedTracks returns loved tracks from the external service.
-func (l *Lastfm) GetLovedTracks() (tracks []domain.Track) {
+func (l *Lastfm) GetLovedTracks() (tracks []domain.Track, err error) {
 	username, _ := l.GetUsername()
 	result, _ := l.userAPI.GetLovedTracks(lastfm.P{
 		"user":  username,

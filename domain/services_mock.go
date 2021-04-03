@@ -90,11 +90,12 @@ func (mr *MockServiceMockRecorder) CreateAuthURL() *gomock.Call {
 }
 
 // GetLovedTracks mocks base method.
-func (m *MockService) GetLovedTracks() []Track {
+func (m *MockService) GetLovedTracks() ([]Track, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetLovedTracks")
 	ret0, _ := ret[0].([]Track)
-	return ret0
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
 }
 
 // GetLovedTracks indicates an expected call of GetLovedTracks.

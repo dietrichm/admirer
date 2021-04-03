@@ -223,7 +223,11 @@ func TestLastfm(t *testing.T) {
 				Name:   "Mr. Testy",
 			},
 		}
-		got := service.GetLovedTracks()
+		got, err := service.GetLovedTracks()
+
+		if err != nil {
+			t.Errorf("Unexpected error: %v", err)
+		}
 
 		for index, expectedTrack := range expected {
 			if got[index] != expectedTrack {

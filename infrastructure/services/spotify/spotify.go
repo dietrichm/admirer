@@ -99,8 +99,8 @@ func (s *Spotify) GetUsername() (string, error) {
 }
 
 // GetLovedTracks returns loved tracks from the external service.
-func (s *Spotify) GetLovedTracks() []domain.Track {
-	return make([]domain.Track, 0)
+func (s *Spotify) GetLovedTracks() ([]domain.Track, error) {
+	return make([]domain.Track, 0), nil
 }
 
 // Close persists any state before quitting the application.

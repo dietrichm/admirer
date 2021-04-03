@@ -28,6 +28,8 @@ func status(serviceLoader domain.ServiceLoader, writer io.Writer) error {
 			return err
 		}
 
+		defer service.Close()
+
 		if err := statusForService(service, writer); err != nil {
 			return err
 		}

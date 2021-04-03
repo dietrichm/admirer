@@ -17,11 +17,13 @@ func TestStatus(t *testing.T) {
 		fooService.EXPECT().Name().Return("Foo")
 		fooService.EXPECT().Authenticated().Return(true)
 		fooService.EXPECT().GetUsername().Return("user303", nil)
+		fooService.EXPECT().Close()
 
 		barService := domain.NewMockService(ctrl)
 		barService.EXPECT().Name().Return("Bar")
 		barService.EXPECT().Authenticated().Return(true)
 		barService.EXPECT().GetUsername().Return("user808", nil)
+		barService.EXPECT().Close()
 
 		serviceLoader := domain.NewMockServiceLoader(ctrl)
 		serviceLoader.EXPECT().Names().Return([]string{"foo", "bar"})
@@ -75,6 +77,7 @@ Bar
 		fooService := domain.NewMockService(ctrl)
 		fooService.EXPECT().Name().Return("Foo")
 		fooService.EXPECT().Authenticated().Return(false)
+		fooService.EXPECT().Close()
 
 		serviceLoader := domain.NewMockServiceLoader(ctrl)
 		serviceLoader.EXPECT().Names().Return([]string{"foo"})
@@ -101,6 +104,7 @@ Bar
 		fooService := domain.NewMockService(ctrl)
 		fooService.EXPECT().Authenticated().Return(true)
 		fooService.EXPECT().GetUsername().Return("", errors.New(expected))
+		fooService.EXPECT().Close()
 
 		serviceLoader := domain.NewMockServiceLoader(ctrl)
 		serviceLoader.EXPECT().Names().Return([]string{"foo"})

@@ -8,6 +8,19 @@ A command line utility to sync song likes (loved tracks) between Spotify and Las
 
 **Work In Progress:** this is serving as my Go learning project and is currently not completely functional. Admirer is tested only on Linux, and no compiled binaries are being provided yet.
 
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+- [Usage](#usage)
+  - [Supported services](#supported-services)
+  - [Authentication](#authentication)
+- [Use cases](#use-cases)
+  - [Listing recently loved or added tracks](#listing-recently-loved-or-added-tracks)
+  - [TODO: syncing recently loved tracks between services](#todo-syncing-recently-loved-tracks-between-services)
+- [License](#license)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 ## Usage
 
 ```

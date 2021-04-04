@@ -32,7 +32,11 @@ func list(serviceLoader domain.ServiceLoader, writer io.Writer, args []string) e
 
 	defer service.Close()
 
-	tracks, _ := service.GetLovedTracks()
+	tracks, err := service.GetLovedTracks()
+	if err != nil {
+		return err
+	}
+
 	for _, track := range tracks {
 		fmt.Fprintln(writer, track.Artist, "-", track.Name)
 	}

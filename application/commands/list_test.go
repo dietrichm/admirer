@@ -68,6 +68,27 @@ Foo & Bar - Mr. Testy
 			t.Errorf("expected %q, got %q", expected, got)
 		}
 	})
+
+	t.Run("returns error when failing to load loved tracks", func(t *testing.T) {
+		ctrl := gomock.NewController(t)
+
+		service := domain.NewMockService(ctrl)
+		service.EXPECT().GetLovedTracks().Return(nil, errors.New("load error"))
+		service.EXPECT().Close()
+
+		serviceLoader := domain.NewMockServiceLoader(ctrl)
+		serviceLoader.EXPECT().ForName("foo").Return(service, nil)
+
+		output, err := executeList(serviceLoader, "foo")
+
+		if err == nil {
+			t.Error("Expected an error")
+		}
+
+		if output != "" {
+			t.Errorf("Unexpected output: %v", output)
+		}
+	})
 }
 
 func executeList(serviceLoader domain.ServiceLoader, args ...string) (string, error) {

@@ -25,6 +25,7 @@ type Authenticator interface {
 type Client interface {
 	CurrentUser() (*spotify.PrivateUser, error)
 	Token() (*oauth2.Token, error)
+	CurrentUsersTracksOpt(opt *spotify.Options) (*spotify.SavedTrackPage, error)
 }
 
 // Spotify is the external Spotify service implementation.

@@ -133,6 +133,21 @@ func (mr *MockClientMockRecorder) CurrentUser() *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CurrentUser", reflect.TypeOf((*MockClient)(nil).CurrentUser))
 }
 
+// CurrentUsersTracksOpt mocks base method.
+func (m *MockClient) CurrentUsersTracksOpt(opt *spotify.Options) (*spotify.SavedTrackPage, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CurrentUsersTracksOpt", opt)
+	ret0, _ := ret[0].(*spotify.SavedTrackPage)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// CurrentUsersTracksOpt indicates an expected call of CurrentUsersTracksOpt.
+func (mr *MockClientMockRecorder) CurrentUsersTracksOpt(opt interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CurrentUsersTracksOpt", reflect.TypeOf((*MockClient)(nil).CurrentUsersTracksOpt), opt)
+}
+
 // Token mocks base method.
 func (m *MockClient) Token() (*oauth2.Token, error) {
 	m.ctrl.T.Helper()

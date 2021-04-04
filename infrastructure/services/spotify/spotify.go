@@ -100,8 +100,25 @@ func (s *Spotify) GetUsername() (string, error) {
 }
 
 // GetLovedTracks returns loved tracks from the external service.
-func (s *Spotify) GetLovedTracks() ([]domain.Track, error) {
-	return make([]domain.Track, 0), nil
+func (s *Spotify) GetLovedTracks() (tracks []domain.Track, err error) {
+	limit := 10
+	options := &spotify.Options{
+		Limit: &limit,
+	}
+
+	result, err := s.client.CurrentUsersTracksOpt(options)
+	if err != nil {
+		return
+	}
+
+	for _, resultTrack := range result.Tracks {
+		track := domain.Track{
+			Artist: resultTrack.Artists[0].Name,
+			Name:   resultTrack.Name,
+		}
+		tracks = append(tracks, track)
+	}
+	return
 }
 
 // Close persists any state before quitting the application.

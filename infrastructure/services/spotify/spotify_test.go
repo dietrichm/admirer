@@ -8,6 +8,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/dietrichm/admirer/domain"
 	"github.com/dietrichm/admirer/infrastructure/config"
 	"github.com/golang/mock/gomock"
 	"github.com/zmb3/spotify"
@@ -167,6 +168,72 @@ func TestSpotify(t *testing.T) {
 		}
 
 		service.authenticateFromSecrets(secrets)
+	})
+
+	t.Run("returns loved tracks for current user", func(t *testing.T) {
+		ctrl := gomock.NewController(t)
+
+		result := &spotify.SavedTrackPage{
+			Tracks: []spotify.SavedTrack{
+				spotify.SavedTrack{
+					FullTrack: spotify.FullTrack{
+						SimpleTrack: spotify.SimpleTrack{
+							Artists: []spotify.SimpleArtist{
+								spotify.SimpleArtist{
+									Name: "Awesome Artist",
+								},
+							},
+							Name: "Blam (Instrumental)",
+						},
+					},
+				},
+				spotify.SavedTrack{
+					FullTrack: spotify.FullTrack{
+						SimpleTrack: spotify.SimpleTrack{
+							Artists: []spotify.SimpleArtist{
+								spotify.SimpleArtist{
+									Name: "Foo & Bar",
+								},
+							},
+							Name: "Mr. Testy",
+						},
+					},
+				},
+			},
+		}
+
+		client := NewMockClient(ctrl)
+		limit := 10
+		options := &spotify.Options{
+			Limit: &limit,
+		}
+		client.EXPECT().CurrentUsersTracksOpt(options).Return(result, nil)
+
+		service := &Spotify{
+			client: client,
+		}
+
+		expected := []domain.Track{
+			domain.Track{
+				Artist: "Awesome Artist",
+				Name:   "Blam (Instrumental)",
+			},
+			domain.Track{
+				Artist: "Foo & Bar",
+				Name:   "Mr. Testy",
+			},
+		}
+		got, err := service.GetLovedTracks()
+
+		if err != nil {
+			t.Errorf("Unexpected error: %v", err)
+		}
+
+		for index, expectedTrack := range expected {
+			if got[index] != expectedTrack {
+				t.Errorf("expected %q, got %q", expectedTrack, got[index])
+			}
+		}
 	})
 
 	t.Run("new token is persisted when closing service", func(t *testing.T) {

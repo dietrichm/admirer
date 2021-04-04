@@ -208,7 +208,7 @@ func TestLastfm(t *testing.T) {
 		userAPI.EXPECT().GetInfo(lastfm.P{}).Return(user, nil)
 		userAPI.EXPECT().GetLovedTracks(lastfm.P{
 			"user":  "Diana",
-			"limit": 10,
+			"limit": 5,
 		}).Return(result, nil)
 
 		service := &Lastfm{userAPI: userAPI}
@@ -223,7 +223,7 @@ func TestLastfm(t *testing.T) {
 				Name:   "Mr. Testy",
 			},
 		}
-		got, err := service.GetLovedTracks()
+		got, err := service.GetLovedTracks(5)
 
 		if err != nil {
 			t.Errorf("Unexpected error: %v", err)
@@ -245,7 +245,7 @@ func TestLastfm(t *testing.T) {
 
 		service := &Lastfm{userAPI: userAPI}
 
-		got, err := service.GetLovedTracks()
+		got, err := service.GetLovedTracks(5)
 
 		if err == nil {
 			t.Error("Expected an error")
@@ -267,7 +267,7 @@ func TestLastfm(t *testing.T) {
 
 		service := &Lastfm{userAPI: userAPI}
 
-		got, err := service.GetLovedTracks()
+		got, err := service.GetLovedTracks(5)
 
 		if err == nil {
 			t.Error("Expected an error")

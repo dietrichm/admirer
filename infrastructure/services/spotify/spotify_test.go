@@ -203,7 +203,7 @@ func TestSpotify(t *testing.T) {
 		}
 
 		client := NewMockClient(ctrl)
-		limit := 10
+		limit := 5
 		options := &spotify.Options{
 			Limit: &limit,
 		}
@@ -223,7 +223,7 @@ func TestSpotify(t *testing.T) {
 				Name:   "Mr. Testy",
 			},
 		}
-		got, err := service.GetLovedTracks()
+		got, err := service.GetLovedTracks(5)
 
 		if err != nil {
 			t.Errorf("Unexpected error: %v", err)
@@ -246,7 +246,7 @@ func TestSpotify(t *testing.T) {
 			client: client,
 		}
 
-		got, err := service.GetLovedTracks()
+		got, err := service.GetLovedTracks(5)
 
 		if err == nil {
 			t.Error("Expected an error")

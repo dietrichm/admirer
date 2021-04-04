@@ -97,7 +97,7 @@ func (l *Lastfm) GetUsername() (string, error) {
 }
 
 // GetLovedTracks returns loved tracks from the external service.
-func (l *Lastfm) GetLovedTracks() (tracks []domain.Track, err error) {
+func (l *Lastfm) GetLovedTracks(limit int) (tracks []domain.Track, err error) {
 	username, err := l.GetUsername()
 	if err != nil {
 		return
@@ -105,7 +105,7 @@ func (l *Lastfm) GetLovedTracks() (tracks []domain.Track, err error) {
 
 	result, err := l.userAPI.GetLovedTracks(lastfm.P{
 		"user":  username,
-		"limit": 10,
+		"limit": limit,
 	})
 
 	for _, resultTrack := range result.Tracks {

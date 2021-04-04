@@ -90,18 +90,18 @@ func (mr *MockServiceMockRecorder) CreateAuthURL() *gomock.Call {
 }
 
 // GetLovedTracks mocks base method.
-func (m *MockService) GetLovedTracks() ([]Track, error) {
+func (m *MockService) GetLovedTracks(limit int) ([]Track, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetLovedTracks")
+	ret := m.ctrl.Call(m, "GetLovedTracks", limit)
 	ret0, _ := ret[0].([]Track)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // GetLovedTracks indicates an expected call of GetLovedTracks.
-func (mr *MockServiceMockRecorder) GetLovedTracks() *gomock.Call {
+func (mr *MockServiceMockRecorder) GetLovedTracks(limit interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetLovedTracks", reflect.TypeOf((*MockService)(nil).GetLovedTracks))
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetLovedTracks", reflect.TypeOf((*MockService)(nil).GetLovedTracks), limit)
 }
 
 // GetUsername mocks base method.

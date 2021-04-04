@@ -100,8 +100,7 @@ func (s *Spotify) GetUsername() (string, error) {
 }
 
 // GetLovedTracks returns loved tracks from the external service.
-func (s *Spotify) GetLovedTracks() (tracks []domain.Track, err error) {
-	limit := 10
+func (s *Spotify) GetLovedTracks(limit int) (tracks []domain.Track, err error) {
 	options := &spotify.Options{
 		Limit: &limit,
 	}

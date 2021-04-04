@@ -32,7 +32,7 @@ func list(serviceLoader domain.ServiceLoader, writer io.Writer, args []string) e
 
 	defer service.Close()
 
-	tracks, err := service.GetLovedTracks()
+	tracks, err := service.GetLovedTracks(10)
 	if err != nil {
 		return err
 	}

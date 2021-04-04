@@ -25,7 +25,7 @@ func TestList(t *testing.T) {
 		}
 
 		service := domain.NewMockService(ctrl)
-		service.EXPECT().GetLovedTracks().Return(tracks, nil)
+		service.EXPECT().GetLovedTracks(10).Return(tracks, nil)
 		service.EXPECT().Close()
 
 		serviceLoader := domain.NewMockServiceLoader(ctrl)
@@ -73,7 +73,7 @@ Foo & Bar - Mr. Testy
 		ctrl := gomock.NewController(t)
 
 		service := domain.NewMockService(ctrl)
-		service.EXPECT().GetLovedTracks().Return(nil, errors.New("load error"))
+		service.EXPECT().GetLovedTracks(10).Return(nil, errors.New("load error"))
 		service.EXPECT().Close()
 
 		serviceLoader := domain.NewMockServiceLoader(ctrl)

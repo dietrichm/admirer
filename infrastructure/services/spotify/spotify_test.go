@@ -236,6 +236,27 @@ func TestSpotify(t *testing.T) {
 		}
 	})
 
+	t.Run("returns error when failing to read loved tracks", func(t *testing.T) {
+		ctrl := gomock.NewController(t)
+
+		client := NewMockClient(ctrl)
+		client.EXPECT().CurrentUsersTracksOpt(gomock.Any()).Return(nil, errors.New("read error"))
+
+		service := &Spotify{
+			client: client,
+		}
+
+		got, err := service.GetLovedTracks()
+
+		if err == nil {
+			t.Error("Expected an error")
+		}
+
+		if len(got) > 0 {
+			t.Errorf("Unexpected return value: %v", got)
+		}
+	})
+
 	t.Run("new token is persisted when closing service", func(t *testing.T) {
 		ctrl := gomock.NewController(t)
 

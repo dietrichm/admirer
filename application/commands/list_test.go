@@ -25,13 +25,13 @@ func TestList(t *testing.T) {
 		}
 
 		service := domain.NewMockService(ctrl)
-		service.EXPECT().GetLovedTracks(10).Return(tracks, nil)
+		service.EXPECT().GetLovedTracks(5).Return(tracks, nil)
 		service.EXPECT().Close()
 
 		serviceLoader := domain.NewMockServiceLoader(ctrl)
 		serviceLoader.EXPECT().ForName("foo").Return(service, nil)
 
-		got, err := executeList(serviceLoader, "foo")
+		got, err := executeList(serviceLoader, 5, "foo")
 
 		if err != nil {
 			t.Errorf("Unexpected error: %v", err)
@@ -52,7 +52,7 @@ Foo & Bar - Mr. Testy
 		serviceLoader := domain.NewMockServiceLoader(ctrl)
 		serviceLoader.EXPECT().ForName(gomock.Any()).Return(nil, errors.New(expected))
 
-		output, err := executeList(serviceLoader, "foobar")
+		output, err := executeList(serviceLoader, 5, "foobar")
 
 		if output != "" {
 			t.Errorf("Unexpected output: %v", output)
@@ -73,13 +73,13 @@ Foo & Bar - Mr. Testy
 		ctrl := gomock.NewController(t)
 
 		service := domain.NewMockService(ctrl)
-		service.EXPECT().GetLovedTracks(10).Return(nil, errors.New("load error"))
+		service.EXPECT().GetLovedTracks(3).Return(nil, errors.New("load error"))
 		service.EXPECT().Close()
 
 		serviceLoader := domain.NewMockServiceLoader(ctrl)
 		serviceLoader.EXPECT().ForName("foo").Return(service, nil)
 
-		output, err := executeList(serviceLoader, "foo")
+		output, err := executeList(serviceLoader, 3, "foo")
 
 		if err == nil {
 			t.Error("Expected an error")
@@ -91,8 +91,8 @@ Foo & Bar - Mr. Testy
 	})
 }
 
-func executeList(serviceLoader domain.ServiceLoader, args ...string) (string, error) {
+func executeList(serviceLoader domain.ServiceLoader, limit int, args ...string) (string, error) {
 	buffer := new(bytes.Buffer)
-	err := list(serviceLoader, buffer, args)
+	err := list(serviceLoader, limit, buffer, args)
 	return buffer.String(), err
 }

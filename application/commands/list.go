@@ -18,11 +18,11 @@ var listCommand = &cobra.Command{
 	Short: "List loved tracks on specified service",
 	Args:  cobra.MinimumNArgs(1),
 	RunE: func(command *cobra.Command, args []string) error {
-		return list(services.AvailableServices, command.OutOrStdout(), args)
+		return list(services.AvailableServices, 10, command.OutOrStdout(), args)
 	},
 }
 
-func list(serviceLoader domain.ServiceLoader, writer io.Writer, args []string) error {
+func list(serviceLoader domain.ServiceLoader, limit int, writer io.Writer, args []string) error {
 	serviceName := args[0]
 
 	service, err := serviceLoader.ForName(serviceName)
@@ -32,7 +32,7 @@ func list(serviceLoader domain.ServiceLoader, writer io.Writer, args []string) e
 
 	defer service.Close()
 
-	tracks, err := service.GetLovedTracks(10)
+	tracks, err := service.GetLovedTracks(limit)
 	if err != nil {
 		return err
 	}

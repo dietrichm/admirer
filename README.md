@@ -74,7 +74,7 @@ Using the `list` command, you can retrieve a list of your most recently loved or
 ### TODO: syncing recently loved tracks between services
 
 Using a `sync` command, you can synchronise recently loved tracks from one service to another.
-For example to mark as loved on Last.fm the same tracks that were added to your library on Spotify, or vice versa
+For example to mark as loved on Last.fm the same tracks that were added to your library on Spotify, or vice versa.
 
 ## License
 

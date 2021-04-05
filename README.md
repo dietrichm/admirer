@@ -41,7 +41,7 @@ Use "admirer [command] --help" for more information about a command.
 
 ### Supported services
 
-Last.fm (`lastfm`) and Spotify (`spotify`) have an initial implementation.
+Last.fm and Spotify have an initial implementation.
 
 When the functionality is adequately feature complete, I want to add support for [ListenBrainz](https://listenbrainz.org/) and CSV/JSON files as well.
 
@@ -49,10 +49,10 @@ When the functionality is adequately feature complete, I want to add support for
 
 Before using any of the provided services, you need to create **your own API application** on said service and export your new API client ID and secret as environment variables:
 
-| Service | Creating your app | Environment variables |
-| ------- | ----------------- | --------------------- |
-| Last.fm | [Create an account here](https://www.last.fm/api/account/create) | `LASTFM_CLIENT_ID` and `LASTFM_CLIENT_SECRET` |
-| Spotify | [Manage and create an app here](https://developer.spotify.com/dashboard/applications) | `SPOTIFY_CLIENT_ID` and `SPOTIFY_CLIENT_SECRET` |
+| Service | Internal name | Creating your app | Environment variables |
+| ------- | ------------- | ----------------- | --------------------- |
+| Last.fm | `lastfm` | [Create an account here](https://www.last.fm/api/account/create) | `LASTFM_CLIENT_ID` and `LASTFM_CLIENT_SECRET` |
+| Spotify | `spotify` | [Manage and create an app here](https://developer.spotify.com/dashboard/applications) | `SPOTIFY_CLIENT_ID` and `SPOTIFY_CLIENT_SECRET` |
 
 When this is done, continue with the following steps.
 

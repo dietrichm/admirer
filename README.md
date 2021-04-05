@@ -47,12 +47,12 @@ When the functionality is adequately feature complete, I want to add support for
 
 ### Authentication
 
-Before using any of the provided services, you need to create **your own API application** on said service.
+Before using any of the provided services, you need to create **your own API application** on said service and export your new API client ID and secret as environment variables:
 
-* For Last.fm, [create an account here](https://www.last.fm/api/account/create).
-* For Spotify, [manage and create an app here](https://developer.spotify.com/dashboard/applications).
-
-Export your new API client ID and secret as an environment variable. Run the login command (as stated below) to see the environment variable names.
+| Service | Creating your app | Environment variables |
+| ------- | ----------------- | --------------------- |
+| Last.fm | [Create an account here](https://www.last.fm/api/account/create) | `LASTFM_CLIENT_ID` and `LASTFM_CLIENT_SECRET` |
+| Spotify | [Manage and create an app here](https://developer.spotify.com/dashboard/applications) | `SPOTIFY_CLIENT_ID` and `SPOTIFY_CLIENT_SECRET` |
 
 When this is done, continue with the following steps.
 

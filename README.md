@@ -11,6 +11,8 @@ A command line utility to sync song likes (loved tracks) between Spotify and Las
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
+- [Installation](#installation)
+  - [Building from source](#building-from-source)
 - [Usage](#usage)
   - [Supported services](#supported-services)
   - [Authentication](#authentication)
@@ -20,6 +22,16 @@ A command line utility to sync song likes (loved tracks) between Spotify and Las
 - [License](#license)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+## Installation
+
+### Building from source
+
+Please [install Go 1.16+ first](https://golang.org/doc/install) and set the `GOPATH` environment variable.
+
+```sh
+go get -u github.com/dietrichm/admirer
+```
 
 ## Usage
 
@@ -56,9 +68,9 @@ Before using any of the provided services, you need to create **your own API app
 
 When this is done, continue with the following steps.
 
-1. Run `./admirer login <service>` to retrieve an authentication URL.
+1. Run `$GOPATH/bin/admirer login <service>` to retrieve an authentication URL.
 1. By visiting this URL, the service will ask confirmation and redirect back to a non existing URL `https://admirer.test/...`.
-1. Copy the code parameter from this URL's query parameters and pass it along as another parameter to `./admirer login <service>`.
+1. Copy the code parameter from this URL's query parameters and pass it along as another parameter to `$GOPATH/bin/admirer login <service>`.
 1. If all goes well, you will retrieve confirmation that you have been logged in.
 
 **Warning**: please be aware that - for now - the authentication information will be saved in **plain text** in a file in `~/.config/admirer`. This file's permissions is set to `600`, however.

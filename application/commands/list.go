@@ -9,7 +9,10 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var limit int
+
 func init() {
+	listCommand.Flags().IntVarP(&limit, "limit", "l", 10, "Limit number of returned tracks")
 	rootCommand.AddCommand(listCommand)
 }
 
@@ -18,7 +21,7 @@ var listCommand = &cobra.Command{
 	Short: "List loved tracks on specified service",
 	Args:  cobra.MinimumNArgs(1),
 	RunE: func(command *cobra.Command, args []string) error {
-		return list(services.AvailableServices, 10, command.OutOrStdout(), args)
+		return list(services.AvailableServices, limit, command.OutOrStdout(), args)
 	},
 }
 

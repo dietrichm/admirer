@@ -3,6 +3,7 @@
 [![Go version](https://img.shields.io/github/go-mod/go-version/dietrichm/admirer)](go.mod)
 [![Go CI](https://github.com/dietrichm/admirer/actions/workflows/go.yml/badge.svg)](https://github.com/dietrichm/admirer/actions/workflows/go.yml)
 [![License](https://img.shields.io/github/license/dietrichm/admirer)](LICENSE)
+[![Go Reference](https://pkg.go.dev/badge/github.com/dietrichm/admirer.svg)](https://pkg.go.dev/github.com/dietrichm/admirer)
 
 A command line utility to sync song likes (loved tracks) between Spotify and Last.fm.
 

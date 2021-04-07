@@ -24,6 +24,11 @@ type UserAPI interface {
 	GetLovedTracks(args map[string]interface{}) (result lastfm.UserGetLovedTracks, err error)
 }
 
+// TrackAPI is our interface for a Last.fm track API.
+type TrackAPI interface {
+	Love(args map[string]interface{}) (err error)
+}
+
 // Lastfm is the external Lastfm service implementation.
 type Lastfm struct {
 	api     API

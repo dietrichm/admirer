@@ -128,3 +128,40 @@ func (mr *MockUserAPIMockRecorder) GetLovedTracks(args interface{}) *gomock.Call
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetLovedTracks", reflect.TypeOf((*MockUserAPI)(nil).GetLovedTracks), args)
 }
+
+// MockTrackAPI is a mock of TrackAPI interface.
+type MockTrackAPI struct {
+	ctrl     *gomock.Controller
+	recorder *MockTrackAPIMockRecorder
+}
+
+// MockTrackAPIMockRecorder is the mock recorder for MockTrackAPI.
+type MockTrackAPIMockRecorder struct {
+	mock *MockTrackAPI
+}
+
+// NewMockTrackAPI creates a new mock instance.
+func NewMockTrackAPI(ctrl *gomock.Controller) *MockTrackAPI {
+	mock := &MockTrackAPI{ctrl: ctrl}
+	mock.recorder = &MockTrackAPIMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockTrackAPI) EXPECT() *MockTrackAPIMockRecorder {
+	return m.recorder
+}
+
+// Love mocks base method.
+func (m *MockTrackAPI) Love(args map[string]interface{}) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Love", args)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// Love indicates an expected call of Love.
+func (mr *MockTrackAPIMockRecorder) Love(args interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Love", reflect.TypeOf((*MockTrackAPI)(nil).Love), args)
+}

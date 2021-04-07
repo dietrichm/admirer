@@ -127,10 +127,12 @@ func (l *Lastfm) GetLovedTracks(limit int) (tracks []domain.Track, err error) {
 
 // LoveTrack marks a track as loved on the external service.
 func (l *Lastfm) LoveTrack(track domain.Track) error {
-	l.trackAPI.Love(lastfm.P{
+	if err := l.trackAPI.Love(lastfm.P{
 		"track":  track.Name,
 		"artist": track.Artist,
-	})
+	}); err != nil {
+		return err
+	}
 
 	return nil
 }

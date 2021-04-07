@@ -277,6 +277,31 @@ func TestLastfm(t *testing.T) {
 			t.Errorf("Unexpected return value: %v", got)
 		}
 	})
+
+	t.Run("marks track as loved", func(t *testing.T) {
+		ctrl := gomock.NewController(t)
+
+		trackAPI := NewMockTrackAPI(ctrl)
+		trackAPI.EXPECT().Love(lastfm.P{
+			"track":  "Mr. Testy",
+			"artist": "Foo & Bar",
+		}).Return(nil)
+
+		service := &Lastfm{
+			trackAPI: trackAPI,
+		}
+
+		track := domain.Track{
+			Artist: "Foo & Bar",
+			Name:   "Mr. Testy",
+		}
+
+		err := service.LoveTrack(track)
+
+		if err != nil {
+			t.Errorf("Unexpected error: %v", err)
+		}
+	})
 }
 
 func TestNewLastfm(t *testing.T) {

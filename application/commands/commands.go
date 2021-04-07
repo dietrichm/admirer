@@ -6,10 +6,13 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var rootCommand = &cobra.Command{
-	Use:   "admirer",
-	Short: "A command line utility to sync song likes between Spotify and Last.fm.",
-}
+var (
+	rootCommand = &cobra.Command{
+		Use:   "admirer",
+		Short: "A command line utility to sync song likes between Spotify and Last.fm.",
+	}
+	limit int
+)
 
 // Execute runs the requested CLI command.
 func Execute() {

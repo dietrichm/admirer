@@ -9,8 +9,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var limit int
-
 func init() {
 	listCommand.Flags().IntVarP(&limit, "limit", "l", 10, "Limit number of returned tracks")
 	rootCommand.AddCommand(listCommand)

@@ -120,6 +120,11 @@ func (s *Spotify) GetLovedTracks(limit int) (tracks []domain.Track, err error) {
 	return
 }
 
+// LoveTrack marks a track as loved on the external service.
+func (s *Spotify) LoveTrack(track domain.Track) error {
+	return nil
+}
+
 // Close persists any state before quitting the application.
 func (s *Spotify) Close() error {
 	if !s.Authenticated() {

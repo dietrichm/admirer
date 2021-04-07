@@ -125,6 +125,11 @@ func (l *Lastfm) GetLovedTracks(limit int) (tracks []domain.Track, err error) {
 	return
 }
 
+// LoveTrack marks a track as loved on the external service.
+func (l *Lastfm) LoveTrack(track domain.Track) error {
+	return nil
+}
+
 // Close persists any state before quitting the application.
 func (l *Lastfm) Close() error {
 	return nil

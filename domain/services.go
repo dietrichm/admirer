@@ -10,6 +10,7 @@ type Service interface {
 	Authenticate(code string) error
 	GetUsername() (string, error)
 	GetLovedTracks(limit int) ([]Track, error)
+	LoveTrack(track Track) error
 	Close() error
 }
 

@@ -119,6 +119,20 @@ func (mr *MockServiceMockRecorder) GetUsername() *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetUsername", reflect.TypeOf((*MockService)(nil).GetUsername))
 }
 
+// LoveTrack mocks base method.
+func (m *MockService) LoveTrack(track Track) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "LoveTrack", track)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// LoveTrack indicates an expected call of LoveTrack.
+func (mr *MockServiceMockRecorder) LoveTrack(track interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "LoveTrack", reflect.TypeOf((*MockService)(nil).LoveTrack), track)
+}
+
 // Name mocks base method.
 func (m *MockService) Name() string {
 	m.ctrl.T.Helper()

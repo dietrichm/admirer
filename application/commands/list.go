@@ -41,7 +41,7 @@ func list(serviceLoader domain.ServiceLoader, limit int, writer io.Writer, args 
 	}
 
 	for _, track := range tracks {
-		fmt.Fprintln(writer, track.Artist, "-", track.Name)
+		fmt.Fprintln(writer, track.String())
 	}
 
 	return nil

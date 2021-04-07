@@ -31,9 +31,10 @@ type TrackAPI interface {
 
 // Lastfm is the external Lastfm service implementation.
 type Lastfm struct {
-	api     API
-	userAPI UserAPI
-	secrets config.Config
+	api      API
+	userAPI  UserAPI
+	trackAPI TrackAPI
+	secrets  config.Config
 }
 
 // NewLastfm creates a Lastfm instance.
@@ -49,9 +50,10 @@ func NewLastfm(secrets config.Config) (*Lastfm, error) {
 	api.SetSession(secrets.GetString("session_key"))
 
 	return &Lastfm{
-		api:     api,
-		userAPI: api.User,
-		secrets: secrets,
+		api:      api,
+		userAPI:  api.User,
+		trackAPI: api.Track,
+		secrets:  secrets,
 	}, nil
 }
 

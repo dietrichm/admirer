@@ -10,6 +10,7 @@ import (
 )
 
 func init() {
+	syncCommand.Flags().IntVarP(&limit, "limit", "l", 10, "Limit number of synced tracks")
 	rootCommand.AddCommand(syncCommand)
 }
 
@@ -18,7 +19,7 @@ var syncCommand = &cobra.Command{
 	Short: "Sync recently loved tracks from one service to another",
 	Args:  cobra.MinimumNArgs(2),
 	RunE: func(command *cobra.Command, args []string) error {
-		return sync(services.AvailableServices, 10, command.OutOrStdout(), args)
+		return sync(services.AvailableServices, limit, command.OutOrStdout(), args)
 	},
 }
 

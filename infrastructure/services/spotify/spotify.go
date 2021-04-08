@@ -49,7 +49,7 @@ func NewSpotify(secrets config.Config) (*Spotify, error) {
 
 	// Not an actual web server (yet).
 	redirectURL := "https://admirer.test"
-	authenticator := spotify.NewAuthenticator(redirectURL, spotify.ScopeUserReadPrivate, spotify.ScopeUserLibraryRead)
+	authenticator := spotify.NewAuthenticator(redirectURL, spotify.ScopeUserReadPrivate, spotify.ScopeUserLibraryRead, spotify.ScopeUserLibraryModify)
 	authenticator.SetAuthInfo(clientID, clientSecret)
 
 	service := &Spotify{

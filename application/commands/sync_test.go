@@ -83,6 +83,31 @@ Synced: Foo & Bar - Mr. Testy
 			t.Errorf("Unexpected output: %v", output)
 		}
 	})
+
+	t.Run("returns error when failing to read loved tracks", func(t *testing.T) {
+		ctrl := gomock.NewController(t)
+
+		sourceService := domain.NewMockService(ctrl)
+		sourceService.EXPECT().GetLovedTracks(gomock.Any()).Return(nil, errors.New("read error"))
+		sourceService.EXPECT().Close()
+
+		targetService := domain.NewMockService(ctrl)
+		targetService.EXPECT().Close()
+
+		serviceLoader := domain.NewMockServiceLoader(ctrl)
+		serviceLoader.EXPECT().ForName("source").Return(sourceService, nil)
+		serviceLoader.EXPECT().ForName("target").Return(targetService, nil)
+
+		output, err := executeSync(serviceLoader, "source", "target")
+
+		if err == nil {
+			t.Error("Expected an error")
+		}
+
+		if output != "" {
+			t.Errorf("Unexpected output: %v", output)
+		}
+	})
 }
 
 func executeSync(serviceLoader domain.ServiceLoader, args ...string) (string, error) {

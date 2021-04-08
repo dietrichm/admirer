@@ -32,7 +32,10 @@ func sync(serviceLoader domain.ServiceLoader, writer io.Writer, args []string) e
 	defer sourceService.Close()
 	defer targetService.Close()
 
-	tracks, _ := sourceService.GetLovedTracks(10)
+	tracks, err := sourceService.GetLovedTracks(10)
+	if err != nil {
+		return err
+	}
 
 	for _, track := range tracks {
 		if err := targetService.LoveTrack(track); err != nil {

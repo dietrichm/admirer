@@ -18,11 +18,11 @@ var syncCommand = &cobra.Command{
 	Short: "Sync recently loved tracks from one service to another",
 	Args:  cobra.MinimumNArgs(2),
 	RunE: func(command *cobra.Command, args []string) error {
-		return sync(services.AvailableServices, command.OutOrStdout(), args)
+		return sync(services.AvailableServices, 10, command.OutOrStdout(), args)
 	},
 }
 
-func sync(serviceLoader domain.ServiceLoader, writer io.Writer, args []string) error {
+func sync(serviceLoader domain.ServiceLoader, limit int, writer io.Writer, args []string) error {
 	sourceServiceName := args[0]
 	targetServiceName := args[1]
 
@@ -39,7 +39,7 @@ func sync(serviceLoader domain.ServiceLoader, writer io.Writer, args []string) e
 	defer sourceService.Close()
 	defer targetService.Close()
 
-	tracks, err := sourceService.GetLovedTracks(10)
+	tracks, err := sourceService.GetLovedTracks(limit)
 	if err != nil {
 		return err
 	}

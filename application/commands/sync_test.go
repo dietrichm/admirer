@@ -24,7 +24,7 @@ func TestSync(t *testing.T) {
 		tracks := []domain.Track{trackOne, trackTwo}
 
 		sourceService := domain.NewMockService(ctrl)
-		sourceService.EXPECT().GetLovedTracks(10).Return(tracks, nil)
+		sourceService.EXPECT().GetLovedTracks(5).Return(tracks, nil)
 		sourceService.EXPECT().Close()
 
 		targetService := domain.NewMockService(ctrl)
@@ -36,7 +36,7 @@ func TestSync(t *testing.T) {
 		serviceLoader.EXPECT().ForName("source").Return(sourceService, nil)
 		serviceLoader.EXPECT().ForName("target").Return(targetService, nil)
 
-		got, err := executeSync(serviceLoader, "source", "target")
+		got, err := executeSync(serviceLoader, 5, "source", "target")
 
 		if err != nil {
 			t.Errorf("Unexpected error: %v", err)
@@ -73,7 +73,7 @@ Synced: Foo & Bar - Mr. Testy
 		serviceLoader.EXPECT().ForName("source").Return(sourceService, nil)
 		serviceLoader.EXPECT().ForName("target").Return(targetService, nil)
 
-		output, err := executeSync(serviceLoader, "source", "target")
+		output, err := executeSync(serviceLoader, 10, "source", "target")
 
 		if err == nil {
 			t.Error("Expected an error")
@@ -98,7 +98,7 @@ Synced: Foo & Bar - Mr. Testy
 		serviceLoader.EXPECT().ForName("source").Return(sourceService, nil)
 		serviceLoader.EXPECT().ForName("target").Return(targetService, nil)
 
-		output, err := executeSync(serviceLoader, "source", "target")
+		output, err := executeSync(serviceLoader, 10, "source", "target")
 
 		if err == nil {
 			t.Error("Expected an error")
@@ -115,7 +115,7 @@ Synced: Foo & Bar - Mr. Testy
 		serviceLoader := domain.NewMockServiceLoader(ctrl)
 		serviceLoader.EXPECT().ForName("source").Return(nil, errors.New("service error"))
 
-		output, err := executeSync(serviceLoader, "source", "target")
+		output, err := executeSync(serviceLoader, 10, "source", "target")
 
 		if err == nil {
 			t.Error("Expected an error")
@@ -134,7 +134,7 @@ Synced: Foo & Bar - Mr. Testy
 		serviceLoader.EXPECT().ForName("source").Return(sourceService, nil)
 		serviceLoader.EXPECT().ForName("target").Return(nil, errors.New("service error"))
 
-		output, err := executeSync(serviceLoader, "source", "target")
+		output, err := executeSync(serviceLoader, 10, "source", "target")
 
 		if err == nil {
 			t.Error("Expected an error")
@@ -146,8 +146,8 @@ Synced: Foo & Bar - Mr. Testy
 	})
 }
 
-func executeSync(serviceLoader domain.ServiceLoader, args ...string) (string, error) {
+func executeSync(serviceLoader domain.ServiceLoader, limit int, args ...string) (string, error) {
 	buffer := new(bytes.Buffer)
-	err := sync(serviceLoader, buffer, args)
+	err := sync(serviceLoader, limit, buffer, args)
 	return buffer.String(), err
 }

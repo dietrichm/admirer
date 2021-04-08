@@ -9,7 +9,7 @@ import (
 var (
 	rootCommand = &cobra.Command{
 		Use:   "admirer",
-		Short: "A command line utility to sync song likes between Spotify and Last.fm.",
+		Short: "A command line utility to sync loved tracks between music services.",
 	}
 	limit int
 )

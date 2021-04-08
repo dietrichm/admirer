@@ -5,7 +5,7 @@
 [![License](https://img.shields.io/github/license/dietrichm/admirer)](LICENSE)
 [![Go Reference](https://pkg.go.dev/badge/github.com/dietrichm/admirer.svg)](https://pkg.go.dev/github.com/dietrichm/admirer)
 
-A command line utility to sync song likes (loved tracks) between Spotify and Last.fm.
+A command line utility to sync loved tracks between music services.
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->

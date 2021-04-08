@@ -118,6 +118,24 @@ func (m *MockClient) EXPECT() *MockClientMockRecorder {
 	return m.recorder
 }
 
+// AddTracksToLibrary mocks base method.
+func (m *MockClient) AddTracksToLibrary(ids ...spotify.ID) error {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{}
+	for _, a := range ids {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "AddTracksToLibrary", varargs...)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// AddTracksToLibrary indicates an expected call of AddTracksToLibrary.
+func (mr *MockClientMockRecorder) AddTracksToLibrary(ids ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AddTracksToLibrary", reflect.TypeOf((*MockClient)(nil).AddTracksToLibrary), ids...)
+}
+
 // CurrentUser mocks base method.
 func (m *MockClient) CurrentUser() (*spotify.PrivateUser, error) {
 	m.ctrl.T.Helper()
@@ -146,6 +164,21 @@ func (m *MockClient) CurrentUsersTracksOpt(opt *spotify.Options) (*spotify.Saved
 func (mr *MockClientMockRecorder) CurrentUsersTracksOpt(opt interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CurrentUsersTracksOpt", reflect.TypeOf((*MockClient)(nil).CurrentUsersTracksOpt), opt)
+}
+
+// SearchOpt mocks base method.
+func (m *MockClient) SearchOpt(query string, t spotify.SearchType, opt *spotify.Options) (*spotify.SearchResult, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "SearchOpt", query, t, opt)
+	ret0, _ := ret[0].(*spotify.SearchResult)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// SearchOpt indicates an expected call of SearchOpt.
+func (mr *MockClientMockRecorder) SearchOpt(query, t, opt interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SearchOpt", reflect.TypeOf((*MockClient)(nil).SearchOpt), query, t, opt)
 }
 
 // Token mocks base method.

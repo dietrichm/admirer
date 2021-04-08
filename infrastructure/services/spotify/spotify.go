@@ -26,6 +26,8 @@ type Client interface {
 	CurrentUser() (*spotify.PrivateUser, error)
 	Token() (*oauth2.Token, error)
 	CurrentUsersTracksOpt(opt *spotify.Options) (*spotify.SavedTrackPage, error)
+	SearchOpt(query string, t spotify.SearchType, opt *spotify.Options) (*spotify.SearchResult, error)
+	AddTracksToLibrary(ids ...spotify.ID) error
 }
 
 // Spotify is the external Spotify service implementation.

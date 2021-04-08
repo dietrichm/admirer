@@ -2,6 +2,7 @@ package commands
 
 import (
 	"bytes"
+	"errors"
 	"testing"
 
 	"github.com/dietrichm/admirer/domain"
@@ -47,6 +48,39 @@ Synced: Foo & Bar - Mr. Testy
 
 		if got != expected {
 			t.Errorf("expected %q, got %q", expected, got)
+		}
+	})
+
+	t.Run("returns error when failing to mark track as loved", func(t *testing.T) {
+		ctrl := gomock.NewController(t)
+
+		tracks := []domain.Track{
+			domain.Track{
+				Artist: "Awesome Artist",
+				Name:   "Blam (Instrumental)",
+			},
+		}
+
+		sourceService := domain.NewMockService(ctrl)
+		sourceService.EXPECT().GetLovedTracks(gomock.Any()).Return(tracks, nil)
+		sourceService.EXPECT().Close()
+
+		targetService := domain.NewMockService(ctrl)
+		targetService.EXPECT().LoveTrack(gomock.Any()).Return(errors.New("api error"))
+		targetService.EXPECT().Close()
+
+		serviceLoader := domain.NewMockServiceLoader(ctrl)
+		serviceLoader.EXPECT().ForName("source").Return(sourceService, nil)
+		serviceLoader.EXPECT().ForName("target").Return(targetService, nil)
+
+		output, err := executeSync(serviceLoader, "source", "target")
+
+		if err == nil {
+			t.Error("Expected an error")
+		}
+
+		if output != "" {
+			t.Errorf("Unexpected output: %v", output)
 		}
 	})
 }

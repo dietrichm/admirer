@@ -35,7 +35,9 @@ func sync(serviceLoader domain.ServiceLoader, writer io.Writer, args []string) e
 	tracks, _ := sourceService.GetLovedTracks(10)
 
 	for _, track := range tracks {
-		targetService.LoveTrack(track)
+		if err := targetService.LoveTrack(track); err != nil {
+			return err
+		}
 
 		fmt.Fprintln(writer, "Synced:", track.String())
 	}

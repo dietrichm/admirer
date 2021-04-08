@@ -132,7 +132,10 @@ func (s *Spotify) LoveTrack(track domain.Track) error {
 		Limit: &limit,
 	}
 
-	result, _ := s.client.SearchOpt(query, spotify.SearchTypeTrack, options)
+	result, err := s.client.SearchOpt(query, spotify.SearchTypeTrack, options)
+	if err != nil {
+		return err
+	}
 
 	if len(result.Tracks.Tracks) == 0 {
 		return nil

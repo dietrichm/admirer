@@ -296,6 +296,28 @@ func TestSpotify(t *testing.T) {
 		}
 	})
 
+	t.Run("returns error when failing to search track", func(t *testing.T) {
+		ctrl := gomock.NewController(t)
+
+		client := NewMockClient(ctrl)
+		client.EXPECT().SearchOpt(gomock.Any(), gomock.Any(), gomock.Any()).Return(nil, errors.New("read error"))
+
+		service := &Spotify{
+			client: client,
+		}
+
+		track := domain.Track{
+			Artist: "Foo & Bar",
+			Name:   "Mr. Testy",
+		}
+
+		err := service.LoveTrack(track)
+
+		if err == nil {
+			t.Error("Expected an error")
+		}
+	})
+
 	t.Run("skip marking track as loved when no track is found", func(t *testing.T) {
 		ctrl := gomock.NewController(t)
 

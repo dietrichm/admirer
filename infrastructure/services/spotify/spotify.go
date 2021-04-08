@@ -134,6 +134,10 @@ func (s *Spotify) LoveTrack(track domain.Track) error {
 
 	result, _ := s.client.SearchOpt(query, spotify.SearchTypeTrack, options)
 
+	if len(result.Tracks.Tracks) == 0 {
+		return nil
+	}
+
 	trackID := result.Tracks.Tracks[0].ID
 	s.client.AddTracksToLibrary(trackID)
 

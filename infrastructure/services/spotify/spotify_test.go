@@ -296,6 +296,34 @@ func TestSpotify(t *testing.T) {
 		}
 	})
 
+	t.Run("skip marking track as loved when no track is found", func(t *testing.T) {
+		ctrl := gomock.NewController(t)
+
+		result := &spotify.SearchResult{
+			Tracks: &spotify.FullTrackPage{
+				Tracks: []spotify.FullTrack{},
+			},
+		}
+
+		client := NewMockClient(ctrl)
+		client.EXPECT().SearchOpt(gomock.Any(), gomock.Any(), gomock.Any()).Return(result, nil)
+
+		service := &Spotify{
+			client: client,
+		}
+
+		track := domain.Track{
+			Artist: "Foo & Bar",
+			Name:   "Mr. Testy",
+		}
+
+		err := service.LoveTrack(track)
+
+		if err != nil {
+			t.Errorf("Unexpected error: %v", err)
+		}
+	})
+
 	t.Run("new token is persisted when closing service", func(t *testing.T) {
 		ctrl := gomock.NewController(t)
 

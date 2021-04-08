@@ -19,7 +19,7 @@ A command line utility to sync song likes (loved tracks) between Spotify and Las
   - [Authentication](#authentication)
 - [Use cases](#use-cases)
   - [Listing recently loved or added tracks](#listing-recently-loved-or-added-tracks)
-  - [TODO: syncing recently loved tracks between services](#todo-syncing-recently-loved-tracks-between-services)
+  - [Syncing recently loved tracks between services](#syncing-recently-loved-tracks-between-services)
 - [License](#license)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -45,6 +45,7 @@ Available Commands:
   list        List loved tracks on specified service
   login       Log in on external service
   status      Retrieve status for services
+  sync        Sync recently loved tracks from one service to another
 
 Flags:
   -h, --help   help for admirer
@@ -84,9 +85,9 @@ When this is done, continue with the following steps.
 
 Using the `list` command, you can retrieve a list of your most recently loved or added tracks on said service.
 
-### TODO: syncing recently loved tracks between services
+### Syncing recently loved tracks between services
 
-Using a `sync` command, you can synchronise recently loved tracks from one service to another.
+Using the `sync` command, you can synchronise recently loved tracks from one service to another.
 For example to mark as loved on Last.fm the same tracks that were added to your library on Spotify, or vice versa.
 
 ## License

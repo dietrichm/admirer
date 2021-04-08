@@ -7,8 +7,6 @@
 
 A command line utility to sync song likes (loved tracks) between Spotify and Last.fm.
 
-**Work In Progress:** this is serving as my Go learning project and is currently not completely functional. Admirer is tested only on Linux, and no compiled binaries are being provided yet.
-
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
@@ -25,6 +23,10 @@ A command line utility to sync song likes (loved tracks) between Spotify and Las
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Installation
+
+Compiled binaries will be provided for version 1.0.0.
+
+**Note**: Admirer is currently only tested on Linux.
 
 ### Building from source
 
@@ -57,7 +59,7 @@ Use "admirer [command] --help" for more information about a command.
 
 Last.fm and Spotify have an initial implementation.
 
-When the functionality is adequately feature complete, I want to add support for [ListenBrainz](https://listenbrainz.org/) and CSV/JSON files as well.
+In the future, I would like to add support for [ListenBrainz](https://listenbrainz.org/) and CSV/JSON files as well.
 
 ### Authentication
 

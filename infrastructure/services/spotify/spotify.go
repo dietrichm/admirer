@@ -139,7 +139,9 @@ func (s *Spotify) LoveTrack(track domain.Track) error {
 	}
 
 	trackID := result.Tracks.Tracks[0].ID
-	s.client.AddTracksToLibrary(trackID)
+	if err := s.client.AddTracksToLibrary(trackID); err != nil {
+		return err
+	}
 
 	return nil
 }

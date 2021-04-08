@@ -324,6 +324,41 @@ func TestSpotify(t *testing.T) {
 		}
 	})
 
+	t.Run("returns error when failing to add track to library", func(t *testing.T) {
+		ctrl := gomock.NewController(t)
+
+		result := &spotify.SearchResult{
+			Tracks: &spotify.FullTrackPage{
+				Tracks: []spotify.FullTrack{
+					spotify.FullTrack{
+						SimpleTrack: spotify.SimpleTrack{
+							ID: "trackID",
+						},
+					},
+				},
+			},
+		}
+
+		client := NewMockClient(ctrl)
+		client.EXPECT().SearchOpt(gomock.Any(), gomock.Any(), gomock.Any()).Return(result, nil)
+		client.EXPECT().AddTracksToLibrary(gomock.Any()).Return(errors.New("api error"))
+
+		service := &Spotify{
+			client: client,
+		}
+
+		track := domain.Track{
+			Artist: "Foo & Bar",
+			Name:   "Mr. Testy",
+		}
+
+		err := service.LoveTrack(track)
+
+		if err == nil {
+			t.Error("Expected an error")
+		}
+	})
+
 	t.Run("new token is persisted when closing service", func(t *testing.T) {
 		ctrl := gomock.NewController(t)
 

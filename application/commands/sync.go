@@ -26,8 +26,15 @@ func sync(serviceLoader domain.ServiceLoader, writer io.Writer, args []string) e
 	sourceServiceName := args[0]
 	targetServiceName := args[1]
 
-	sourceService, _ := serviceLoader.ForName(sourceServiceName)
-	targetService, _ := serviceLoader.ForName(targetServiceName)
+	sourceService, err := serviceLoader.ForName(sourceServiceName)
+	if err != nil {
+		return err
+	}
+
+	targetService, err := serviceLoader.ForName(targetServiceName)
+	if err != nil {
+		return err
+	}
 
 	defer sourceService.Close()
 	defer targetService.Close()

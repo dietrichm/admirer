@@ -108,6 +108,42 @@ Synced: Foo & Bar - Mr. Testy
 			t.Errorf("Unexpected output: %v", output)
 		}
 	})
+
+	t.Run("returns error when failing to load source service", func(t *testing.T) {
+		ctrl := gomock.NewController(t)
+
+		serviceLoader := domain.NewMockServiceLoader(ctrl)
+		serviceLoader.EXPECT().ForName("source").Return(nil, errors.New("service error"))
+
+		output, err := executeSync(serviceLoader, "source", "target")
+
+		if err == nil {
+			t.Error("Expected an error")
+		}
+
+		if output != "" {
+			t.Errorf("Unexpected output: %v", output)
+		}
+	})
+
+	t.Run("returns error when failing to load target service", func(t *testing.T) {
+		ctrl := gomock.NewController(t)
+
+		sourceService := domain.NewMockService(ctrl)
+		serviceLoader := domain.NewMockServiceLoader(ctrl)
+		serviceLoader.EXPECT().ForName("source").Return(sourceService, nil)
+		serviceLoader.EXPECT().ForName("target").Return(nil, errors.New("service error"))
+
+		output, err := executeSync(serviceLoader, "source", "target")
+
+		if err == nil {
+			t.Error("Expected an error")
+		}
+
+		if output != "" {
+			t.Errorf("Unexpected output: %v", output)
+		}
+	})
 }
 
 func executeSync(serviceLoader domain.ServiceLoader, args ...string) (string, error) {

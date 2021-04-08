@@ -4,6 +4,7 @@ package spotify
 
 import (
 	"errors"
+	"fmt"
 	"os"
 	"time"
 
@@ -124,6 +125,18 @@ func (s *Spotify) GetLovedTracks(limit int) (tracks []domain.Track, err error) {
 
 // LoveTrack marks a track as loved on the external service.
 func (s *Spotify) LoveTrack(track domain.Track) error {
+	query := fmt.Sprintf("artist:%q track:%q", track.Artist, track.Name)
+
+	limit := 1
+	options := &spotify.Options{
+		Limit: &limit,
+	}
+
+	result, _ := s.client.SearchOpt(query, spotify.SearchTypeTrack, options)
+
+	trackID := result.Tracks.Tracks[0].ID
+	s.client.AddTracksToLibrary(trackID)
+
 	return nil
 }
 

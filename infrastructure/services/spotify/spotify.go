@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/dietrichm/admirer/domain"
@@ -126,6 +127,7 @@ func (s *Spotify) GetLovedTracks(limit int) (tracks []domain.Track, err error) {
 // LoveTrack marks a track as loved on the external service.
 func (s *Spotify) LoveTrack(track domain.Track) error {
 	query := fmt.Sprintf("artist:%q track:%q", track.Artist, track.Name)
+	query = strings.ReplaceAll(query, `\"`, "")
 
 	limit := 1
 	options := &spotify.Options{

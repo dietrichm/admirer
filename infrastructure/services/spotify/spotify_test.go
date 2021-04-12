@@ -277,7 +277,7 @@ func TestSpotify(t *testing.T) {
 		}
 
 		client := NewMockClient(ctrl)
-		client.EXPECT().SearchOpt(`artist:"Foo & Bar" track:"Mr. Testy"`, gomock.Any(), options).Return(result, nil)
+		client.EXPECT().SearchOpt(`artist:"Foo & Bar The Famous Two" track:"Mr. Testy - 12 Version"`, gomock.Any(), options).Return(result, nil)
 		client.EXPECT().AddTracksToLibrary([]spotify.ID{"trackID"})
 
 		service := &Spotify{
@@ -285,8 +285,8 @@ func TestSpotify(t *testing.T) {
 		}
 
 		track := domain.Track{
-			Artist: "Foo & Bar",
-			Name:   "Mr. Testy",
+			Artist: `Foo & Bar "The Famous Two"`,
+			Name:   `Mr. Testy - 12" Version`,
 		}
 
 		err := service.LoveTrack(track)

@@ -4,6 +4,7 @@ package lastfm
 
 import (
 	"errors"
+	"fmt"
 	"os"
 
 	"github.com/dietrichm/admirer/domain"
@@ -81,13 +82,13 @@ func (l *Lastfm) CreateAuthURL() string {
 // Authenticate takes an authorization code and authenticates the user.
 func (l *Lastfm) Authenticate(oauthCode string) error {
 	if err := l.api.LoginWithToken(oauthCode); err != nil {
-		return errors.New("failed to parse Last.fm token")
+		return fmt.Errorf("failed to authenticate on Last.fm: %w", err)
 	}
 
 	l.secrets.Set("session_key", l.api.GetSessionKey())
 
 	if err := l.secrets.WriteConfig(); err != nil {
-		return err
+		return fmt.Errorf("failed to write Last.fm secrets: %w", err)
 	}
 
 	return nil
@@ -97,7 +98,7 @@ func (l *Lastfm) Authenticate(oauthCode string) error {
 func (l *Lastfm) GetUsername() (string, error) {
 	user, err := l.userAPI.GetInfo(lastfm.P{})
 	if err != nil {
-		return "", errors.New("failed to read Last.fm profile data")
+		return "", fmt.Errorf("failed to read Last.fm profile data: %w", err)
 	}
 
 	return user.Name, nil
@@ -114,6 +115,9 @@ func (l *Lastfm) GetLovedTracks(limit int) (tracks []domain.Track, err error) {
 		"user":  username,
 		"limit": limit,
 	})
+	if err != nil {
+		return tracks, fmt.Errorf("failed to read Last.fm loved tracks: %w", err)
+	}
 
 	for _, resultTrack := range result.Tracks {
 		track := domain.Track{
@@ -131,7 +135,7 @@ func (l *Lastfm) LoveTrack(track domain.Track) error {
 		"track":  track.Name,
 		"artist": track.Artist,
 	}); err != nil {
-		return err
+		return fmt.Errorf("failed to mark track as loved on Last.fm: %w", err)
 	}
 
 	return nil

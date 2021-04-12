@@ -33,13 +33,13 @@ func (v viperLoader) loadFromFile(filename string) (Config, error) {
 		case *fs.PathError:
 			directory := filepath.Dir(filename)
 			if err := os.MkdirAll(directory, directoryPermissions); err != nil {
-				return nil, err
+				return nil, fmt.Errorf("failed creating configuration directory: %w", err)
 			}
 			if err := config.WriteConfig(); err != nil {
-				return nil, err
+				return nil, fmt.Errorf("failed creating configuration file: %w", err)
 			}
 		default:
-			return nil, readError
+			return nil, fmt.Errorf("failed reading configuration file: %w", readError)
 		}
 	}
 
@@ -53,12 +53,12 @@ func (v viperLoader) loadFromFile(filename string) (Config, error) {
 func (v viperLoader) checkPermissions(filename string) error {
 	file, err := os.Open(filename)
 	if err != nil {
-		return err
+		return fmt.Errorf("failed opening file: %w", err)
 	}
 
 	stat, err := file.Stat()
 	if err != nil {
-		return err
+		return fmt.Errorf("failed opening file: %w", err)
 	}
 
 	actualPermissions := stat.Mode().Perm()

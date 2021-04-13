@@ -61,6 +61,20 @@ func (mr *MockConfigMockRecorder) IsSet(key interface{}) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "IsSet", reflect.TypeOf((*MockConfig)(nil).IsSet), key)
 }
 
+// Save mocks base method.
+func (m *MockConfig) Save() error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Save")
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// Save indicates an expected call of Save.
+func (mr *MockConfigMockRecorder) Save() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Save", reflect.TypeOf((*MockConfig)(nil).Save))
+}
+
 // Set mocks base method.
 func (m *MockConfig) Set(key string, value interface{}) {
 	m.ctrl.T.Helper()

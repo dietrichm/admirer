@@ -19,6 +19,10 @@ type viperConfig struct {
 	*viper.Viper
 }
 
+func (v *viperConfig) Save() error {
+	return v.WriteConfig()
+}
+
 type viperLoader struct{}
 
 func (v viperLoader) Load(name string) (Config, error) {

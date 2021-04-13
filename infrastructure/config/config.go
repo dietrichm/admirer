@@ -10,6 +10,7 @@ type Config interface {
 	IsSet(key string) bool
 	GetString(key string) string
 	Set(key string, value interface{})
+	Save() error
 	WriteConfig() error
 }
 

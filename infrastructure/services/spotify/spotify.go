@@ -84,7 +84,7 @@ func (s *Spotify) CreateAuthURL() string {
 func (s *Spotify) Authenticate(code string) error {
 	token, err := s.authenticator.Exchange(code)
 	if err != nil {
-		return errors.New("failed to parse Spotify token")
+		return fmt.Errorf("failed to authenticate on Spotify: %w", err)
 	}
 
 	client := s.authenticator.NewClient(token)
@@ -97,7 +97,7 @@ func (s *Spotify) Authenticate(code string) error {
 func (s *Spotify) GetUsername() (string, error) {
 	user, err := s.client.CurrentUser()
 	if err != nil {
-		return "", errors.New("failed to read Spotify profile data")
+		return "", fmt.Errorf("failed to read Spotify profile data: %w", err)
 	}
 
 	return user.DisplayName, nil
@@ -111,7 +111,7 @@ func (s *Spotify) GetLovedTracks(limit int) (tracks []domain.Track, err error) {
 
 	result, err := s.client.CurrentUsersTracksOpt(options)
 	if err != nil {
-		return
+		return tracks, fmt.Errorf("failed to read Spotify loved tracks: %w", err)
 	}
 
 	for _, resultTrack := range result.Tracks {
@@ -136,7 +136,7 @@ func (s *Spotify) LoveTrack(track domain.Track) error {
 
 	result, err := s.client.SearchOpt(query, spotify.SearchTypeTrack, options)
 	if err != nil {
-		return err
+		return fmt.Errorf("failed to search track on Spotify: %w", err)
 	}
 
 	if len(result.Tracks.Tracks) == 0 {
@@ -145,7 +145,7 @@ func (s *Spotify) LoveTrack(track domain.Track) error {
 
 	trackID := result.Tracks.Tracks[0].ID
 	if err := s.client.AddTracksToLibrary(trackID); err != nil {
-		return err
+		return fmt.Errorf("failed to mark track as loved on Spotify: %w", err)
 	}
 
 	return nil
@@ -159,11 +159,11 @@ func (s *Spotify) Close() error {
 
 	newToken, err := s.client.Token()
 	if err != nil {
-		return err
+		return fmt.Errorf("failed to save Spotify secrets: %w", err)
 	}
 
 	if err := s.persistToken(newToken); err != nil {
-		return err
+		return fmt.Errorf("failed to save Spotify secrets: %w", err)
 	}
 
 	return nil

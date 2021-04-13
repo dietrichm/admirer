@@ -434,9 +434,8 @@ func TestSpotify(t *testing.T) {
 	t.Run("returns error when unable to read token", func(t *testing.T) {
 		ctrl := gomock.NewController(t)
 
-		expected := "token error"
 		client := NewMockClient(ctrl)
-		client.EXPECT().Token().Return(nil, errors.New(expected))
+		client.EXPECT().Token().Return(nil, errors.New("token error"))
 
 		service := &Spotify{
 			client: client,
@@ -446,12 +445,6 @@ func TestSpotify(t *testing.T) {
 
 		if err == nil {
 			t.Fatal("Expected an error")
-		}
-
-		got := err.Error()
-
-		if got != expected {
-			t.Errorf("expected %q, got %q", expected, got)
 		}
 	})
 
@@ -469,10 +462,9 @@ func TestSpotify(t *testing.T) {
 		client := NewMockClient(ctrl)
 		client.EXPECT().Token().Return(token, nil)
 
-		expected := "write error"
 		secrets := config.NewMockConfig(ctrl)
 		secrets.EXPECT().Set(gomock.Any(), gomock.Any()).AnyTimes()
-		secrets.EXPECT().Save().Return(errors.New(expected))
+		secrets.EXPECT().Save().Return(errors.New("write error"))
 
 		service := &Spotify{
 			client:  client,
@@ -483,12 +475,6 @@ func TestSpotify(t *testing.T) {
 
 		if err == nil {
 			t.Fatal("Expected an error")
-		}
-
-		got := err.Error()
-
-		if got != expected {
-			t.Errorf("expected %q, got %q", expected, got)
 		}
 	})
 }

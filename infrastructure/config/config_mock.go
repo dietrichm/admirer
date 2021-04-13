@@ -87,20 +87,6 @@ func (mr *MockConfigMockRecorder) Set(key, value interface{}) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Set", reflect.TypeOf((*MockConfig)(nil).Set), key, value)
 }
 
-// WriteConfig mocks base method.
-func (m *MockConfig) WriteConfig() error {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "WriteConfig")
-	ret0, _ := ret[0].(error)
-	return ret0
-}
-
-// WriteConfig indicates an expected call of WriteConfig.
-func (mr *MockConfigMockRecorder) WriteConfig() *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "WriteConfig", reflect.TypeOf((*MockConfig)(nil).WriteConfig))
-}
-
 // MockLoader is a mock of Loader interface.
 type MockLoader struct {
 	ctrl     *gomock.Controller

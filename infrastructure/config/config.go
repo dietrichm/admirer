@@ -11,7 +11,6 @@ type Config interface {
 	GetString(key string) string
 	Set(key string, value interface{})
 	Save() error
-	WriteConfig() error
 }
 
 // Loader loads Config by name.

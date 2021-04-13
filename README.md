@@ -79,7 +79,9 @@ When this is done, continue with the following steps.
 
 **Warning**: please be aware that - for now - the authentication information will be saved in **plain text** in a file in `~/.config/admirer`. This file's permissions is set to `600`, however.
 
-**Note**: in future versions of Admirer, I will add an internal HTTP server to retrieve the authentication callback automatically.
+**Note 1**: after #23, API client IDs and secrets will be queried during login and stored along with other authentication secrets.
+
+**Note 2**: in future versions of Admirer, I will add an internal HTTP server to retrieve the authentication callback automatically.
 
 ## Use cases
 

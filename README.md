@@ -59,7 +59,7 @@ Use "admirer [command] --help" for more information about a command.
 
 Last.fm and Spotify have an initial implementation.
 
-In the future, I would like to add support for [ListenBrainz](https://listenbrainz.org/) and CSV/JSON files as well.
+In the future, I would like to add support for [ListenBrainz](https://listenbrainz.org/) and CSV/JSON files as well (#27).
 
 ### Authentication
 
@@ -77,11 +77,11 @@ When this is done, continue with the following steps.
 1. Copy the code parameter from this URL's query parameters and pass it along as another parameter to `admirer login <service>`.
 1. If all goes well, you will retrieve confirmation that you have been logged in.
 
-**Warning**: please be aware that - for now - the authentication information will be saved in **plain text** in a file in `~/.config/admirer`. This file's permissions is set to `600`, however.
+**Warning**: please be aware that - until #24 is done - the authentication information will be saved in **plain text** in a file in `~/.config/admirer`. This file's permissions is set to `600`, however.
 
 **Note 1**: after #23, API client IDs and secrets will be queried during login and stored along with other authentication secrets.
 
-**Note 2**: in future versions of Admirer, I will add an internal HTTP server to retrieve the authentication callback automatically.
+**Note 2**: #25 will add an internal HTTP server to retrieve the authentication callback automatically.
 
 ## Use cases
 

@@ -15,6 +15,10 @@ const (
 	directoryPermissions os.FileMode = 0700
 )
 
+type viperConfig struct {
+	*viper.Viper
+}
+
 type viperLoader struct{}
 
 func (v viperLoader) Load(name string) (Config, error) {
@@ -47,7 +51,7 @@ func (v viperLoader) loadFromFile(filename string) (Config, error) {
 		return nil, err
 	}
 
-	return config, nil
+	return &viperConfig{config}, nil
 }
 
 func (v viperLoader) checkPermissions(filename string) error {

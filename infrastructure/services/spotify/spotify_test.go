@@ -455,7 +455,7 @@ func TestSpotify(t *testing.T) {
 		}
 	})
 
-	t.Run("returns error when unable to write secrets", func(t *testing.T) {
+	t.Run("returns error when unable to save secrets", func(t *testing.T) {
 		ctrl := gomock.NewController(t)
 
 		now := time.Now()

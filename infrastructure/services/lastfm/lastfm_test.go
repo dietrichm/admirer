@@ -90,7 +90,7 @@ func TestLastfm(t *testing.T) {
 		}
 	})
 
-	t.Run("returns error for failed config write", func(t *testing.T) {
+	t.Run("returns error for failed config save", func(t *testing.T) {
 		ctrl := gomock.NewController(t)
 
 		api := NewMockAPI(ctrl)
@@ -99,7 +99,7 @@ func TestLastfm(t *testing.T) {
 
 		secrets := config.NewMockConfig(ctrl)
 		secrets.EXPECT().Set(gomock.Any(), gomock.Any())
-		secrets.EXPECT().Save().Return(errors.New("write error"))
+		secrets.EXPECT().Save().Return(errors.New("save error"))
 
 		service := &Lastfm{
 			api:     api,

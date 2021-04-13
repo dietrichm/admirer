@@ -30,7 +30,7 @@ Compiled binaries will be provided for version 1.0.0.
 
 ### Building from source
 
-Please [install Go 1.16+ first](https://golang.org/doc/install) and set the `GOPATH` environment variable.
+Please [install Go 1.16+ first](https://golang.org/doc/install), set the `GOPATH` environment variable and ensure `$GOPATH/bin` is present in `$PATH`.
 
 ```sh
 go get -u github.com/dietrichm/admirer
@@ -72,9 +72,9 @@ Before using any of the provided services, you need to create **your own API app
 
 When this is done, continue with the following steps.
 
-1. Run `$GOPATH/bin/admirer login <service>` to retrieve an authentication URL.
+1. Run `admirer login <service>` to retrieve an authentication URL.
 1. By visiting this URL, the service will ask confirmation and redirect back to a non existing URL `https://admirer.test/...`.
-1. Copy the code parameter from this URL's query parameters and pass it along as another parameter to `$GOPATH/bin/admirer login <service>`.
+1. Copy the code parameter from this URL's query parameters and pass it along as another parameter to `admirer login <service>`.
 1. If all goes well, you will retrieve confirmation that you have been logged in.
 
 **Warning**: please be aware that - for now - the authentication information will be saved in **plain text** in a file in `~/.config/admirer`. This file's permissions is set to `600`, however.

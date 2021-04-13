@@ -401,7 +401,7 @@ func TestSpotify(t *testing.T) {
 			secrets.EXPECT().Set("access_token", "myAccessToken"),
 			secrets.EXPECT().Set("expiry", now.Format(time.RFC3339)),
 			secrets.EXPECT().Set("refresh_token", "myRefreshToken"),
-			secrets.EXPECT().WriteConfig(),
+			secrets.EXPECT().Save(),
 		)
 
 		service := &Spotify{
@@ -472,7 +472,7 @@ func TestSpotify(t *testing.T) {
 		expected := "write error"
 		secrets := config.NewMockConfig(ctrl)
 		secrets.EXPECT().Set(gomock.Any(), gomock.Any()).AnyTimes()
-		secrets.EXPECT().WriteConfig().Return(errors.New(expected))
+		secrets.EXPECT().Save().Return(errors.New(expected))
 
 		service := &Spotify{
 			client:  client,

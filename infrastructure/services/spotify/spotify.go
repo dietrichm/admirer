@@ -175,7 +175,7 @@ func (s *Spotify) persistToken(token *oauth2.Token) error {
 	s.secrets.Set("expiry", token.Expiry.Format(time.RFC3339))
 	s.secrets.Set("refresh_token", token.RefreshToken)
 
-	if err := s.secrets.WriteConfig(); err != nil {
+	if err := s.secrets.Save(); err != nil {
 		return err
 	}
 	return nil

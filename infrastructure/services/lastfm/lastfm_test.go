@@ -60,7 +60,7 @@ func TestLastfm(t *testing.T) {
 		secrets := config.NewMockConfig(ctrl)
 		gomock.InOrder(
 			secrets.EXPECT().Set("session_key", "mySessionKey"),
-			secrets.EXPECT().WriteConfig(),
+			secrets.EXPECT().Save(),
 		)
 
 		service := &Lastfm{
@@ -99,7 +99,7 @@ func TestLastfm(t *testing.T) {
 
 		secrets := config.NewMockConfig(ctrl)
 		secrets.EXPECT().Set(gomock.Any(), gomock.Any())
-		secrets.EXPECT().WriteConfig().Return(errors.New("write error"))
+		secrets.EXPECT().Save().Return(errors.New("write error"))
 
 		service := &Lastfm{
 			api:     api,

@@ -87,7 +87,7 @@ func (l *Lastfm) Authenticate(oauthCode string) error {
 
 	l.secrets.Set("session_key", l.api.GetSessionKey())
 
-	if err := l.secrets.WriteConfig(); err != nil {
+	if err := l.secrets.Save(); err != nil {
 		return fmt.Errorf("failed to write Last.fm secrets: %w", err)
 	}
 

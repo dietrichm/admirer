@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestConfig(t *testing.T) {
+func TestViperLoader(t *testing.T) {
 	t.Run("reads YAML configuration file", func(t *testing.T) {
 		file, err := createFile("foo: bar")
 		if err != nil {

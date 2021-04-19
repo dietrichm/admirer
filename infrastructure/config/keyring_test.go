@@ -127,4 +127,21 @@ func TestKeyringLoader(t *testing.T) {
 			t.Error("Expected config instance")
 		}
 	})
+
+	t.Run("returns error when unable to open keyring", func(t *testing.T) {
+		loader := &keyringLoader{}
+
+		keyringConfig := keyring_lib.Config{
+			AllowedBackends: []keyring_lib.BackendType{},
+		}
+		config, err := loader.open("name", keyringConfig)
+
+		if err == nil {
+			t.Error("Expected an error")
+		}
+
+		if config != nil {
+			t.Errorf("Unexpected config instance: %v", config)
+		}
+	})
 }

@@ -67,7 +67,10 @@ func (k keyringLoader) Load(name string) (Config, error) {
 }
 
 func (k keyringLoader) open(name string, config keyring.Config) (Config, error) {
-	ring, _ := keyring.Open(config)
+	ring, err := keyring.Open(config)
+	if err != nil {
+		return nil, fmt.Errorf("failed opening keyring: %w", err)
+	}
 
 	return &keyringConfig{
 		Keyring: ring,

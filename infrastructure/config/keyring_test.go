@@ -17,7 +17,10 @@ func TestKeyringConfig(t *testing.T) {
 		keyring.EXPECT().Get("prefix-foo").Return(item, errors.New("key error"))
 		keyring.EXPECT().Get("prefix-bar").Return(item, nil)
 
-		config := &keyringConfig{keyring, "prefix"}
+		config := &keyringConfig{
+			Keyring: keyring,
+			prefix:  "prefix",
+		}
 
 		exists := config.IsSet("foo")
 
@@ -42,7 +45,10 @@ func TestKeyringConfig(t *testing.T) {
 		keyring.EXPECT().Get("prefix-foo").Return(item, errors.New("key error"))
 		keyring.EXPECT().Get("prefix-bar").Return(item, nil)
 
-		config := &keyringConfig{keyring, "prefix"}
+		config := &keyringConfig{
+			Keyring: keyring,
+			prefix:  "prefix",
+		}
 
 		got := config.GetString("foo")
 		expected := ""
@@ -69,7 +75,10 @@ func TestKeyringConfig(t *testing.T) {
 		}
 		keyring.EXPECT().Set(item).Return(nil)
 
-		config := &keyringConfig{keyring, "prefix"}
+		config := &keyringConfig{
+			Keyring: keyring,
+			prefix:  "prefix",
+		}
 
 		config.Set("foo", "bar")
 		err := config.Save()

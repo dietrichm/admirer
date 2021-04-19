@@ -18,7 +18,6 @@ type keyringConfig struct {
 	Keyring
 	prefix  string
 	unsaved map[string]keyring.Item
-	err     error
 }
 
 func (k *keyringConfig) Get(key string) (keyring.Item, error) {
@@ -62,14 +61,19 @@ func (k *keyringConfig) Set(key string, value interface{}) {
 		k.unsaved = map[string]keyring.Item{}
 	}
 	k.unsaved[key] = item
-
-	if err := k.Keyring.Set(item); err != nil {
-		k.err = err
-	}
 }
 
 func (k *keyringConfig) Save() error {
-	return k.err
+	if k.unsaved != nil {
+		for _, item := range k.unsaved {
+			if err := k.Keyring.Set(item); err != nil {
+				return err
+			}
+		}
+		k.unsaved = map[string]keyring.Item{}
+	}
+
+	return nil
 }
 
 type keyringLoader struct{}

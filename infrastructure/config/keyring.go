@@ -16,8 +16,9 @@ type Keyring interface {
 
 type keyringConfig struct {
 	Keyring
-	prefix string
-	err    error
+	prefix  string
+	unsaved map[string]keyring.Item
+	err     error
 }
 
 func (k *keyringConfig) Get(key string) (keyring.Item, error) {
@@ -50,6 +51,11 @@ func (k *keyringConfig) Set(key string, value interface{}) {
 		Key:  k.prefixed(key),
 		Data: []byte(value.(string)),
 	}
+
+	if k.unsaved == nil {
+		k.unsaved = map[string]keyring.Item{}
+	}
+	k.unsaved[key] = item
 
 	if err := k.Keyring.Set(item); err != nil {
 		k.err = err

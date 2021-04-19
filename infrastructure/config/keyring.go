@@ -26,6 +26,15 @@ func (k *keyringConfig) IsSet(key string) bool {
 	return true
 }
 
+func (k *keyringConfig) GetString(key string) string {
+	item, err := k.Get(k.prefixed(key))
+	if err != nil {
+		return ""
+	}
+
+	return string(item.Data)
+}
+
 func (k *keyringConfig) prefixed(key string) string {
 	return fmt.Sprintf("%s-%s", k.prefix, key)
 }

@@ -31,4 +31,31 @@ func TestKeyringConfig(t *testing.T) {
 			t.Error("Key should exist in keyring")
 		}
 	})
+
+	t.Run("returns string value for key", func(t *testing.T) {
+		ctrl := gomock.NewController(t)
+
+		keyring := NewMockKeyring(ctrl)
+		item := keyring_lib.Item{
+			Data: []byte("something"),
+		}
+		keyring.EXPECT().Get("prefix-foo").Return(item, errors.New("key error"))
+		keyring.EXPECT().Get("prefix-bar").Return(item, nil)
+
+		config := &keyringConfig{keyring, "prefix"}
+
+		got := config.GetString("foo")
+		expected := ""
+
+		if got != expected {
+			t.Errorf("expected %q, got %q", expected, got)
+		}
+
+		got = config.GetString("bar")
+		expected = "something"
+
+		if got != expected {
+			t.Errorf("expected %q, got %q", expected, got)
+		}
+	})
 }

@@ -14,9 +14,9 @@ func TestKeyringConfig(t *testing.T) {
 
 		keyring := NewMockKeyring(ctrl)
 		item := keyring_lib.Item{}
-		keyring.EXPECT().Get("foo").Return(item, errors.New("key error"))
+		keyring.EXPECT().Get("prefix-foo").Return(item, errors.New("key error"))
 
-		config := &keyringConfig{keyring}
+		config := &keyringConfig{keyring, "prefix"}
 
 		exists := config.IsSet("foo")
 
@@ -30,9 +30,9 @@ func TestKeyringConfig(t *testing.T) {
 
 		keyring := NewMockKeyring(ctrl)
 		item := keyring_lib.Item{}
-		keyring.EXPECT().Get("foo").Return(item, nil)
+		keyring.EXPECT().Get("prefix-foo").Return(item, nil)
 
-		config := &keyringConfig{keyring}
+		config := &keyringConfig{keyring, "prefix"}
 
 		exists := config.IsSet("foo")
 

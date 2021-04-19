@@ -3,6 +3,8 @@
 package config
 
 import (
+	"fmt"
+
 	"github.com/99designs/keyring"
 )
 
@@ -13,12 +15,17 @@ type Keyring interface {
 
 type keyringConfig struct {
 	Keyring
+	prefix string
 }
 
 func (k *keyringConfig) IsSet(key string) bool {
-	if _, err := k.Get(key); err != nil {
+	if _, err := k.Get(k.prefixed(key)); err != nil {
 		return false
 	}
 
 	return true
+}
+
+func (k *keyringConfig) prefixed(key string) string {
+	return fmt.Sprintf("%s-%s", k.prefix, key)
 }

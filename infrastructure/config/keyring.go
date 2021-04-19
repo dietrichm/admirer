@@ -17,6 +17,7 @@ type Keyring interface {
 type keyringConfig struct {
 	Keyring
 	prefix string
+	err    error
 }
 
 func (k *keyringConfig) IsSet(key string) bool {
@@ -46,9 +47,11 @@ func (k *keyringConfig) Set(key string, value interface{}) {
 		Data: []byte(value.(string)),
 	}
 
-	k.Keyring.Set(item)
+	if err := k.Keyring.Set(item); err != nil {
+		k.err = err
+	}
 }
 
 func (k *keyringConfig) Save() error {
-	return nil
+	return k.err
 }

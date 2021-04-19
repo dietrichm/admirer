@@ -87,4 +87,23 @@ func TestKeyringConfig(t *testing.T) {
 			t.Errorf("Unexpected error: %v", err)
 		}
 	})
+
+	t.Run("returns error when failing to save key-value pair", func(t *testing.T) {
+		ctrl := gomock.NewController(t)
+
+		keyring := NewMockKeyring(ctrl)
+		keyring.EXPECT().Set(gomock.Any()).Return(errors.New("write error"))
+
+		config := &keyringConfig{
+			Keyring: keyring,
+			prefix:  "prefix",
+		}
+
+		config.Set("foo", "bar")
+		err := config.Save()
+
+		if err == nil {
+			t.Fatal("Expected an error")
+		}
+	})
 }

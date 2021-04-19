@@ -58,4 +58,19 @@ func TestKeyringConfig(t *testing.T) {
 			t.Errorf("expected %q, got %q", expected, got)
 		}
 	})
+
+	t.Run("saves key-value pair in keyring", func(t *testing.T) {
+		ctrl := gomock.NewController(t)
+
+		keyring := NewMockKeyring(ctrl)
+		item := keyring_lib.Item{
+			Key:  "prefix-foo",
+			Data: []byte("bar"),
+		}
+		keyring.EXPECT().Set(item).Return(nil)
+
+		config := &keyringConfig{keyring, "prefix"}
+
+		config.Set("foo", "bar")
+	})
 }

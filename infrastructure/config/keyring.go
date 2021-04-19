@@ -39,3 +39,12 @@ func (k *keyringConfig) GetString(key string) string {
 func (k *keyringConfig) prefixed(key string) string {
 	return fmt.Sprintf("%s-%s", k.prefix, key)
 }
+
+func (k *keyringConfig) Set(key string, value interface{}) {
+	item := keyring.Item{
+		Key:  k.prefixed(key),
+		Data: []byte(value.(string)),
+	}
+
+	k.Keyring.Set(item)
+}

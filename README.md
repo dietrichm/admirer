@@ -77,8 +77,6 @@ When this is done, continue with the following steps.
 1. Copy the code parameter from this URL's query parameters and pass it along as another parameter to `admirer login <service>`.
 1. If all goes well, you will retrieve confirmation that you have been logged in.
 
-**Warning**: please be aware that - until [#24](https://github.com/dietrichm/admirer/issues/24) is done - the authentication information will be saved in **plain text** in a file in `~/.config/admirer`. This file's permissions is set to `600`, however.
-
 **Note 1**: after [#23](https://github.com/dietrichm/admirer/issues/23), API client IDs and secrets will be queried during login and stored along with other authentication secrets.
 
 **Note 2**: [#25](https://github.com/dietrichm/admirer/issues/25) will add an internal HTTP server to retrieve the authentication callback automatically.

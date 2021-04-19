@@ -129,6 +129,21 @@ func TestKeyringConfig(t *testing.T) {
 			t.Fatal("Expected an error")
 		}
 	})
+
+	t.Run("saves empty keyring without error", func(t *testing.T) {
+		ctrl := gomock.NewController(t)
+		keyring := NewMockKeyring(ctrl)
+
+		config := &keyringConfig{
+			Keyring: keyring,
+		}
+
+		err := config.Save()
+
+		if err != nil {
+			t.Errorf("Unexpected error: %v", err)
+		}
+	})
 }
 
 func TestKeyringLoader(t *testing.T) {

@@ -2,6 +2,7 @@ package config
 
 import (
 	"errors"
+	"os"
 	"testing"
 
 	keyring_lib "github.com/99designs/keyring"
@@ -109,5 +110,21 @@ func TestKeyringConfig(t *testing.T) {
 }
 
 func TestKeyringLoader(t *testing.T) {
+	t.Run("opens keyring config with settings", func(t *testing.T) {
+		loader := &keyringLoader{}
 
+		keyringConfig := keyring_lib.Config{
+			AllowedBackends: []keyring_lib.BackendType{keyring_lib.FileBackend},
+			FileDir:         os.TempDir(),
+		}
+		config, err := loader.open("name", keyringConfig)
+
+		if err != nil {
+			t.Errorf("Unexpected error: %v", err)
+		}
+
+		if config == nil {
+			t.Error("Expected config instance")
+		}
+	})
 }

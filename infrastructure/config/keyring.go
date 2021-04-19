@@ -57,3 +57,20 @@ func (k *keyringConfig) Save() error {
 }
 
 type keyringLoader struct{}
+
+func (k keyringLoader) Load(name string) (Config, error) {
+	config := keyring.Config{
+		ServiceName: "admirer",
+	}
+
+	return k.open(name, config)
+}
+
+func (k keyringLoader) open(name string, config keyring.Config) (Config, error) {
+	ring, _ := keyring.Open(config)
+
+	return &keyringConfig{
+		Keyring: ring,
+		prefix:  name,
+	}, nil
+}

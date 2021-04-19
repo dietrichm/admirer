@@ -17,5 +17,5 @@ var AvailableServices = mapServiceLoader{
 			return lastfm.NewLastfm(secrets)
 		},
 	},
-	configLoader: config.ConfigLoader,
+	configLoader: config.SecretsLoader,
 }

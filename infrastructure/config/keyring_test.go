@@ -9,12 +9,13 @@ import (
 )
 
 func TestKeyringConfig(t *testing.T) {
-	t.Run("returns false when key is not set in keyring", func(t *testing.T) {
+	t.Run("returns whether key is set in keyring", func(t *testing.T) {
 		ctrl := gomock.NewController(t)
 
 		keyring := NewMockKeyring(ctrl)
 		item := keyring_lib.Item{}
 		keyring.EXPECT().Get("prefix-foo").Return(item, errors.New("key error"))
+		keyring.EXPECT().Get("prefix-bar").Return(item, nil)
 
 		config := &keyringConfig{keyring, "prefix"}
 
@@ -23,18 +24,8 @@ func TestKeyringConfig(t *testing.T) {
 		if exists {
 			t.Error("Key should not exist in keyring")
 		}
-	})
 
-	t.Run("returns true when key is set in keyring", func(t *testing.T) {
-		ctrl := gomock.NewController(t)
-
-		keyring := NewMockKeyring(ctrl)
-		item := keyring_lib.Item{}
-		keyring.EXPECT().Get("prefix-foo").Return(item, nil)
-
-		config := &keyringConfig{keyring, "prefix"}
-
-		exists := config.IsSet("foo")
+		exists = config.IsSet("bar")
 
 		if !exists {
 			t.Error("Key should exist in keyring")

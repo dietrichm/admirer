@@ -72,5 +72,10 @@ func TestKeyringConfig(t *testing.T) {
 		config := &keyringConfig{keyring, "prefix"}
 
 		config.Set("foo", "bar")
+		err := config.Save()
+
+		if err != nil {
+			t.Errorf("Unexpected error: %v", err)
+		}
 	})
 }

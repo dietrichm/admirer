@@ -48,3 +48,7 @@ func (k *keyringConfig) Set(key string, value interface{}) {
 
 	k.Keyring.Set(item)
 }
+
+func (k *keyringConfig) Save() error {
+	return nil
+}

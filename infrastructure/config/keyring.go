@@ -21,10 +21,8 @@ type keyringConfig struct {
 }
 
 func (k *keyringConfig) Get(key string) (keyring.Item, error) {
-	if k.unsaved != nil {
-		if item, exists := k.unsaved[key]; exists {
-			return item, nil
-		}
+	if item, exists := k.unsaved[key]; exists {
+		return item, nil
 	}
 
 	return k.Keyring.Get(key)

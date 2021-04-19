@@ -62,14 +62,12 @@ func (k *keyringConfig) Set(key string, value interface{}) {
 }
 
 func (k *keyringConfig) Save() error {
-	if k.unsaved != nil {
-		for _, item := range k.unsaved {
-			if err := k.Keyring.Set(item); err != nil {
-				return err
-			}
+	for _, item := range k.unsaved {
+		if err := k.Keyring.Set(item); err != nil {
+			return err
 		}
-		k.unsaved = map[string]keyring.Item{}
 	}
+	k.unsaved = map[string]keyring.Item{}
 
 	return nil
 }

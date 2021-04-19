@@ -66,6 +66,28 @@ func TestKeyringConfig(t *testing.T) {
 		}
 	})
 
+	t.Run("returns string value from unsaved key", func(t *testing.T) {
+		ctrl := gomock.NewController(t)
+
+		keyring := NewMockKeyring(ctrl)
+		item := keyring_lib.Item{
+			Data: []byte("something"),
+		}
+
+		config := &keyringConfig{
+			Keyring: keyring,
+			prefix:  "prefix",
+			unsaved: map[string]keyring_lib.Item{"prefix-foo": item},
+		}
+
+		got := config.GetString("foo")
+		expected := "something"
+
+		if got != expected {
+			t.Errorf("expected %q, got %q", expected, got)
+		}
+	})
+
 	t.Run("saves key-value pair in keyring", func(t *testing.T) {
 		ctrl := gomock.NewController(t)
 

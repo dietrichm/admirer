@@ -14,3 +14,11 @@ type Keyring interface {
 type keyringConfig struct {
 	Keyring
 }
+
+func (k *keyringConfig) IsSet(key string) bool {
+	if _, err := k.Get(key); err != nil {
+		return false
+	}
+
+	return true
+}

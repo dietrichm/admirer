@@ -11,6 +11,7 @@ import (
 // Keyring is our interface for a Keyring implementation.
 type Keyring interface {
 	Get(key string) (keyring.Item, error)
+	Set(item keyring.Item) error
 }
 
 type keyringConfig struct {

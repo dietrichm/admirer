@@ -48,3 +48,17 @@ func (mr *MockKeyringMockRecorder) Get(key interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Get", reflect.TypeOf((*MockKeyring)(nil).Get), key)
 }
+
+// Set mocks base method.
+func (m *MockKeyring) Set(item keyring.Item) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Set", item)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// Set indicates an expected call of Set.
+func (mr *MockKeyringMockRecorder) Set(item interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Set", reflect.TypeOf((*MockKeyring)(nil).Set), item)
+}

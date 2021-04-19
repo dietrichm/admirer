@@ -55,3 +55,5 @@ func (k *keyringConfig) Set(key string, value interface{}) {
 func (k *keyringConfig) Save() error {
 	return k.err
 }
+
+type keyringLoader struct{}

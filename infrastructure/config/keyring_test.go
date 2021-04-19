@@ -107,3 +107,7 @@ func TestKeyringConfig(t *testing.T) {
 		}
 	})
 }
+
+func TestKeyringLoader(t *testing.T) {
+
+}

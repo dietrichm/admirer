@@ -5,6 +5,9 @@ package config
 // ConfigLoader is the default configuration loader.
 var ConfigLoader = &viperLoader{}
 
+// SecretsLoader is the default secrets loader.
+var SecretsLoader = &keyringLoader{}
+
 // Config is the interface for reading and writing configuration.
 type Config interface {
 	IsSet(key string) bool

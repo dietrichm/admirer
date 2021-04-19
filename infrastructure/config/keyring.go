@@ -20,6 +20,10 @@ type keyringConfig struct {
 	err    error
 }
 
+func (k *keyringConfig) Get(key string) (keyring.Item, error) {
+	return k.Keyring.Get(key)
+}
+
 func (k *keyringConfig) IsSet(key string) bool {
 	if _, err := k.Get(k.prefixed(key)); err != nil {
 		return false

@@ -24,10 +24,12 @@ func TestSync(t *testing.T) {
 		tracks := []domain.Track{trackOne, trackTwo}
 
 		sourceService := domain.NewMockService(ctrl)
+		sourceService.EXPECT().Authenticated().Return(true)
 		sourceService.EXPECT().GetLovedTracks(5).Return(tracks, nil)
 		sourceService.EXPECT().Close()
 
 		targetService := domain.NewMockService(ctrl)
+		targetService.EXPECT().Authenticated().Return(true)
 		targetService.EXPECT().LoveTrack(trackOne).Return(nil)
 		targetService.EXPECT().LoveTrack(trackTwo).Return(nil)
 		targetService.EXPECT().Close()
@@ -62,10 +64,12 @@ Synced: Foo & Bar - Mr. Testy
 		}
 
 		sourceService := domain.NewMockService(ctrl)
+		sourceService.EXPECT().Authenticated().Return(true)
 		sourceService.EXPECT().GetLovedTracks(gomock.Any()).Return(tracks, nil)
 		sourceService.EXPECT().Close()
 
 		targetService := domain.NewMockService(ctrl)
+		targetService.EXPECT().Authenticated().Return(true)
 		targetService.EXPECT().LoveTrack(gomock.Any()).Return(errors.New("api error"))
 		targetService.EXPECT().Close()
 
@@ -88,10 +92,12 @@ Synced: Foo & Bar - Mr. Testy
 		ctrl := gomock.NewController(t)
 
 		sourceService := domain.NewMockService(ctrl)
+		sourceService.EXPECT().Authenticated().Return(true)
 		sourceService.EXPECT().GetLovedTracks(gomock.Any()).Return(nil, errors.New("read error"))
 		sourceService.EXPECT().Close()
 
 		targetService := domain.NewMockService(ctrl)
+		targetService.EXPECT().Authenticated().Return(true)
 		targetService.EXPECT().Close()
 
 		serviceLoader := domain.NewMockServiceLoader(ctrl)
@@ -133,6 +139,57 @@ Synced: Foo & Bar - Mr. Testy
 		serviceLoader := domain.NewMockServiceLoader(ctrl)
 		serviceLoader.EXPECT().ForName("source").Return(sourceService, nil)
 		serviceLoader.EXPECT().ForName("target").Return(nil, errors.New("service error"))
+
+		output, err := executeSync(serviceLoader, 10, "source", "target")
+
+		if err == nil {
+			t.Error("Expected an error")
+		}
+
+		if output != "" {
+			t.Errorf("Unexpected output: %v", output)
+		}
+	})
+
+	t.Run("returns error when source service is not authenticated", func(t *testing.T) {
+		ctrl := gomock.NewController(t)
+
+		sourceService := domain.NewMockService(ctrl)
+		sourceService.EXPECT().Authenticated().Return(false)
+		sourceService.EXPECT().Close()
+
+		targetService := domain.NewMockService(ctrl)
+		targetService.EXPECT().Close()
+
+		serviceLoader := domain.NewMockServiceLoader(ctrl)
+		serviceLoader.EXPECT().ForName("source").Return(sourceService, nil)
+		serviceLoader.EXPECT().ForName("target").Return(targetService, nil)
+
+		output, err := executeSync(serviceLoader, 10, "source", "target")
+
+		if err == nil {
+			t.Error("Expected an error")
+		}
+
+		if output != "" {
+			t.Errorf("Unexpected output: %v", output)
+		}
+	})
+
+	t.Run("returns error when target service is not authenticated", func(t *testing.T) {
+		ctrl := gomock.NewController(t)
+
+		sourceService := domain.NewMockService(ctrl)
+		sourceService.EXPECT().Authenticated().Return(true)
+		sourceService.EXPECT().Close()
+
+		targetService := domain.NewMockService(ctrl)
+		targetService.EXPECT().Authenticated().Return(false)
+		targetService.EXPECT().Close()
+
+		serviceLoader := domain.NewMockServiceLoader(ctrl)
+		serviceLoader.EXPECT().ForName("source").Return(sourceService, nil)
+		serviceLoader.EXPECT().ForName("target").Return(targetService, nil)
 
 		output, err := executeSync(serviceLoader, 10, "source", "target")
 

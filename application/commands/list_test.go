@@ -75,6 +75,7 @@ Foo & Bar - Mr. Testy
 
 		service := domain.NewMockService(ctrl)
 		service.EXPECT().Authenticated().Return(false)
+		service.EXPECT().Name().AnyTimes().Return("Foo")
 		service.EXPECT().Close()
 
 		serviceLoader := domain.NewMockServiceLoader(ctrl)

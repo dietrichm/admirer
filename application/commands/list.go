@@ -34,7 +34,7 @@ func list(serviceLoader domain.ServiceLoader, limit int, writer io.Writer, args 
 	defer service.Close()
 
 	if !service.Authenticated() {
-		return fmt.Errorf("not logged in on %q", serviceName)
+		return fmt.Errorf("not logged in on %s", service.Name())
 	}
 
 	tracks, err := service.GetLovedTracks(limit)

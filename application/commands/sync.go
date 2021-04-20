@@ -41,11 +41,11 @@ func sync(serviceLoader domain.ServiceLoader, limit int, writer io.Writer, args 
 	defer targetService.Close()
 
 	if !sourceService.Authenticated() {
-		return fmt.Errorf("not logged in on %q", sourceServiceName)
+		return fmt.Errorf("not logged in on %s", sourceService.Name())
 	}
 
 	if !targetService.Authenticated() {
-		return fmt.Errorf("not logged in on %q", targetServiceName)
+		return fmt.Errorf("not logged in on %s", targetService.Name())
 	}
 
 	tracks, err := sourceService.GetLovedTracks(limit)

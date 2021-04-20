@@ -156,6 +156,7 @@ Synced: Foo & Bar - Mr. Testy
 
 		sourceService := domain.NewMockService(ctrl)
 		sourceService.EXPECT().Authenticated().Return(false)
+		sourceService.EXPECT().Name().AnyTimes().Return("Source")
 		sourceService.EXPECT().Close()
 
 		targetService := domain.NewMockService(ctrl)
@@ -185,6 +186,7 @@ Synced: Foo & Bar - Mr. Testy
 
 		targetService := domain.NewMockService(ctrl)
 		targetService.EXPECT().Authenticated().Return(false)
+		targetService.EXPECT().Name().AnyTimes().Return("Target")
 		targetService.EXPECT().Close()
 
 		serviceLoader := domain.NewMockServiceLoader(ctrl)

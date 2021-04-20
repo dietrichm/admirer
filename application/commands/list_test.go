@@ -25,6 +25,7 @@ func TestList(t *testing.T) {
 		}
 
 		service := domain.NewMockService(ctrl)
+		service.EXPECT().Authenticated().Return(true)
 		service.EXPECT().GetLovedTracks(5).Return(tracks, nil)
 		service.EXPECT().Close()
 
@@ -69,10 +70,32 @@ Foo & Bar - Mr. Testy
 		}
 	})
 
+	t.Run("returns error when service is not authenticated", func(t *testing.T) {
+		ctrl := gomock.NewController(t)
+
+		service := domain.NewMockService(ctrl)
+		service.EXPECT().Authenticated().Return(false)
+		service.EXPECT().Close()
+
+		serviceLoader := domain.NewMockServiceLoader(ctrl)
+		serviceLoader.EXPECT().ForName("foo").Return(service, nil)
+
+		output, err := executeList(serviceLoader, 3, "foo")
+
+		if err == nil {
+			t.Error("Expected an error")
+		}
+
+		if output != "" {
+			t.Errorf("Unexpected output: %v", output)
+		}
+	})
+
 	t.Run("returns error when failing to load loved tracks", func(t *testing.T) {
 		ctrl := gomock.NewController(t)
 
 		service := domain.NewMockService(ctrl)
+		service.EXPECT().Authenticated().Return(true)
 		service.EXPECT().GetLovedTracks(3).Return(nil, errors.New("load error"))
 		service.EXPECT().Close()
 

@@ -81,6 +81,11 @@ func (s *Spotify) CreateAuthURL(redirectURL string) string {
 	return s.authenticator.AuthURLWithOpts("", redirectOption)
 }
 
+// CodeParam is the query parameter name used in the authentication callback.
+func (s *Spotify) CodeParam() string {
+	return "code"
+}
+
 // Authenticate takes an authorization code and authenticates the user.
 func (s *Spotify) Authenticate(code string) error {
 	token, err := s.authenticator.Exchange(code)

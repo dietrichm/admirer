@@ -76,6 +76,11 @@ func (l *Lastfm) CreateAuthURL(redirectURL string) string {
 	return l.api.GetAuthRequestUrl(redirectURL)
 }
 
+// CodeParam is the query parameter name used in the authentication callback.
+func (l *Lastfm) CodeParam() string {
+	return "token"
+}
+
 // Authenticate takes an authorization code and authenticates the user.
 func (l *Lastfm) Authenticate(oauthCode string) error {
 	if err := l.api.LoginWithToken(oauthCode); err != nil {

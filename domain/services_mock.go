@@ -75,6 +75,20 @@ func (mr *MockServiceMockRecorder) Close() *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Close", reflect.TypeOf((*MockService)(nil).Close))
 }
 
+// CodeParam mocks base method.
+func (m *MockService) CodeParam() string {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CodeParam")
+	ret0, _ := ret[0].(string)
+	return ret0
+}
+
+// CodeParam indicates an expected call of CodeParam.
+func (mr *MockServiceMockRecorder) CodeParam() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CodeParam", reflect.TypeOf((*MockService)(nil).CodeParam))
+}
+
 // CreateAuthURL mocks base method.
 func (m *MockService) CreateAuthURL(redirectURL string) string {
 	m.ctrl.T.Helper()

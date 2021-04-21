@@ -61,8 +61,9 @@ func TestSpotify(t *testing.T) {
 		}
 
 		client := spotify.Client{}
+		redirectOption := oauth2.SetAuthURLParam("redirect_uri", "https://admirer.test/foo")
 		authenticator := NewMockAuthenticator(ctrl)
-		authenticator.EXPECT().Exchange("authcode").Return(token, nil)
+		authenticator.EXPECT().Exchange("authcode", redirectOption).Return(token, nil)
 		authenticator.EXPECT().NewClient(token).Return(client)
 
 		service := &Spotify{
@@ -84,7 +85,7 @@ func TestSpotify(t *testing.T) {
 		ctrl := gomock.NewController(t)
 
 		authenticator := NewMockAuthenticator(ctrl)
-		authenticator.EXPECT().Exchange(gomock.Any()).Return(nil, errors.New("error"))
+		authenticator.EXPECT().Exchange(gomock.Any(), gomock.Any()).Return(nil, errors.New("error"))
 
 		service := &Spotify{authenticator: authenticator}
 

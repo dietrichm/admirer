@@ -88,7 +88,8 @@ func (s *Spotify) CodeParam() string {
 
 // Authenticate takes an authorization code and authenticates the user.
 func (s *Spotify) Authenticate(code string, redirectURL string) error {
-	token, err := s.authenticator.Exchange(code)
+	redirectOption := oauth2.SetAuthURLParam("redirect_uri", redirectURL)
+	token, err := s.authenticator.Exchange(code, redirectOption)
 	if err != nil {
 		return fmt.Errorf("failed to authenticate on Spotify: %w", err)
 	}

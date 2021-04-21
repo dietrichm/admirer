@@ -31,13 +31,14 @@ func login(serviceLoader domain.ServiceLoader, writer io.Writer, args []string) 
 	}
 
 	defer service.Close()
+	redirectURL := "https://admirer.test"
 
 	if len(args) < 2 {
-		fmt.Fprintln(writer, service.Name(), "authentication URL:", service.CreateAuthURL("https://admirer.test"))
+		fmt.Fprintln(writer, service.Name(), "authentication URL:", service.CreateAuthURL(redirectURL))
 		return nil
 	}
 
-	if err := service.Authenticate(args[1], "https://admirer.test"); err != nil {
+	if err := service.Authenticate(args[1], redirectURL); err != nil {
 		return err
 	}
 

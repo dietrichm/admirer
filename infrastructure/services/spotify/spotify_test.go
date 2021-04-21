@@ -35,13 +35,14 @@ func TestSpotify(t *testing.T) {
 	t.Run("creates authentication URL", func(t *testing.T) {
 		ctrl := gomock.NewController(t)
 
+		redirectOption := oauth2.SetAuthURLParam("redirect_uri", "https://admirer.test/foo")
 		authenticator := NewMockAuthenticator(ctrl)
-		authenticator.EXPECT().AuthURL("").Return("https://service.test/auth")
+		authenticator.EXPECT().AuthURLWithOpts(gomock.Any(), redirectOption).Return("https://service.test/auth")
 
 		service := &Spotify{authenticator: authenticator}
 
 		expected := "https://service.test/auth"
-		got := service.CreateAuthURL("https://admirer.test")
+		got := service.CreateAuthURL("https://admirer.test/foo")
 
 		if got != expected {
 			t.Errorf("expected %q, got %q", expected, got)

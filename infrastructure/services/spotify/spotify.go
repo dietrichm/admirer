@@ -18,7 +18,7 @@ import (
 // Authenticator is our interface for a Spotify authenticator.
 type Authenticator interface {
 	SetAuthInfo(clientID, secretKey string)
-	AuthURL(state string) string
+	AuthURLWithOpts(state string, opts ...oauth2.AuthCodeOption) string
 	Exchange(string, ...oauth2.AuthCodeOption) (*oauth2.Token, error)
 	NewClient(token *oauth2.Token) spotify.Client
 }
@@ -77,7 +77,8 @@ func (s *Spotify) Authenticated() bool {
 
 // CreateAuthURL returns an authorization URL to authorize the integration.
 func (s *Spotify) CreateAuthURL(redirectURL string) string {
-	return s.authenticator.AuthURL("")
+	redirectOption := oauth2.SetAuthURLParam("redirect_uri", redirectURL)
+	return s.authenticator.AuthURLWithOpts("", redirectOption)
 }
 
 // Authenticate takes an authorization code and authenticates the user.

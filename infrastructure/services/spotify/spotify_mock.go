@@ -35,18 +35,23 @@ func (m *MockAuthenticator) EXPECT() *MockAuthenticatorMockRecorder {
 	return m.recorder
 }
 
-// AuthURL mocks base method.
-func (m *MockAuthenticator) AuthURL(state string) string {
+// AuthURLWithOpts mocks base method.
+func (m *MockAuthenticator) AuthURLWithOpts(state string, opts ...oauth2.AuthCodeOption) string {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "AuthURL", state)
+	varargs := []interface{}{state}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "AuthURLWithOpts", varargs...)
 	ret0, _ := ret[0].(string)
 	return ret0
 }
 
-// AuthURL indicates an expected call of AuthURL.
-func (mr *MockAuthenticatorMockRecorder) AuthURL(state interface{}) *gomock.Call {
+// AuthURLWithOpts indicates an expected call of AuthURLWithOpts.
+func (mr *MockAuthenticatorMockRecorder) AuthURLWithOpts(state interface{}, opts ...interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AuthURL", reflect.TypeOf((*MockAuthenticator)(nil).AuthURL), state)
+	varargs := append([]interface{}{state}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AuthURLWithOpts", reflect.TypeOf((*MockAuthenticator)(nil).AuthURLWithOpts), varargs...)
 }
 
 // Exchange mocks base method.

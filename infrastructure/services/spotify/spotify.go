@@ -76,7 +76,7 @@ func (s *Spotify) Authenticated() bool {
 }
 
 // CreateAuthURL returns an authorization URL to authorize the integration.
-func (s *Spotify) CreateAuthURL() string {
+func (s *Spotify) CreateAuthURL(redirectURL string) string {
 	return s.authenticator.AuthURL("")
 }
 

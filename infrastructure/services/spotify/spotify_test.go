@@ -41,7 +41,7 @@ func TestSpotify(t *testing.T) {
 		service := &Spotify{authenticator: authenticator}
 
 		expected := "https://service.test/auth"
-		got := service.CreateAuthURL()
+		got := service.CreateAuthURL("https://admirer.test")
 
 		if got != expected {
 			t.Errorf("expected %q, got %q", expected, got)

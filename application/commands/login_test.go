@@ -15,7 +15,7 @@ func TestLogin(t *testing.T) {
 
 		service := domain.NewMockService(ctrl)
 		service.EXPECT().Name().AnyTimes().Return("Service")
-		service.EXPECT().CreateAuthURL().Return("https://service.test/auth")
+		service.EXPECT().CreateAuthURL("https://admirer.test").Return("https://service.test/auth")
 		service.EXPECT().Close()
 
 		serviceLoader := domain.NewMockServiceLoader(ctrl)

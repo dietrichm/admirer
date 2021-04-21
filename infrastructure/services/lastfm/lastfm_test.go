@@ -42,7 +42,7 @@ func TestLastfm(t *testing.T) {
 
 		service := &Lastfm{api: api}
 
-		got := service.CreateAuthURL()
+		got := service.CreateAuthURL("https://admirer.test")
 		expected := "https://service.test/auth"
 
 		if got != expected {

@@ -6,7 +6,7 @@ package domain
 type Service interface {
 	Name() string
 	Authenticated() bool
-	CreateAuthURL() string
+	CreateAuthURL(redirectURL string) string
 	Authenticate(code string) error
 	GetUsername() (string, error)
 	GetLovedTracks(limit int) ([]Track, error)

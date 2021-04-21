@@ -72,9 +72,9 @@ func (l *Lastfm) Authenticated() bool {
 }
 
 // CreateAuthURL returns an authorization URL to authorize the integration.
-func (l *Lastfm) CreateAuthURL() string {
+func (l *Lastfm) CreateAuthURL(redirectURL string) string {
 	// Not an actual web server (yet).
-	redirectURL := "https://admirer.test"
+	redirectURL = "https://admirer.test"
 
 	return l.api.GetAuthRequestUrl(redirectURL)
 }

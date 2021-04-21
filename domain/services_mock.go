@@ -76,17 +76,17 @@ func (mr *MockServiceMockRecorder) Close() *gomock.Call {
 }
 
 // CreateAuthURL mocks base method.
-func (m *MockService) CreateAuthURL() string {
+func (m *MockService) CreateAuthURL(redirectURL string) string {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "CreateAuthURL")
+	ret := m.ctrl.Call(m, "CreateAuthURL", redirectURL)
 	ret0, _ := ret[0].(string)
 	return ret0
 }
 
 // CreateAuthURL indicates an expected call of CreateAuthURL.
-func (mr *MockServiceMockRecorder) CreateAuthURL() *gomock.Call {
+func (mr *MockServiceMockRecorder) CreateAuthURL(redirectURL interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateAuthURL", reflect.TypeOf((*MockService)(nil).CreateAuthURL))
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateAuthURL", reflect.TypeOf((*MockService)(nil).CreateAuthURL), redirectURL)
 }
 
 // GetLovedTracks mocks base method.

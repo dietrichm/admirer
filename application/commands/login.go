@@ -33,7 +33,7 @@ func login(serviceLoader domain.ServiceLoader, writer io.Writer, args []string) 
 	defer service.Close()
 
 	if len(args) < 2 {
-		fmt.Fprintln(writer, service.Name(), "authentication URL:", service.CreateAuthURL())
+		fmt.Fprintln(writer, service.Name(), "authentication URL:", service.CreateAuthURL("https://admirer.test"))
 		return nil
 	}
 

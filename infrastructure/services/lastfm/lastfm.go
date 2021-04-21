@@ -82,7 +82,7 @@ func (l *Lastfm) CodeParam() string {
 }
 
 // Authenticate takes an authorization code and authenticates the user.
-func (l *Lastfm) Authenticate(oauthCode string) error {
+func (l *Lastfm) Authenticate(oauthCode string, redirectURL string) error {
 	if err := l.api.LoginWithToken(oauthCode); err != nil {
 		return fmt.Errorf("failed to authenticate on Last.fm: %w", err)
 	}

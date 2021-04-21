@@ -68,7 +68,7 @@ func TestLastfm(t *testing.T) {
 			secrets: secrets,
 		}
 
-		err := service.Authenticate("authcode")
+		err := service.Authenticate("authcode", "")
 
 		if err != nil {
 			t.Errorf("Unexpected error: %v", err)
@@ -83,7 +83,7 @@ func TestLastfm(t *testing.T) {
 
 		service := &Lastfm{api: api}
 
-		err := service.Authenticate("authcode")
+		err := service.Authenticate("authcode", "")
 
 		if err == nil {
 			t.Fatal("Expected an error")
@@ -105,7 +105,7 @@ func TestLastfm(t *testing.T) {
 			api:     api,
 			secrets: secrets}
 
-		err := service.Authenticate("authcode")
+		err := service.Authenticate("authcode", "")
 
 		if err == nil {
 			t.Fatal("Expected an error")

@@ -37,7 +37,7 @@ func TestLogin(t *testing.T) {
 		ctrl := gomock.NewController(t)
 
 		service := domain.NewMockService(ctrl)
-		service.EXPECT().Authenticate("authcode")
+		service.EXPECT().Authenticate("authcode", "https://admirer.test")
 		service.EXPECT().Name().AnyTimes().Return("Service")
 		service.EXPECT().GetUsername().Return("Joe", nil)
 		service.EXPECT().Close()
@@ -86,7 +86,7 @@ func TestLogin(t *testing.T) {
 
 		expected := "failed authentication"
 		service := domain.NewMockService(ctrl)
-		service.EXPECT().Authenticate(gomock.Any()).Return(errors.New(expected))
+		service.EXPECT().Authenticate(gomock.Any(), gomock.Any()).Return(errors.New(expected))
 		service.EXPECT().Close()
 
 		serviceLoader := domain.NewMockServiceLoader(ctrl)
@@ -114,7 +114,7 @@ func TestLogin(t *testing.T) {
 
 		expected := "failed username retrieval"
 		service := domain.NewMockService(ctrl)
-		service.EXPECT().Authenticate(gomock.Any()).Return(nil)
+		service.EXPECT().Authenticate(gomock.Any(), gomock.Any()).Return(nil)
 		service.EXPECT().GetUsername().Return("", errors.New(expected))
 		service.EXPECT().Close()
 

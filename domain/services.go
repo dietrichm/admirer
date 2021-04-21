@@ -8,7 +8,7 @@ type Service interface {
 	Authenticated() bool
 	CreateAuthURL(redirectURL string) string
 	CodeParam() string
-	Authenticate(code string) error
+	Authenticate(code string, redirectURL string) error
 	GetUsername() (string, error)
 	GetLovedTracks(limit int) ([]Track, error)
 	LoveTrack(track Track) error

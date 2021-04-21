@@ -69,7 +69,7 @@ func TestSpotify(t *testing.T) {
 			authenticator: authenticator,
 		}
 
-		err := service.Authenticate("authcode")
+		err := service.Authenticate("authcode", "https://admirer.test/foo")
 
 		if err != nil {
 			t.Errorf("Unexpected error: %v", err)
@@ -88,7 +88,7 @@ func TestSpotify(t *testing.T) {
 
 		service := &Spotify{authenticator: authenticator}
 
-		err := service.Authenticate("authcode")
+		err := service.Authenticate("authcode", "")
 
 		if err == nil {
 			t.Fatal("Expected an error")

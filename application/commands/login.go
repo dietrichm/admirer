@@ -37,7 +37,7 @@ func login(serviceLoader domain.ServiceLoader, writer io.Writer, args []string) 
 		return nil
 	}
 
-	if err := service.Authenticate(args[1]); err != nil {
+	if err := service.Authenticate(args[1], "https://admirer.test"); err != nil {
 		return err
 	}
 

@@ -48,9 +48,7 @@ func NewSpotify(secrets config.Config) (*Spotify, error) {
 		return nil, errors.New("please set SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET environment variables")
 	}
 
-	// Not an actual web server (yet).
-	redirectURL := "https://admirer.test"
-	authenticator := spotify.NewAuthenticator(redirectURL, spotify.ScopeUserReadPrivate, spotify.ScopeUserLibraryRead, spotify.ScopeUserLibraryModify)
+	authenticator := spotify.NewAuthenticator("", spotify.ScopeUserReadPrivate, spotify.ScopeUserLibraryRead, spotify.ScopeUserLibraryModify)
 	authenticator.SetAuthInfo(clientID, clientSecret)
 
 	service := &Spotify{

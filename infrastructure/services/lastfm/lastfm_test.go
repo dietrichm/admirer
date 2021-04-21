@@ -38,11 +38,11 @@ func TestLastfm(t *testing.T) {
 		ctrl := gomock.NewController(t)
 
 		api := NewMockAPI(ctrl)
-		api.EXPECT().GetAuthRequestUrl("https://admirer.test").Return("https://service.test/auth")
+		api.EXPECT().GetAuthRequestUrl("https://admirer.test/foo").Return("https://service.test/auth")
 
 		service := &Lastfm{api: api}
 
-		got := service.CreateAuthURL("https://admirer.test")
+		got := service.CreateAuthURL("https://admirer.test/foo")
 		expected := "https://service.test/auth"
 
 		if got != expected {

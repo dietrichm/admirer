@@ -5,8 +5,8 @@ import (
 	"io"
 
 	"github.com/dietrichm/admirer/domain"
+	"github.com/dietrichm/admirer/infrastructure/authentication"
 	"github.com/dietrichm/admirer/infrastructure/services"
-	"github.com/dietrichm/admirer/infrastructure/services/authentication"
 	"github.com/spf13/cobra"
 )
 

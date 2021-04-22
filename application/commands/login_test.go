@@ -6,7 +6,7 @@ import (
 	"testing"
 
 	"github.com/dietrichm/admirer/domain"
-	"github.com/dietrichm/admirer/infrastructure/services/authentication"
+	"github.com/dietrichm/admirer/infrastructure/authentication"
 	"github.com/golang/mock/gomock"
 )
 

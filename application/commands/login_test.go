@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/dietrichm/admirer/domain"
+	"github.com/dietrichm/admirer/infrastructure/services/authentication"
 	"github.com/golang/mock/gomock"
 )
 
@@ -141,6 +142,6 @@ func TestLogin(t *testing.T) {
 
 func executeLogin(serviceLoader domain.ServiceLoader, args ...string) (string, error) {
 	buffer := new(bytes.Buffer)
-	err := login(serviceLoader, buffer, args)
+	err := login(serviceLoader, authentication.DefaultCallbackProvider, buffer, args)
 	return buffer.String(), err
 }

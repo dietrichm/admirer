@@ -5,6 +5,8 @@
 package authentication
 
 import (
+	reflect "reflect"
+
 	gomock "github.com/golang/mock/gomock"
 )
 
@@ -29,4 +31,19 @@ func NewMockCallbackProvider(ctrl *gomock.Controller) *MockCallbackProvider {
 // EXPECT returns an object that allows the caller to indicate expected use.
 func (m *MockCallbackProvider) EXPECT() *MockCallbackProviderMockRecorder {
 	return m.recorder
+}
+
+// ReadCode mocks base method.
+func (m *MockCallbackProvider) ReadCode(key string) (string, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ReadCode", key)
+	ret0, _ := ret[0].(string)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ReadCode indicates an expected call of ReadCode.
+func (mr *MockCallbackProviderMockRecorder) ReadCode(key interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ReadCode", reflect.TypeOf((*MockCallbackProvider)(nil).ReadCode), key)
 }

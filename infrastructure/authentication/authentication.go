@@ -6,4 +6,6 @@ package authentication
 var DefaultCallbackProvider = &httpCallbackProvider{}
 
 // CallbackProvider provides a callback mechanism for authenticating services.
-type CallbackProvider interface{}
+type CallbackProvider interface {
+	ReadCode(key string) (code string, err error)
+}

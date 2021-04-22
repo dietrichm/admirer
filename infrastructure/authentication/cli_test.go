@@ -2,6 +2,7 @@ package authentication
 
 import (
 	"bytes"
+	"strings"
 	"testing"
 )
 
@@ -22,6 +23,13 @@ func TestCliCallbackProvider(t *testing.T) {
 		expected := "readString"
 		if got != expected {
 			t.Errorf("expected %q, got %q", expected, got)
+		}
+
+		output := writer.String()
+		expected = `Please provide "foo" parameter`
+
+		if !strings.Contains(output, expected) {
+			t.Errorf("expected %q, got %q", expected, output)
 		}
 	})
 

@@ -22,7 +22,9 @@ func TestLogin(t *testing.T) {
 		serviceLoader := domain.NewMockServiceLoader(ctrl)
 		serviceLoader.EXPECT().ForName("foobar").Return(service, nil)
 
-		got, err := executeLogin(serviceLoader, "foobar")
+		callbackProvider := authentication.NewMockCallbackProvider(ctrl)
+
+		got, err := executeLogin(serviceLoader, callbackProvider, "foobar")
 		expected := "Service authentication URL: https://service.test/auth\n"
 
 		if got != expected {
@@ -46,7 +48,9 @@ func TestLogin(t *testing.T) {
 		serviceLoader := domain.NewMockServiceLoader(ctrl)
 		serviceLoader.EXPECT().ForName(gomock.Any()).Return(service, nil)
 
-		got, err := executeLogin(serviceLoader, "foobar", "authcode")
+		callbackProvider := authentication.NewMockCallbackProvider(ctrl)
+
+		got, err := executeLogin(serviceLoader, callbackProvider, "foobar", "authcode")
 		expected := "Logged in on Service as Joe\n"
 
 		if got != expected {
@@ -65,7 +69,9 @@ func TestLogin(t *testing.T) {
 		serviceLoader := domain.NewMockServiceLoader(ctrl)
 		serviceLoader.EXPECT().ForName(gomock.Any()).Return(nil, errors.New(expected))
 
-		output, err := executeLogin(serviceLoader, "foobar")
+		callbackProvider := authentication.NewMockCallbackProvider(ctrl)
+
+		output, err := executeLogin(serviceLoader, callbackProvider, "foobar")
 
 		if output != "" {
 			t.Errorf("Unexpected output: %v", output)
@@ -93,7 +99,9 @@ func TestLogin(t *testing.T) {
 		serviceLoader := domain.NewMockServiceLoader(ctrl)
 		serviceLoader.EXPECT().ForName(gomock.Any()).Return(service, nil)
 
-		output, err := executeLogin(serviceLoader, "foobar", "authcode")
+		callbackProvider := authentication.NewMockCallbackProvider(ctrl)
+
+		output, err := executeLogin(serviceLoader, callbackProvider, "foobar", "authcode")
 
 		if output != "" {
 			t.Errorf("Unexpected output: %v", output)
@@ -122,7 +130,9 @@ func TestLogin(t *testing.T) {
 		serviceLoader := domain.NewMockServiceLoader(ctrl)
 		serviceLoader.EXPECT().ForName(gomock.Any()).Return(service, nil)
 
-		output, err := executeLogin(serviceLoader, "foobar", "authcode")
+		callbackProvider := authentication.NewMockCallbackProvider(ctrl)
+
+		output, err := executeLogin(serviceLoader, callbackProvider, "foobar", "authcode")
 
 		if output != "" {
 			t.Errorf("Unexpected output: %v", output)
@@ -140,8 +150,8 @@ func TestLogin(t *testing.T) {
 	})
 }
 
-func executeLogin(serviceLoader domain.ServiceLoader, args ...string) (string, error) {
+func executeLogin(serviceLoader domain.ServiceLoader, callbackProvider authentication.CallbackProvider, args ...string) (string, error) {
 	buffer := new(bytes.Buffer)
-	err := login(serviceLoader, authentication.DefaultCallbackProvider, buffer, args)
+	err := login(serviceLoader, callbackProvider, buffer, args)
 	return buffer.String(), err
 }

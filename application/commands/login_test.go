@@ -11,21 +11,27 @@ import (
 )
 
 func TestLogin(t *testing.T) {
-	t.Run("prints service authentication URL", func(t *testing.T) {
+	t.Run("prints service authentication URL and authenticates with received auth code", func(t *testing.T) {
 		ctrl := gomock.NewController(t)
 
 		service := domain.NewMockService(ctrl)
 		service.EXPECT().Name().AnyTimes().Return("Service")
 		service.EXPECT().CreateAuthURL("https://admirer.test").Return("https://service.test/auth")
+		service.EXPECT().CodeParam().Return("codeparam")
+		service.EXPECT().Authenticate("authcode", "https://admirer.test")
+		service.EXPECT().GetUsername().Return("Joe", nil)
 		service.EXPECT().Close()
 
 		serviceLoader := domain.NewMockServiceLoader(ctrl)
 		serviceLoader.EXPECT().ForName("foobar").Return(service, nil)
 
 		callbackProvider := authentication.NewMockCallbackProvider(ctrl)
+		callbackProvider.EXPECT().ReadCode("codeparam").Return("authcode", nil)
 
 		got, err := executeLogin(serviceLoader, callbackProvider, "foobar")
-		expected := "Service authentication URL: https://service.test/auth\n"
+		expected := `Service authentication URL: https://service.test/auth
+Logged in on Service as Joe
+`
 
 		if got != expected {
 			t.Errorf("expected %q, got %q", expected, got)
@@ -36,7 +42,7 @@ func TestLogin(t *testing.T) {
 		}
 	})
 
-	t.Run("authenticates on service with auth code", func(t *testing.T) {
+	t.Run("authenticates on service with provided auth code", func(t *testing.T) {
 		ctrl := gomock.NewController(t)
 
 		service := domain.NewMockService(ctrl)

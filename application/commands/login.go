@@ -36,7 +36,13 @@ func login(serviceLoader domain.ServiceLoader, callbackProvider authentication.C
 
 	if len(args) < 2 {
 		fmt.Fprintln(writer, service.Name(), "authentication URL:", service.CreateAuthURL(redirectURL))
-		return nil
+
+		code, err := callbackProvider.ReadCode(service.CodeParam())
+		if err != nil {
+			return fmt.Errorf("failed reading authentication code: %w", err)
+		}
+
+		args = append(args, code)
 	}
 
 	if err := service.Authenticate(args[1], redirectURL); err != nil {

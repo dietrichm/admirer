@@ -26,7 +26,7 @@ func TestLogin(t *testing.T) {
 		serviceLoader.EXPECT().ForName("foobar").Return(service, nil)
 
 		callbackProvider := authentication.NewMockCallbackProvider(ctrl)
-		callbackProvider.EXPECT().ReadCode("codeparam").Return("authcode", nil)
+		callbackProvider.EXPECT().ReadCode("codeparam", gomock.Any()).Return("authcode", nil)
 
 		got, err := executeLogin(serviceLoader, callbackProvider, "foobar")
 		expected := `Service authentication URL: https://service.test/auth
@@ -107,7 +107,7 @@ Logged in on Service as Joe
 		serviceLoader.EXPECT().ForName("foobar").Return(service, nil)
 
 		callbackProvider := authentication.NewMockCallbackProvider(ctrl)
-		callbackProvider.EXPECT().ReadCode(gomock.Any()).Return("", errors.New("read error"))
+		callbackProvider.EXPECT().ReadCode(gomock.Any(), gomock.Any()).Return("", errors.New("read error"))
 
 		_, err := executeLogin(serviceLoader, callbackProvider, "foobar")
 

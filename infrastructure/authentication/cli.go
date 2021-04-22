@@ -10,7 +10,7 @@ type cliCallbackProvider struct {
 	reader io.Reader
 }
 
-func (c cliCallbackProvider) ReadCode(key string) (code string, err error) {
+func (c cliCallbackProvider) ReadCode(key string, writer io.Writer) (code string, err error) {
 	bufferedReader := bufio.NewReader(c.reader)
 	code, err = bufferedReader.ReadString('\n')
 

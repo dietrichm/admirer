@@ -5,6 +5,7 @@
 package authentication
 
 import (
+	io "io"
 	reflect "reflect"
 
 	gomock "github.com/golang/mock/gomock"
@@ -34,16 +35,16 @@ func (m *MockCallbackProvider) EXPECT() *MockCallbackProviderMockRecorder {
 }
 
 // ReadCode mocks base method.
-func (m *MockCallbackProvider) ReadCode(key string) (string, error) {
+func (m *MockCallbackProvider) ReadCode(key string, writer io.Writer) (string, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "ReadCode", key)
+	ret := m.ctrl.Call(m, "ReadCode", key, writer)
 	ret0, _ := ret[0].(string)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // ReadCode indicates an expected call of ReadCode.
-func (mr *MockCallbackProviderMockRecorder) ReadCode(key interface{}) *gomock.Call {
+func (mr *MockCallbackProviderMockRecorder) ReadCode(key, writer interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ReadCode", reflect.TypeOf((*MockCallbackProvider)(nil).ReadCode), key)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ReadCode", reflect.TypeOf((*MockCallbackProvider)(nil).ReadCode), key, writer)
 }

@@ -2,12 +2,15 @@
 
 package authentication
 
-import "os"
+import (
+	"io"
+	"os"
+)
 
 // DefaultCallbackProvider is the default callback provider for services.
 var DefaultCallbackProvider = &cliCallbackProvider{os.Stdin}
 
 // CallbackProvider provides a callback mechanism for authenticating services.
 type CallbackProvider interface {
-	ReadCode(key string) (code string, err error)
+	ReadCode(key string, writer io.Writer) (code string, err error)
 }

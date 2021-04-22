@@ -94,6 +94,28 @@ Logged in on Service as Joe
 		}
 	})
 
+	t.Run("returns error when failing to read code from callback provider", func(t *testing.T) {
+		ctrl := gomock.NewController(t)
+
+		service := domain.NewMockService(ctrl)
+		service.EXPECT().Name().AnyTimes().Return("Service")
+		service.EXPECT().CreateAuthURL(gomock.Any()).Return("https://service.test/auth")
+		service.EXPECT().CodeParam().Return("codeparam")
+		service.EXPECT().Close()
+
+		serviceLoader := domain.NewMockServiceLoader(ctrl)
+		serviceLoader.EXPECT().ForName("foobar").Return(service, nil)
+
+		callbackProvider := authentication.NewMockCallbackProvider(ctrl)
+		callbackProvider.EXPECT().ReadCode(gomock.Any()).Return("", errors.New("read error"))
+
+		_, err := executeLogin(serviceLoader, callbackProvider, "foobar")
+
+		if err == nil {
+			t.Fatal("Expected an error")
+		}
+	})
+
 	t.Run("returns error for failed authentication", func(t *testing.T) {
 		ctrl := gomock.NewController(t)
 

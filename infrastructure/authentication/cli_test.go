@@ -1,12 +1,14 @@
 package authentication
 
 import (
+	"bytes"
 	"testing"
 )
 
 func TestCliCallbackProvider(t *testing.T) {
 	t.Run("returns code read from CLI iput", func(t *testing.T) {
-		provider := new(cliCallbackProvider)
+		buffer := new(bytes.Buffer)
+		provider := &cliCallbackProvider{buffer}
 
 		got, err := provider.ReadCode("foo")
 

@@ -74,7 +74,7 @@ When this is done, continue with the following steps.
 
 1. Run `admirer login <service>` to retrieve an authentication URL.
 1. By visiting this URL, the service will ask confirmation and redirect back to a non existing URL `https://admirer.test/...`.
-1. Copy the code parameter from this URL's query parameters and pass it along as another parameter to `admirer login <service>`.
+1. Copy and paste the desired query parameter from the URL into the CLI input and press <kbd>Enter</kbd>.
 1. If all goes well, you will retrieve confirmation that you have been logged in.
 
 **Note 1**: after [#23](https://github.com/dietrichm/admirer/issues/23), API client IDs and secrets will be queried during login and stored along with other authentication secrets.

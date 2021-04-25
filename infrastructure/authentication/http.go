@@ -6,19 +6,21 @@ import (
 	"net/http"
 )
 
-type httpCallbackProvider struct{}
+type httpCallbackProvider struct {
+	server *http.Server
+}
 
-func (h httpCallbackProvider) ReadCode(key string, writer io.Writer) (code string, err error) {
+func (h *httpCallbackProvider) ReadCode(key string, writer io.Writer) (code string, err error) {
 	ctx := context.Background()
 
 	handler := &httpCallbackHandler{Key: key}
-	server := &http.Server{
+	h.server = &http.Server{
 		Handler: handler,
 	}
 
-	go server.ListenAndServe()
+	go h.server.ListenAndServe()
 
-	err = server.Shutdown(ctx)
+	err = h.server.Shutdown(ctx)
 
 	return
 }

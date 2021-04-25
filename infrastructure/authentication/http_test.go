@@ -12,13 +12,15 @@ func TestHttpCallbackHandler(t *testing.T) {
 	request := httptest.NewRequest("GET", "/?myToken=tokenValue", nil)
 	response := httptest.NewRecorder()
 
-	handler := httpCallbackHandler{Key: "myToken"}
-	handler.ServeHTTP(response, request)
+	t.Run("saves request form value as specified by injected key", func(t *testing.T) {
+		handler := httpCallbackHandler{Key: "myToken"}
+		handler.ServeHTTP(response, request)
 
-	got := handler.Value
-	expected := "tokenValue"
+		got := handler.Value
+		expected := "tokenValue"
 
-	if got != expected {
-		t.Errorf("expected %q, got %q", expected, got)
-	}
+		if got != expected {
+			t.Errorf("expected %q, got %q", expected, got)
+		}
+	})
 }

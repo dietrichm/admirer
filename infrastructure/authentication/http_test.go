@@ -23,4 +23,16 @@ func TestHttpCallbackHandler(t *testing.T) {
 			t.Errorf("expected %q, got %q", expected, got)
 		}
 	})
+
+	t.Run("saves empty string when request form value does not exist", func(t *testing.T) {
+		handler := httpCallbackHandler{Key: "nonExisting"}
+		handler.ServeHTTP(response, request)
+
+		got := handler.Value
+		expected := ""
+
+		if got != expected {
+			t.Errorf("expected %q, got %q", expected, got)
+		}
+	})
 }

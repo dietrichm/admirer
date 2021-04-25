@@ -8,6 +8,13 @@ import (
 type httpCallbackProvider struct{}
 
 func (h httpCallbackProvider) ReadCode(key string, writer io.Writer) (code string, err error) {
+	handler := &httpCallbackHandler{Key: key}
+	server := &http.Server{
+		Handler: handler,
+	}
+
+	go server.ListenAndServe()
+
 	return
 }
 

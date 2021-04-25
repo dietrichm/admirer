@@ -6,6 +6,8 @@ import (
 )
 
 func TestHttpCallbackProvider(t *testing.T) {
+	provider := new(httpCallbackProvider)
+	provider.ReadCode("myToken", nil)
 }
 
 func TestHttpCallbackHandler(t *testing.T) {

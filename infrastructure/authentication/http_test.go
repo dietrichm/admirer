@@ -7,7 +7,11 @@ import (
 
 func TestHttpCallbackProvider(t *testing.T) {
 	provider := new(httpCallbackProvider)
-	provider.ReadCode("myToken", nil)
+	_, err := provider.ReadCode("myToken", nil)
+
+	if err != nil {
+		t.Errorf("Unexpected error: %v", err)
+	}
 }
 
 func TestHttpCallbackHandler(t *testing.T) {

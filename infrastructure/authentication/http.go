@@ -1,6 +1,7 @@
 package authentication
 
 import (
+	"context"
 	"io"
 	"net/http"
 )
@@ -8,12 +9,16 @@ import (
 type httpCallbackProvider struct{}
 
 func (h httpCallbackProvider) ReadCode(key string, writer io.Writer) (code string, err error) {
+	ctx := context.Background()
+
 	handler := &httpCallbackHandler{Key: key}
 	server := &http.Server{
 		Handler: handler,
 	}
 
 	go server.ListenAndServe()
+
+	err = server.Shutdown(ctx)
 
 	return
 }

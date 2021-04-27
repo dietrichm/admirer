@@ -26,10 +26,12 @@ func (h *httpCallbackProvider) ReadCode(key string, writer io.Writer) (code stri
 }
 
 type httpCallbackHandler struct {
-	Key   string
-	Value string
+	Key      string
+	Value    string
+	DoneFunc func()
 }
 
 func (h *httpCallbackHandler) ServeHTTP(writer http.ResponseWriter, request *http.Request) {
 	h.Value = request.FormValue(h.Key)
+	h.DoneFunc()
 }

@@ -18,8 +18,11 @@ func TestHttpCallbackHandler(t *testing.T) {
 	request := httptest.NewRequest("GET", "/?myToken=tokenValue", nil)
 	response := httptest.NewRecorder()
 
-	t.Run("saves request form value as specified by injected key", func(t *testing.T) {
-		handler := httpCallbackHandler{Key: "myToken"}
+	t.Run("saves request form value as specified by injected key and call done function", func(t *testing.T) {
+		called := false
+		doneFunc := func() { called = true }
+
+		handler := httpCallbackHandler{Key: "myToken", DoneFunc: doneFunc}
 		handler.ServeHTTP(response, request)
 
 		got := handler.Value
@@ -28,10 +31,17 @@ func TestHttpCallbackHandler(t *testing.T) {
 		if got != expected {
 			t.Errorf("expected %q, got %q", expected, got)
 		}
+
+		if !called {
+			t.Error("Done func was not called")
+		}
 	})
 
 	t.Run("saves empty string when request form value does not exist", func(t *testing.T) {
-		handler := httpCallbackHandler{Key: "nonExisting"}
+		called := false
+		doneFunc := func() { called = true }
+
+		handler := httpCallbackHandler{Key: "nonExisting", DoneFunc: doneFunc}
 		handler.ServeHTTP(response, request)
 
 		got := handler.Value
@@ -39,6 +49,10 @@ func TestHttpCallbackHandler(t *testing.T) {
 
 		if got != expected {
 			t.Errorf("expected %q, got %q", expected, got)
+		}
+
+		if !called {
+			t.Error("Done func was not called")
 		}
 	})
 }

@@ -57,7 +57,7 @@ Synced: Foo & Bar - Mr. Testy
 		ctrl := gomock.NewController(t)
 
 		tracks := []domain.Track{
-			domain.Track{
+			{
 				Artist: "Awesome Artist",
 				Name:   "Blam (Instrumental)",
 			},

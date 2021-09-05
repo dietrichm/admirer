@@ -177,11 +177,11 @@ func TestSpotify(t *testing.T) {
 
 		result := &spotify.SavedTrackPage{
 			Tracks: []spotify.SavedTrack{
-				spotify.SavedTrack{
+				{
 					FullTrack: spotify.FullTrack{
 						SimpleTrack: spotify.SimpleTrack{
 							Artists: []spotify.SimpleArtist{
-								spotify.SimpleArtist{
+								{
 									Name: "Awesome Artist",
 								},
 							},
@@ -189,11 +189,11 @@ func TestSpotify(t *testing.T) {
 						},
 					},
 				},
-				spotify.SavedTrack{
+				{
 					FullTrack: spotify.FullTrack{
 						SimpleTrack: spotify.SimpleTrack{
 							Artists: []spotify.SimpleArtist{
-								spotify.SimpleArtist{
+								{
 									Name: "Foo & Bar",
 								},
 							},
@@ -216,11 +216,11 @@ func TestSpotify(t *testing.T) {
 		}
 
 		expected := []domain.Track{
-			domain.Track{
+			{
 				Artist: "Awesome Artist",
 				Name:   "Blam (Instrumental)",
 			},
-			domain.Track{
+			{
 				Artist: "Foo & Bar",
 				Name:   "Mr. Testy",
 			},
@@ -269,7 +269,7 @@ func TestSpotify(t *testing.T) {
 		result := &spotify.SearchResult{
 			Tracks: &spotify.FullTrackPage{
 				Tracks: []spotify.FullTrack{
-					spotify.FullTrack{
+					{
 						SimpleTrack: spotify.SimpleTrack{
 							ID: "trackID",
 						},
@@ -354,7 +354,7 @@ func TestSpotify(t *testing.T) {
 		result := &spotify.SearchResult{
 			Tracks: &spotify.FullTrackPage{
 				Tracks: []spotify.FullTrack{
-					spotify.FullTrack{
+					{
 						SimpleTrack: spotify.SimpleTrack{
 							ID: "trackID",
 						},

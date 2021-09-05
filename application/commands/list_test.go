@@ -14,11 +14,11 @@ func TestList(t *testing.T) {
 		ctrl := gomock.NewController(t)
 
 		tracks := []domain.Track{
-			domain.Track{
+			{
 				Artist: "Awesome Artist",
 				Name:   "Blam (Instrumental)",
 			},
-			domain.Track{
+			{
 				Artist: "Foo & Bar",
 				Name:   "Mr. Testy",
 			},

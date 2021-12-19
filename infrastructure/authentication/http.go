@@ -11,9 +11,9 @@ type httpCallbackProvider struct {
 }
 
 func (h *httpCallbackProvider) ReadCode(key string, writer io.Writer) (code string, err error) {
-	ctx, cancel := context.WithCancel(context.Background())
+	ctx := context.Background()
 
-	handler := &httpCallbackHandler{Key: key, DoneFunc: cancel}
+	handler := &httpCallbackHandler{Key: key}
 	h.server = &http.Server{
 		Handler: handler,
 	}
@@ -26,12 +26,10 @@ func (h *httpCallbackProvider) ReadCode(key string, writer io.Writer) (code stri
 }
 
 type httpCallbackHandler struct {
-	Key      string
-	Value    string
-	DoneFunc func()
+	Key   string
+	Value chan string
 }
 
 func (h *httpCallbackHandler) ServeHTTP(writer http.ResponseWriter, request *http.Request) {
-	h.Value = request.FormValue(h.Key)
-	h.DoneFunc()
+	h.Value <- request.FormValue(h.Key)
 }

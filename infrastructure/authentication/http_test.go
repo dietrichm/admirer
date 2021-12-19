@@ -8,12 +8,6 @@ import (
 )
 
 func TestHttpCallbackProvider(t *testing.T) {
-	g := NewGomegaWithT(t)
-
-	provider := new(httpCallbackProvider)
-	_, err := provider.ReadCode("myToken", nil)
-
-	g.Expect(err).ToNot(HaveOccurred())
 }
 
 func TestHttpCallbackHandler(t *testing.T) {

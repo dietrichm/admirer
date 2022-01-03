@@ -214,11 +214,11 @@ func TestLastfm(t *testing.T) {
 		service := &Lastfm{userAPI: userAPI}
 
 		expected := []domain.Track{
-			domain.Track{
+			{
 				Artist: "Awesome Artist",
 				Name:   "Blam (Instrumental)",
 			},
-			domain.Track{
+			{
 				Artist: "Foo & Bar",
 				Name:   "Mr. Testy",
 			},

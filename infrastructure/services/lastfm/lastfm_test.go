@@ -159,33 +159,33 @@ func TestLastfm(t *testing.T) {
 
 		result := lastfm.UserGetLovedTracks{
 			Tracks: []struct {
-				Name string "xml:\"name\""
-				Mbid string "xml:\"mbid\""
-				Url  string "xml:\"url\""
+				Name string `xml:"name"`
+				Mbid string `xml:"mbid"`
+				Url  string `xml:"url"`
 				Date struct {
-					Uts  string "xml:\"uts,attr\""
-					Date string "xml:\",chardata\""
-				} "xml:\"date\""
+					Uts  string `xml:"uts,attr"`
+					Date string `xml:",chardata"`
+				} `xml:"date"`
 				Artist struct {
-					Name string "xml:\"name\""
-					Mbid string "xml:\"mbid\""
-					Url  string "xml:\"url\""
-				} "xml:\"artist\""
+					Name string `xml:"name"`
+					Mbid string `xml:"mbid"`
+					Url  string `xml:"url"`
+				} `xml:"artist"`
 				Images []struct {
-					Size string "xml:\"size,attr\""
-					Url  string "xml:\",chardata\""
-				} "xml:\"image\""
+					Size string `xml:"size,attr"`
+					Url  string `xml:",chardata"`
+				} `xml:"image"`
 				Streamable struct {
-					FullTrack  string "xml:\"fulltrack,attr\""
-					Streamable string "xml:\",chardata\""
-				} "xml:\"streamable\""
+					FullTrack  string `xml:"fulltrack,attr"`
+					Streamable string `xml:",chardata"`
+				} `xml:"streamable"`
 			}{
 				{
 					Name: "Blam (Instrumental)",
 					Artist: struct {
-						Name string "xml:\"name\""
-						Mbid string "xml:\"mbid\""
-						Url  string "xml:\"url\""
+						Name string `xml:"name"`
+						Mbid string `xml:"mbid"`
+						Url  string `xml:"url"`
 					}{
 						Name: "Awesome Artist",
 					},
@@ -193,9 +193,9 @@ func TestLastfm(t *testing.T) {
 				{
 					Name: "Mr. Testy",
 					Artist: struct {
-						Name string "xml:\"name\""
-						Mbid string "xml:\"mbid\""
-						Url  string "xml:\"url\""
+						Name string `xml:"name"`
+						Mbid string `xml:"mbid"`
+						Url  string `xml:"url"`
 					}{
 						Name: "Foo & Bar",
 					},

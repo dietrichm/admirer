@@ -7,7 +7,7 @@ require (
 	github.com/golang/mock v1.6.0
 	github.com/onsi/gomega v1.18.1
 	github.com/shkh/lastfm-go v0.0.0-20191215035245-89a801c244e0
-	github.com/spf13/cobra v1.3.0
+	github.com/spf13/cobra v1.4.0
 	github.com/spf13/viper v1.10.1
 	github.com/zmb3/spotify v1.3.0
 	golang.org/x/oauth2 v0.0.0-20211104180415-d3ed0bb246c8

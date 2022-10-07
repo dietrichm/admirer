@@ -5,7 +5,7 @@ go 1.19
 require (
 	github.com/99designs/keyring v1.2.1
 	github.com/golang/mock v1.6.0
-	github.com/onsi/gomega v1.20.2
+	github.com/onsi/gomega v1.21.0
 	github.com/shkh/lastfm-go v0.0.0-20191215035245-89a801c244e0
 	github.com/spf13/cobra v1.5.0
 	github.com/spf13/viper v1.13.0

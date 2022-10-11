@@ -7,7 +7,7 @@ require (
 	github.com/golang/mock v1.6.0
 	github.com/onsi/gomega v1.21.1
 	github.com/shkh/lastfm-go v0.0.0-20191215035245-89a801c244e0
-	github.com/spf13/cobra v1.5.0
+	github.com/spf13/cobra v1.6.0
 	github.com/spf13/viper v1.13.0
 	github.com/zmb3/spotify v1.3.0
 	golang.org/x/oauth2 v0.0.0-20220411215720-9780585627b5
@@ -23,7 +23,7 @@ require (
 	github.com/google/go-cmp v0.5.8 // indirect
 	github.com/gsterjov/go-libsecret v0.0.0-20161001094733-a6f4afe4910c // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
-	github.com/inconshreveable/mousetrap v1.0.0 // indirect
+	github.com/inconshreveable/mousetrap v1.0.1 // indirect
 	github.com/magiconair/properties v1.8.6 // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/mtibben/percent v0.2.1 // indirect

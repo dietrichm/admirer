@@ -3,7 +3,7 @@ module github.com/dietrichm/admirer
 go 1.19
 
 require (
-	github.com/99designs/keyring v1.2.1
+	github.com/99designs/keyring v1.2.2
 	github.com/golang/mock v1.6.0
 	github.com/onsi/gomega v1.24.2
 	github.com/shkh/lastfm-go v0.0.0-20191215035245-89a801c244e0

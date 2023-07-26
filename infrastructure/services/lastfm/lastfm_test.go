@@ -339,7 +339,7 @@ func TestNewLastfm(t *testing.T) {
 		service, err := NewLastfm(secrets)
 
 		if service == nil {
-			t.Error("Expected an instance")
+			t.Fatal("Expected an instance")
 		}
 
 		if err != nil {

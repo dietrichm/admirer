@@ -6,6 +6,7 @@ import (
 	"net/http"
 )
 
+//lint:ignore U1000 WIP
 type httpCallbackProvider struct {
 	server *http.Server
 }

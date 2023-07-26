@@ -67,10 +67,7 @@ func (s *Spotify) Name() string {
 
 // Authenticated returns whether the service is logged in.
 func (s *Spotify) Authenticated() bool {
-	if s.client != nil {
-		return true
-	}
-	return false
+	return s.client != nil
 }
 
 // CreateAuthURL returns an authorization URL to authorize the integration.

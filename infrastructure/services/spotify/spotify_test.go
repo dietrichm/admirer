@@ -550,11 +550,7 @@ func (t tokenMatcher) Matches(x interface{}) bool {
 	expiry := t.token.Expiry.Truncate(time.Second)
 	gotExpiry := gotToken.Expiry.Truncate(time.Second)
 
-	if !expiry.Equal(gotExpiry) {
-		return false
-	}
-
-	return true
+	return expiry.Equal(gotExpiry)
 }
 
 func (t tokenMatcher) String() string {

@@ -1,7 +1,6 @@
 package config
 
 import (
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strings"
@@ -156,7 +155,7 @@ func TestViperLoader(t *testing.T) {
 }
 
 func createFile(contents string) (*os.File, error) {
-	file, err := ioutil.TempFile(os.TempDir(), "admirer-")
+	file, err := os.CreateTemp(os.TempDir(), "admirer-")
 	if err != nil {
 		return nil, err
 	}

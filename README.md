@@ -30,7 +30,7 @@ Compiled binaries will be provided for version 1.0.0.
 
 ### Building from source
 
-Please [install Go 1.19 first](https://golang.org/doc/install), set the `GOPATH` environment variable and ensure `$GOPATH/bin` is present in `$PATH`.
+Please [install Go 1.20 first](https://golang.org/doc/install), set the `GOPATH` environment variable and ensure `$GOPATH/bin` is present in `$PATH`.
 
 ```sh
 go install github.com/dietrichm/admirer@latest

@@ -1,6 +1,9 @@
-.PHONY: default test build mocks vendor
+.PHONY: default check test build mocks vendor
 
-default: test build
+default: check test build
+
+check:
+	go vet ./...
 
 test:
 	go test ./...

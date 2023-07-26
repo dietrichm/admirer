@@ -29,6 +29,9 @@ jobs:
             dep ensure
         fi
 
+    - name: Check
+      run: make check
+
     - name: Test
       run: go test -v ./...
 

@@ -1,12 +1,12 @@
-.PHONY: default build test mocks vendor
+.PHONY: default test build mocks vendor
 
-default: build test
-
-build:
-	go build ./...
+default: test build
 
 test:
 	go test ./...
+
+build:
+	go build ./...
 
 mocks:
 	go generate ./...

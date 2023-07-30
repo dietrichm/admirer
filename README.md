@@ -65,10 +65,10 @@ In the future, I would like to add support for [ListenBrainz](https://listenbrai
 
 Before using any of the provided services, you need to create **your own API application** on said service and export your new API client ID and secret as environment variables:
 
-| Service | Internal name | Creating your app | Environment variables |
-| ------- | ------------- | ----------------- | --------------------- |
-| Last.fm | `lastfm` | [Create an account here](https://www.last.fm/api/account/create) | `LASTFM_CLIENT_ID` and `LASTFM_CLIENT_SECRET` |
-| Spotify | `spotify` | [Manage and create an app here](https://developer.spotify.com/dashboard/applications) | `SPOTIFY_CLIENT_ID` and `SPOTIFY_CLIENT_SECRET` |
+| Service | Creating your app | Environment variables |
+| ------- | ----------------- | --------------------- |
+| Last.fm | [Create an account here](https://www.last.fm/api/account/create) | `LASTFM_CLIENT_ID` and `LASTFM_CLIENT_SECRET` |
+| Spotify | [Manage and create an app here](https://developer.spotify.com/dashboard/applications) | `SPOTIFY_CLIENT_ID` and `SPOTIFY_CLIENT_SECRET` |
 
 When this is done, continue with the following steps.
 

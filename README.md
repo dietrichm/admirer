@@ -43,6 +43,7 @@ Usage:
   admirer [command]
 
 Available Commands:
+  completion  Generate the autocompletion script for the specified shell
   help        Help about any command
   list        List loved tracks on specified service
   login       Log in on external service

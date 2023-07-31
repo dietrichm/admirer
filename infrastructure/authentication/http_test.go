@@ -4,7 +4,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	. "github.com/onsi/gomega"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestHttpCallbackProvider(t *testing.T) {
@@ -15,8 +15,6 @@ func TestHttpCallbackHandler(t *testing.T) {
 	response := httptest.NewRecorder()
 
 	t.Run("saves request form value as specified by injected key", func(t *testing.T) {
-		g := NewGomegaWithT(t)
-
 		handler := &httpCallbackHandler{
 			Key:   "myToken",
 			Value: make(chan string, 1),
@@ -24,12 +22,10 @@ func TestHttpCallbackHandler(t *testing.T) {
 
 		go handler.ServeHTTP(response, request)
 
-		g.Expect(<-handler.Value).To(Equal("tokenValue"))
+		assert.Equal(t, "tokenValue", <-handler.Value)
 	})
 
 	t.Run("saves empty string when request form value does not exist", func(t *testing.T) {
-		g := NewGomegaWithT(t)
-
 		handler := &httpCallbackHandler{
 			Key:   "nonExisting",
 			Value: make(chan string, 1),
@@ -37,6 +33,6 @@ func TestHttpCallbackHandler(t *testing.T) {
 
 		go handler.ServeHTTP(response, request)
 
-		g.Expect(<-handler.Value).To(BeEmpty())
+		assert.Empty(t, <-handler.Value)
 	})
 }

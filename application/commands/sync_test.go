@@ -7,6 +7,7 @@ import (
 
 	"github.com/dietrichm/admirer/domain"
 	"github.com/golang/mock/gomock"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestSync(t *testing.T) {
@@ -40,17 +41,12 @@ func TestSync(t *testing.T) {
 
 		got, err := executeSync(serviceLoader, 5, "source", "target")
 
-		if err != nil {
-			t.Errorf("Unexpected error: %v", err)
-		}
-
 		expected := `Synced: Awesome Artist - Blam (Instrumental)
 Synced: Foo & Bar - Mr. Testy
 `
 
-		if got != expected {
-			t.Errorf("expected %q, got %q", expected, got)
-		}
+		assert.NoError(t, err)
+		assert.Equal(t, expected, got)
 	})
 
 	t.Run("returns error when failing to mark track as loved", func(t *testing.T) {
@@ -79,13 +75,8 @@ Synced: Foo & Bar - Mr. Testy
 
 		output, err := executeSync(serviceLoader, 10, "source", "target")
 
-		if err == nil {
-			t.Error("Expected an error")
-		}
-
-		if output != "" {
-			t.Errorf("Unexpected output: %v", output)
-		}
+		assert.Error(t, err)
+		assert.Empty(t, output)
 	})
 
 	t.Run("returns error when failing to read loved tracks", func(t *testing.T) {
@@ -106,13 +97,8 @@ Synced: Foo & Bar - Mr. Testy
 
 		output, err := executeSync(serviceLoader, 10, "source", "target")
 
-		if err == nil {
-			t.Error("Expected an error")
-		}
-
-		if output != "" {
-			t.Errorf("Unexpected output: %v", output)
-		}
+		assert.Error(t, err)
+		assert.Empty(t, output)
 	})
 
 	t.Run("returns error when failing to load source service", func(t *testing.T) {
@@ -123,13 +109,8 @@ Synced: Foo & Bar - Mr. Testy
 
 		output, err := executeSync(serviceLoader, 10, "source", "target")
 
-		if err == nil {
-			t.Error("Expected an error")
-		}
-
-		if output != "" {
-			t.Errorf("Unexpected output: %v", output)
-		}
+		assert.Error(t, err)
+		assert.Empty(t, output)
 	})
 
 	t.Run("returns error when failing to load target service", func(t *testing.T) {
@@ -142,13 +123,8 @@ Synced: Foo & Bar - Mr. Testy
 
 		output, err := executeSync(serviceLoader, 10, "source", "target")
 
-		if err == nil {
-			t.Error("Expected an error")
-		}
-
-		if output != "" {
-			t.Errorf("Unexpected output: %v", output)
-		}
+		assert.Error(t, err)
+		assert.Empty(t, output)
 	})
 
 	t.Run("returns error when source service is not authenticated", func(t *testing.T) {
@@ -168,13 +144,8 @@ Synced: Foo & Bar - Mr. Testy
 
 		output, err := executeSync(serviceLoader, 10, "source", "target")
 
-		if err == nil {
-			t.Error("Expected an error")
-		}
-
-		if output != "" {
-			t.Errorf("Unexpected output: %v", output)
-		}
+		assert.Error(t, err)
+		assert.Empty(t, output)
 	})
 
 	t.Run("returns error when target service is not authenticated", func(t *testing.T) {
@@ -195,13 +166,8 @@ Synced: Foo & Bar - Mr. Testy
 
 		output, err := executeSync(serviceLoader, 10, "source", "target")
 
-		if err == nil {
-			t.Error("Expected an error")
-		}
-
-		if output != "" {
-			t.Errorf("Unexpected output: %v", output)
-		}
+		assert.Error(t, err)
+		assert.Empty(t, output)
 	})
 }
 

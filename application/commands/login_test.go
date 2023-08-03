@@ -8,6 +8,7 @@ import (
 	"github.com/dietrichm/admirer/domain"
 	"github.com/dietrichm/admirer/infrastructure/authentication"
 	"github.com/golang/mock/gomock"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestLogin(t *testing.T) {
@@ -33,13 +34,8 @@ func TestLogin(t *testing.T) {
 Logged in on Service as Joe
 `
 
-		if got != expected {
-			t.Errorf("expected %q, got %q", expected, got)
-		}
-
-		if err != nil {
-			t.Errorf("Unexpected error: %v", err)
-		}
+		assert.NoError(t, err)
+		assert.Equal(t, expected, got)
 	})
 
 	t.Run("authenticates on service with provided auth code", func(t *testing.T) {
@@ -59,13 +55,8 @@ Logged in on Service as Joe
 		got, err := executeLogin(serviceLoader, callbackProvider, "foobar", "authcode")
 		expected := "Logged in on Service as Joe\n"
 
-		if got != expected {
-			t.Errorf("expected %q, got %q", expected, got)
-		}
-
-		if err != nil {
-			t.Errorf("Unexpected error: %v", err)
-		}
+		assert.NoError(t, err)
+		assert.Equal(t, expected, got)
 	})
 
 	t.Run("returns error for unknown service", func(t *testing.T) {
@@ -79,19 +70,8 @@ Logged in on Service as Joe
 
 		output, err := executeLogin(serviceLoader, callbackProvider, "foobar")
 
-		if output != "" {
-			t.Errorf("Unexpected output: %v", output)
-		}
-
-		if err == nil {
-			t.Fatal("Expected an error")
-		}
-
-		got := err.Error()
-
-		if got != expected {
-			t.Errorf("expected %q, got %q", expected, got)
-		}
+		assert.EqualError(t, err, expected)
+		assert.Empty(t, output)
 	})
 
 	t.Run("returns error when failing to read code from callback provider", func(t *testing.T) {
@@ -111,9 +91,7 @@ Logged in on Service as Joe
 
 		_, err := executeLogin(serviceLoader, callbackProvider, "foobar")
 
-		if err == nil {
-			t.Fatal("Expected an error")
-		}
+		assert.Error(t, err)
 	})
 
 	t.Run("returns error for failed authentication", func(t *testing.T) {
@@ -131,19 +109,8 @@ Logged in on Service as Joe
 
 		output, err := executeLogin(serviceLoader, callbackProvider, "foobar", "authcode")
 
-		if output != "" {
-			t.Errorf("Unexpected output: %v", output)
-		}
-
-		if err == nil {
-			t.Fatal("Expected an error")
-		}
-
-		got := err.Error()
-
-		if got != expected {
-			t.Errorf("expected %q, got %q", expected, got)
-		}
+		assert.EqualError(t, err, expected)
+		assert.Empty(t, output)
 	})
 
 	t.Run("returns error for failed username retrieval", func(t *testing.T) {
@@ -162,19 +129,8 @@ Logged in on Service as Joe
 
 		output, err := executeLogin(serviceLoader, callbackProvider, "foobar", "authcode")
 
-		if output != "" {
-			t.Errorf("Unexpected output: %v", output)
-		}
-
-		if err == nil {
-			t.Fatal("Expected an error")
-		}
-
-		got := err.Error()
-
-		if got != expected {
-			t.Errorf("expected %q, got %q", expected, got)
-		}
+		assert.EqualError(t, err, expected)
+		assert.Empty(t, output)
 	})
 }
 

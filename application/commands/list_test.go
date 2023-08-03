@@ -7,6 +7,7 @@ import (
 
 	"github.com/dietrichm/admirer/domain"
 	"github.com/golang/mock/gomock"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestList(t *testing.T) {
@@ -34,16 +35,12 @@ func TestList(t *testing.T) {
 
 		got, err := executeList(serviceLoader, 5, "foo")
 
-		if err != nil {
-			t.Errorf("Unexpected error: %v", err)
-		}
-
 		expected := `Awesome Artist - Blam (Instrumental)
 Foo & Bar - Mr. Testy
 `
-		if got != expected {
-			t.Errorf("expected %q, got %q", expected, got)
-		}
+
+		assert.NoError(t, err)
+		assert.Equal(t, expected, got)
 	})
 
 	t.Run("returns error for unknown service", func(t *testing.T) {
@@ -55,19 +52,8 @@ Foo & Bar - Mr. Testy
 
 		output, err := executeList(serviceLoader, 5, "foobar")
 
-		if output != "" {
-			t.Errorf("Unexpected output: %v", output)
-		}
-
-		if err == nil {
-			t.Fatal("Expected an error")
-		}
-
-		got := err.Error()
-
-		if got != expected {
-			t.Errorf("expected %q, got %q", expected, got)
-		}
+		assert.EqualError(t, err, expected)
+		assert.Empty(t, output)
 	})
 
 	t.Run("returns error when service is not authenticated", func(t *testing.T) {
@@ -83,13 +69,8 @@ Foo & Bar - Mr. Testy
 
 		output, err := executeList(serviceLoader, 3, "foo")
 
-		if err == nil {
-			t.Error("Expected an error")
-		}
-
-		if output != "" {
-			t.Errorf("Unexpected output: %v", output)
-		}
+		assert.Error(t, err)
+		assert.Empty(t, output)
 	})
 
 	t.Run("returns error when failing to load loved tracks", func(t *testing.T) {
@@ -105,13 +86,8 @@ Foo & Bar - Mr. Testy
 
 		output, err := executeList(serviceLoader, 3, "foo")
 
-		if err == nil {
-			t.Error("Expected an error")
-		}
-
-		if output != "" {
-			t.Errorf("Unexpected output: %v", output)
-		}
+		assert.Error(t, err)
+		assert.Empty(t, output)
 	})
 }
 

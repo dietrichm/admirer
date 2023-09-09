@@ -1,4 +1,4 @@
-.PHONY: default check test build mocks vendor
+.PHONY: default check test build mocks
 
 default: check test build
 
@@ -14,7 +14,3 @@ build:
 
 mocks:
 	go generate ./...
-
-vendor:
-	go get
-	go mod vendor

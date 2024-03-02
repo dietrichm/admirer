@@ -8,7 +8,7 @@ require (
 	github.com/shkh/lastfm-go v0.0.0-20191215035245-89a801c244e0
 	github.com/spf13/cobra v1.8.0
 	github.com/spf13/viper v1.18.2
-	github.com/stretchr/testify v1.8.4
+	github.com/stretchr/testify v1.9.0
 	github.com/zmb3/spotify v1.3.0
 	golang.org/x/oauth2 v0.17.0
 	honnef.co/go/tools v0.4.7

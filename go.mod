@@ -10,7 +10,7 @@ require (
 	github.com/spf13/viper v1.18.2
 	github.com/stretchr/testify v1.9.0
 	github.com/zmb3/spotify v1.3.0
-	golang.org/x/oauth2 v0.19.0
+	golang.org/x/oauth2 v0.20.0
 	honnef.co/go/tools v0.4.7
 )
 
